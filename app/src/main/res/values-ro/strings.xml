@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Generalities -->
+    <string name="app_name">Dicționar Francez – Român – Francez</string>
+    <string name="hello_world">Bine ați venit!</string>
+    <string name="action_settings">Setări generale</string>
+    <string name="bt_switch">Inversează limbile</string>
+    <string name="cautare_termen">Căutare cuvânt</string>
+    <string name="ellipsis">…</string>
+
+    <string-array name="direction_array">
+        <item>Scrieți cuvânt francez…</item>
+        <item>Scrieți cuvânt român…</item>
+    </string-array>
+
+    <!-- A plurals resource for number of words in DB: -->
+    <plurals name="tv_number_of_words">
+        <item quantity="one">Există doar un cuvânt</item>
+        <item quantity="few">Sunt %1$s cuvinte</item>
+        <item quantity="other">Sunt %1$s de cuvinte</item>
+    </plurals>
+
+    <string name="tv_website">www.android.pontes.ro</string>
+    <string name="hint_scrie_aici">Scrieți aici…</string>
+    <string name="bt_search">Căutare</string>
+    <string name="bt_cancel_search">Golire</string>
+    <string name="bt_learn_irregular_verbs">Verbele neregulate…</string>
+    <string name="warning">Avertisment!</string>
+    <string name="error">Eroare!</string>
+    <string name="warning_wrong_search">Trebuie să scrieți minimum două caractere pentru a căuta!</string>
+    <string name="warning_not_results">Nu a fost găsit niciun rezultat!&lt;br>Ați căutat: &lt;i>%1$s&lt;/i>.&lt;br>Încercați din nou.</string>
+    <string name="warning_no_tts_available_fr">Nu există voce corespunzătoare pentru redarea textului în vorbire.\nÎncercați să alegeți o altă limbă în Setări.\nDe asemenea puteți instala un motor TTS care să aibă voce în limba franceză.</string>
+    <string name="warning_no_tts_available_ro">Nu există voce în limba română pentru redarea textului.\nÎncercați să actualizați aplicația Sintetizare vocală Google în Magazin Google Play.\nÎncepând cu ianuarie 2018, Google include și o voce pentru limba română în motorul lor gratuit de sintetizare vocală.</string>
+    <string name="tv_word_and_explanation">&lt;b>%1$s&lt;/b> – %2$s</string>
+    <!-- A plurals resource for results: -->
+    <plurals name="tv_number_of_results">
+        <item quantity="one">A fost găsit un rezultat</item>
+        <item quantity="few">Au fost găsite %d rezultate</item>
+        <item quantity="other">Au fost găsite %d de rezultate</item>
+    </plurals>
+
+    <!-- The Main Menu Items: -->
+    <string name="mnu_settings">Setări generale</string>
+    <string name="mnu_display">Dimensiune text</string>
+    <string name="mnu_about">Despre Dicționar…</string>
+    <string name="mnu_go_to_web_page">Pagina web a aplicației</string>
+    <string name="mnu_online_version">Vedeți varianta web a dicționarului</string>
+    <string name="mnu_app_in_play_store">Vedeți aplicația în Magazin Play</string>
+    <string name="mnu_default_settings">Resetare program la valorile inițiale…</string>
+    <string name="title_default_settings">Resetare Dicționar Francez – Român</string>
+    <string name="body_default_settings">Sunteți sigur că vreți să resetați toate valorile?\nProgramul va fi in starea inițială.\nDacă ați achiziționat versiunea Premium, aceasta va fi reactivată la prima lansare a aplicației.</string>
+
+    <!-- Settings Activity: -->
+    <string name="title_activity_settings">Setări generale</string>
+    <string name="enable_sounds">Redare sunete</string>
+    <string name="enable_shake">Căutare nouă la scuturare</string>
+    <string name="enable_screen_awake">Menținere ecran activ</string>
+    <string name="enable_ime_action">Butonul din colțul jos dreapta al tastaturii virtuale caută direct</string>
+    <string name="search_full_text">Căutare texte întregi (vor fi căutate cuvinte delimitate de caractere non-alfanumerice)</string>
+
+    <!-- Text size activity, old was Display Settings Activity: -->
+    <string name="title_activity_display_settings">Dimensiune text</string>
+    <string name="display_choose_size">Dimensiunea textului rezultatelor:</string>
+
+    <!-- About dialog: -->
+    <string name="about">Despre Dicționar</string>
+    <string name="app_version">Dicționar Francez – Român, versiunea 2.3.1</string>
+    <string name="app_release_date">Versiune 1.0 finalizată miercuri, 10 februarie 2016</string>
+    <string name="app_last_update">Ultima actualizare finalizată duminică, 12 august 2018</string>
+    <string name="app_creator">Programat de Emanuel Boboiu (Manu)</string>
+    <string name="phone_number">Telefon: +40740203043</string>
+    <string name="email_address">E-mail: android@pontes.ro</string>
+    <string name="web_address">Web: www.android.pontes.ro</string>
+    <string name="app_credits2">Pictograma și imagini create de Iulian Duma și Ștefan Halus</string>
+    <string name="app_credits3">Baza de date a fost creată de Florin Rădulescu</string>
+    <string name="app_credits4">Testare beta: Iulian Duma și Ioto Hăinală</string>
+
+    <!-- Help strings in an array: -->
+    <string name="mnu_help">Ajutor…</string>
+    <string name="help_alert_title">Ajutor pentru dicționar</string>
+
+    <string-array name="information_array">
+        <item>Aplicația de față este un dicționar francez – român și român – francez ușor de utilizat, cu mii de termeni și traducerile acestora.</item>
+        <item>Baza de date este salvată în dispozitivul dumneavoastră, astfel nu este necesară o conexiune activă la internet în momentul utilizării.</item>
+        <item>---------------</item>
+        <item>Pentru a căuta un cuvânt, scrieți în câmpul de editare situat în partea de sus a ferestrei principale, apoi atingeți căutare.</item>
+        <item>Rezultatele apar într-o listă cu maxim 300 de itemi.</item>
+        <item>Pentru a schimba direcția de căutare, există deasupra câmpului de editare un buton Inversează limbile. Astfel pot fi căutate cuvinte în limba franceză sau în limba română, după necesitate.</item>
+        <item>Atingând scurt un rezultat, partea franceză va fi pronunțată de o voce instalată pe dispozitiv.</item>
+        <item>Atingând lung un rezultat, apare un meniu contextual din care se poate alege ca partea franceză să fie pronunțată de vocea sintetică, să fie spusă pe litere; de asemenea rezultatul poate fi adăugat la vocabular, poate fi copiat în clipboard (fie în întregime, fie doar termenul, fie doar explicația).</item>
+        <item>---------------</item>
+        <item>În meniul principal al ferestrei dedicată dicționarului, există și o zonă de setări (generale setare voce (TTS), alegere dimensiune text, alegere fundal).</item>
+        <item>Din Setările generale se poate alege modul de căutare a termenilor, fie toate ocurențele textului scris, fie doar cele în care textul scris apare în întregime, delimitat de spații sau alte semne.</item>
+        <item>Se poate alege ca la scuturare să fie golită fereastra de rezultatele anterioare, se poate seta ca ecranul să nu se blocheze automat, sunetele să fie redate sau nu și altele.</item>
+        <item>În Setări voce (TTS) se poate alege una dintre vocile disponibile în dispozitiv pentru a citi limba franceză, astfel cuvintele putând fi pronunțate la o atingere scurtă. Apar toate motoarele de sintetizare vocală, fiind selectate variantele de limbă franceză ale acestora. Aici se poate schimba și viteza sau frecvența unei voci alese, astfel încât să aibă un anumit comportament atunci când citește în dicționar.</item>
+        <item>Există posibilitatea schimbării fundalului. La prima deschidere a aplicației este ales aleatoriu unul dintre cele disponibile. În Setări, Alegere fundal se poate comuta între fundalurile existente sau se poate dezactiva încât să nu apară niciunul.</item>
+        <item>---------------</item>
+        <item>Vocabularul meu este o unealtă care permite inserarea de cuvinte și explicațiile acestora pe secțiuni într-o bază de date.</item>
+        <item>Atingeți lung un rezultat afișat în urma unei căutări și alegeți în meniul contextual Adăugare la vocabularul meu.\nApare un dialog unde se poate alege secțiunea în care să fie adăugat rezultatul, ori se poate crea una nouă.</item>
+        <item>În fereastra Vocabularul meu se pot vizualiza înregistrări pe secțiuni, se pot adăuga, edita sau șterge înregistrări și alte acțiuni care pot fi găsite în meniul contextual sau în meniul principal.\nAvând o astfel de unealtă pot fi învățate cu ușurință cuvinte noi în limba franceză, avându-le aranjate pe secțiuni.</item>
+        <item>O secțiune din vocabular poate fi exportată în fișier cu extensia .frd pe memoria de stocare.\nSecțiunea poate fi importată oricând deschizând fișierul corespunzător dintr-un manager de fișiere.\nAvând posibilitatea de exportare și importare, secțiunile pot fi salvate pentru o eventuală reinstalare a aplicației sau pentru a fi trimise prietenilor.</item>
+        <item>Există și posibilitatea importării de secțiuni predefinite, gen Animale, Culori și altele.\nAceste secțiuni pot fi găsite în meniul principal al modulului Vocabularul meu.</item>
+        <item>---------------</item>
+        <item>În versiunea Standard, aplicația afișează în partea de jos a ferestrelor reclame Google.</item>
+        <item>Există și o versiune Premium care nu afișează reclame, astfel economisindu-se resurse și trafic de internet.</item>
+        <item>Pentru a achiziționa versiunea fără reclame, mergeți la Versiune Premium din meniul principal al ferestrei dedicată dicționarului.</item>
+        <item>Vi se va solicită o sumă modică ce poate fi achitată prin mecanismele puse la dispoziție de Google.</item>
+        <item>În urma achiziției, versiunea Premium va fi imediat disponibilă, aceasta rămânând valabilă și în urma unei instalări viitoare.</item>
+        <item>Versiunea Premium este disponibilă pentru toate dispozitivele care sunt conectate la Magazin Google Play cu contul de GMail utilizat la cumpărare.</item>
+        <item>---------------</item>
+        <item>Pentru a întreba alte detalii sau pentru a trimite sugestii, utilizați adresa de E-mail emanuelboboiu@gmail.com.</item>
+        <item>Puteți de asemenea suna la 0740203043.</item>
+        <item>---------------</item>
+    </string-array>
+
+    <!-- Unique ID for advertising: -->
+    <string name="banner_ad_unit_id">ca-app-pub-9705662823127450/8605312295</string>
+    <string name="banner_ad_unit_id_test">ca-app-pub-3940256099942544/6300978111</string>
+
+    <!-- About irregular verbs activity: -->
+    <string name="title_activity_verbs">Verbele neregulate</string>
+    <string name="mnu_irregular_verbs">Verbe</string>
+    <string name="mnu_go_to_dictionary">Dicționar</string>
+    <string name="tv_welcome_verbs_message">Știm %1$s de verbe neregulate.\nLe puteți învăța citind lista alfabetică sau încercând un test.</string>
+    <string name="bt_verbs_list">Lista</string>
+    <string name="bt_verbs_quiz">Test</string>
+    <string name="tv_choose_letter">Alegeți o inițială:</string>
+    <string name="in_spinner_choose_a_letter">- alegeți aici -</string>
+    <string name="in_spinner_all_initials">toate - %1$s</string>
+    <string name="verb_in_list">%1$s. &lt;b>%2$s&lt;/b>, %3$s, %4$s – &lt;i>%5$s&lt;/i></string>
+    <string name="choose_forms_to_fill_in">Alegeți formele de completat:</string>
+    <string name="bt_start_quiz">Start!</string>
+    <string name="bt_next_item">Următorul…</string>
+    <string name="bt_finish_quiz">Finalizare!</string>
+    <string name="text_unfilled">.......</string>
+    <string name="content_description_unfilled">Forma %1$s lipsește. Atingeți aici pentru a o completa!</string>
+
+    <string-array name="verb_forms_array">
+        <item>Nothing</item>
+        <item>I</item>
+        <item>II</item>
+        <item>III</item>
+    </string-array>
+
+    <string name="no_forms_were_chosen">Trebuie să alegeți cel puțin o formă.\nAlegeți formele de completat și atingeți din nou butonul Start.</string>
+    <string name="item_title_in_quiz">Itemul %1$s din %2$s:</string>
+    <string name="quiz_message_before_start">Bifați una, două sau trei forme pe care vreți să le completați, apoi apăsați butonul Start.\nItemii testului vor apărea aici unul câte unul.</string>
+    <string name="quiz_progress_bar">Bară de progres %1$s%%</string>
+    <string name="final_mark">Ați obținut nota %1$s.</string>
+    <!-- A plurals resource for mistakes: -->
+    <plurals name="tv_number_of_mistakes">
+        <item quantity="one">Ați avut doar o greșeală:</item>
+        <item quantity="few">Ați avut %d greșeli:</item>
+        <item quantity="other">Ați avut %d de greșeli:</item>
+    </plurals>
+
+    <string name="tv_you_had_no_mistakes">Felicitări! Ați știut totul.\nNu am găsit nicio greșeală.</string>
+    <string name="final_item_error">Itemul %1$s, forma %2$s a verbului %3$s:\ncorect era %4$s, ați scris %5$s.</string>
+    <string name="mnu_view_statistics">Vizualizare statistici…</string>
+    <string name="title_view_statistics">Statistici</string>
+    <string name="bt_close">Închidere</string>
+
+    <!-- A plurals resource for number of tests: -->
+    <plurals name="tv_number_of_tests">
+        <item quantity="one">V-ați testat doar o dată.</item>
+        <item quantity="few">V-ați testat de %1$s ori.</item>
+        <item quantity="other">V-ați testat de %1$s de ori.</item>
+    </plurals>
+
+    <string name="tv_general_average">Media dumneavoastră generală este %1$s.</string>
+    <string name="tv_no_average">Media generală va apărea aici.</string>
+    <string name="tv_average_of_last_marks">Media ultimelor %1$s note este %2$s</string>
+    <string name="no_average_for_last_marks">Media ultimelor %1$s note va apărea aici</string>
+    <string name="one_of_last_marks">%1$s – %2$s</string>
+    <string name="no_last_x_marks">Lista ultimelor %1$s note va apărea aici.</string>
+    <string name="today">azi</string>
+    <string name="yesterday">ieri</string>
+    <string name="date_format">%1$s, %2$s %3$s %4$s, %5$s:%6$s</string>
+    <string name="mnu_view_online_stats">Vedeți clasamente și statistici online</string>
+    <string name="mnu_nickname">Pseudonimul dumneavoastră…</string>
+    <string name="nickname_title">Pseudonim</string>
+    <string name="change_nickname_message">Pseudonimul dumneavoastră actual este %1$s.\nCompletați un pseudonim nou sau numele real.\nAcesta va apărea în clasamentele și statisticile online:</string>
+    <string name="anonymous">Anonim</string>
+    <string name="unknown">necunoscut</string>
+    <string name="change_nickname_hint">Atingeți aici pentru a scrie…</string>
+    <string name="nickname_too_short">Numele trebuie să conțină minim două litere.\nVă rugăm să scrieți din nou.</string>
+    <string name="nickname_success">Modificare efectuată cu succes.\nNoul dumneavoastră pseudonim este %1$s.\nAcesta va apărea în clasamentele și statisticile online.</string>
+    <string name="no_connection_available">Am detectat că nu există conexiune la Internet.\nVă rugăm să conectați dispozitivul la rețea și să încercați din nou.</string>
+    <string name="correctness_of_a_result">Corect: %1$s. </string>
+    <string name="please_wait">În curs de conectare la server…\nVă rugăm așteptați!</string>
+    <string name="message_for_more_results">Pentru a evita solicitarea excesiva a resurselor dispozitivului, au fost afișate doar %1$s rezultate.\nPuteți încerca să căutați un text mai precis sau să activați din Setări generale căutarea textelor întregi pentru restrângere.</string>
+
+    <!-- Some new string in 2.0 version: -->
+    <string name="main_menu_title">Meniul principal</string>
+    <string name="mnu_settings_submenu">Setări</string>
+    <string name="mnu_web_submenu">Resurse WEB</string>
+
+    <!-- String for in_app_billing, Premium version: -->
+    <string name="mnu_get_premium_version">Versiune Premium…</string>
+    <string name="tv_premium_version_status">Aceasta este versiunea Premium</string>
+    <string name="premium_version_alert_title">Versiune Premium</string>
+    <string name="non_premium_version_alert_message">Dacă vreți ca reclamele să nu mai apară niciodată în acest program, puteți achiziționa versiunea Premium pentru doar %1$s.\nAvând versiunea Premium va fi economisit de asemenea trafic de internet consumat în prezent pentru afișarea reclamelor.</string>
+    <string name="premium_version_alert_message">Aveți deja versiunea Premium.\nVă mulțumim pentru interesul acordat acestui dicționar.</string>
+    <string name="bt_buy_premium">Obțineți Premium acum!</string>
+    <string name="title_activity_premium_version">Versiune Premium</string>
+    <string name="activity_premium_message">Felicitări!\nAți achiziționat cu succes versiunea Premium a Dicționarului Francez Român.\nDe acum ați scăpat de reclame.\nMulțumim pentru interesul acordat acestui dicționar.</string>
+
+    <!-- Context menu of the results: -->
+    <string name="cm_result_title">Opțiuni suplimentare</string>
+    <string name="cm_add_to_vocabulary">Adaugă la vocabular</string>
+    <string name="cm_speak_result">Pronunță cu voce tare</string>
+    <string name="cm_spell_result">Spune pe litere</string>
+    <string name="cm_copy_result">Copiază rezultatul întreg în clipboard</string>
+    <string name="cm_copy_word">Copiază doar termenul în clipboard</string>
+    <string name="cm_copy_explanation">Copiază doar explicația în clipboard</string>
+
+    <!-- Strings for my vocabulary -->
+    <string name="add_to_vocabulary_alert_title">Adăugare la vocabular</string>
+    <string name="tv_add_this_word">Adăugare &lt;%1$s&lt;/i>:</string>
+    <string name="et_new_vocabulary_hint">Scrieți un nume pentru o secțiune nouă</string>
+
+    <!-- A plurals resource for all categories total number in dropdown list: -->
+    <plurals name="number_of_all_words_in_vocabulary">
+        <item quantity="one">Toate – un cuvânt</item>
+        <item quantity="few">Toate – %1$s cuvinte</item>
+        <item quantity="other">Toate – %1$s de cuvinte</item>
+    </plurals>
+
+    <string name="dropdown_category">&lt;b>%1$s&lt;/b> – %2$s</string>
+    <string name="cbt_category">&lt;b>%1$s&lt;/b> (%2$s)</string>
+    <!-- A plurals resource for category and number of words in it: -->
+    <plurals name="number_of_words_in_category">
+        <item quantity="one">un cuvânt</item>
+        <item quantity="few">%1$s cuvinte</item>
+        <item quantity="other">%1$s de cuvinte</item>
+    </plurals>
+
+    <string name="bt_add_now">Adăugați!</string>
+    <string name="bt_cancel">Anulare</string>
+    <string name="no_category_chosen">Nu ați ales o secțiune pentru rezultatul selectat.\nVă rugăm să încercați din nou!.</string>
+    <string name="this_record_already_exists_in_vocabulary">Acest cuvânt există deja în vocabular.\nAceeași înregistrare nu poate exista de două ori.</string>
+    <string name="this_vocabulary_section_already_exists">Ați completat un nume de secțiune care există deja.\nÎnregistrarea selectată a fost adăugată în secțiunea deja existentă.</string>
+    <string name="title_activity_vocabulary">Vocabularul meu</string>
+    <string name="mnu_vocabulary">Vocabular</string>
+    <string name="tv_choose_category">Alegeți o secțiune: </string>
+    <string name="tv_welcome_vocabulary_message">Vocabularul dumneavoastră conține:\n - secțiuni: %1$s,\n - înregistrări: %2$s,\n - înregistrări per secțiune: %3$s.</string>
+    <string name="no_records_yet">Nu ați adăugat încă niciun cuvânt în vocabular.\nPentru a adăuga, atingeți lung un rezultat din fereastra Dicționar, apoi alegeți Adăugare la vocabular.</string>
+    <string name="in_spinner_choose_category">- alegeți aici -</string>
+    <string name="record_in_list">&lt;b>%1$s&lt;/b> – &lt;i>%2$s&lt;/i></string>
+    <string name="cm_vocabulary_title">Meniu contextual</string>
+    <string name="cm_properties">Proprietăți…</string>
+    <string name="alert_properties_title">Proprietăți</string>
+    <string name="properties_word">Termen: &lt;b>%1$s&lt;/b></string>
+    <string name="properties_explanation">Explicație: &lt;i>%1$s&lt;/i></string>
+    <string name="properties_direction">Dicționar: &lt;b>%1$s&lt;/b></string>
+    <string name="properties_category">Secțiune: &lt;b>%1$s&lt;/b></string>
+    <string name="properties_date">Adăugat: &lt;i>%1$s&lt;/i></string>
+    <string name="properties_english_romanian">francez – român</string>
+    <string name="properties_romanian_english">român – francez</string>
+    <string name="cm_delete">Șterge</string>
+    <string name="title_delete_record_in_vocabulary">Ștergere înregistrare</string>
+    <string name="body_delete_record_in_vocabulary">Sunteți sigur că vreți să ștergeți &lt;b>%1$s&lt;/b> din vocabular?</string>
+    <string name="title_category_deleted">Secțiune ștearsă</string>
+    <string name="body_category_deleted">Secțiunea &lt;b>%1$s&lt;/b> a fost eliminată.\nAceasta nu mai conținea înregistrări.</string>
+    <string name="yes">Da</string>
+    <string name="no">Nu</string>
+    <string name="title_delete_entire_vocabulary">Ștergere totală</string>
+    <string name="body_delete_entire_vocabulary">Sunteți sigur că doriți să ștergeți toate secțiunile și înregistrările din vocabular?\nAceastă acțiune este ireversibilă.</string>
+    <string name="mnu_delete_all">Golire vocabular…</string>
+    <string name="mnu_delete_section">Ștergere secțiune…</string>
+    <string name="title_delete_entire_category">Ștergere secțiune</string>
+    <string name="body_delete_entire_category">Sunteți sigur că vreți să ștergeți secțiunea &lt;b>%1$s&lt;/b> și toate înregistrările acesteia?\nAceastă acțiune este ireversibilă.</string>
+    <string name="warning_no_category_chosen">Nu ați ales o secțiune.</string>
+    <string name="mnu_section_information">Informații secțiune…</string>
+    <string name="title_alert_section_information">Informații secțiune</string>
+    <string name="info_category_name">Nume: &lt;b>%1$s&lt;/b></string>
+    <string name="info_section_contains">Înregistrări: &lt;b>%1$s&lt;/b></string>
+    <string name="info_date">Creată: &lt;i>%1$s&lt;/i></string>
+    <string name="bt_my_vocabulary">Vocabularul meu…</string>
+    <string name="title_default_vocabulary">Resetare Vocabularul meu</string>
+    <string name="body_default_vocabulary">Vreți de asemenea să ștergeți toate înregistrările din vocabularul dumneavoastră?</string>
+    <string name="cm_edit">Editează</string>
+    <string name="title_edit_record_in_vocabulary">Editare înregistrare</string>
+    <string name="save">Salvați!</string>
+    <string name="no_texts_for_edit">Ambele câmpuri de editare trebuie să conțină text.\nVă rugăm să încercați din nou!</string>
+    <string name="mnu_add_in_section">Adăugare în secțiune…</string>
+    <string name="title_add_in_section">Adăugare cuvânt</string>
+    <string name="message_add_in_section">Completați câmpurile de mai jos pentru a adăuga o înregistrare nouă în &lt;b>%1$s&lt;/b>:</string>
+    <string name="hint_add_new_word">Scrieți aici cuvântul…</string>
+    <string name="hint_add_new_explanation">Scrieți aici explicația…</string>
+
+    <!-- For Export and import vocabulary: -->
+    <string name="mnu_export_category">Exportare secțiune…</string>
+    <string name="title_export_category">Exportare secțiune</string>
+    <string name="body_export_category">Secțiunea &lt;b>%1$s&lt;/b> va fi exportată în fișierul &lt;b>%2$s&lt;/b>.\nAcest fișier va fi creat în folderul &lt;b>%3$s&lt;/b>, care poate fi găsit pe spațiul de stocare.</string>
+    <string name="category_exported_successfully">Secțiunea &lt;b>%1$s&lt;/b> a fost exportată cu succes.\nNumăr de înregistrări: &lt;b>%2$s&lt;/b>.</string>
+    <string name="bt_continue">Continuați!</string>
+    <string name="export_error">"Procesul de exportare nu s-a finalizat cu succes.\nAsigurați-vă că ați acordat permisiunile necesare acestei aplicații.</string>
+    <string name="title_import">Importare secțiune</string>
+    <string name="file_not_found">Fișierul nu a putut fi găsit sau deschis.\nAsigurați-vă că ați acordat permisiunile necesare acestei aplicații.</string>
+    <string name="import_final_information">Importarea în secțiunea &lt;b>%1$s&lt;/b> a fost finalizată:&lt;br> - înregistrări noi: &lt;b>%2$s&lt;/b>;&lt;br> - dubluri ignorate: &lt;b>%3$s&lt;/b>.</string>
+    <string name="import_unknown_error">A apărut o eroare necunoscută în timpul importării…</string>
+    <string name="mnu_import_predefined">Importare secțiuni predefinite…</string>
+    <string name="title_import_predefined">Importare secțiuni predefinite</string>
+    <string name="body_import_predefined">Alegeți o secțiune pentru a o importa:</string>
+    <string name="bt_import_predefined_categories">Importați secțiuni predefinite de cuvinte…</string>
+
+    <!-- Other strings: -->
+    <string name="mnu_rate">Evaluați aplicația…</string>
+    <string name="title_rate_app">Evaluare</string>
+    <string name="body_rate_app">Dacă acest dicționar vă este util, vă rugăm să îl evaluați în Magazin Google Play.\nMulțumim pentru interesul acordat.</string>
+    <string name="bt_rate">Evaluați!</string>
+    <string name="bt_not_now">Nu acum!</string>
+
+    <!-- String for permissions and others: -->
+    <string name="information">Informație</string>
+    <string name="info_when_permission_accounts_not_granted">Dicționarul funcționează fără probleme chiar dacă alegeți să nu acordați nicio permisiune.\nAvem nevoie de acea permisiune doar pentru a obține numele dumneavoastră de utilizator Google, astfel încât unele acțiuni, precum activarea versiunii premium fără plată în magazin, să poată fi efectuate.\nGarantăm că nu arătăm niciunde în mod public acel nume de utilizator Google.\nData viitoare când deschideți programul puteți alege să nu mai fiți întrebat niciodată de permisiune.\nDe asemenea, dacă nevoile se schimbă în viitor, puteți acorda această permisiune în manager de Aplicații, în Setările dispozitivului.</string>
+    <string name="no_account_name_detected_because_permission">Nu vă cunoaștem numele de utilizator Google, astfel că nu putem să ținem pe server un istoric al activității dumneavoastră.\nCu ceva vreme în urmă ați ales să nu acordați programului permisiunea de a afla numele de utilizator Google.\nDacă în viitor ați dori să vedeți istoricul mai amănunțit al activității dumneavoastră, mergeți în Manager de aplicații, Dicționar Francez Român și acolo puteți acorda permisiunile necesare.\nGarantăm că nu vom afișa niciunde numele dumneavoastră Google real, dacă veți dori să apăreți public, veți putea seta orice nume / poreclă.\nDe asemenea, menționăm că puteți continua să rezolvați teste și fără nicio acțiune, fără să acordați permisiunile cerute.</string>
+    <string name="info_when_permission_write_not_granted">Este imposibil să realizăm export sau import de fișiere de pe memoria de stocare, dacă nu ne-ați acordat permisiunea necesară.\nDacă doriți să exportați sau să importați fișiere, vă rugăm să încercați din nou și să acceptați cererea  noastră de a ne acorda permisiunea necesară.\nDicționarul continuă să funcționeze chiar și fără această permisiune, puteți bifa la următoarea încercare să nu se mai afișeze niciodată cererea.\nDe asemenea, dacă nevoile se schimbă în viitor, puteți acorda această permisiune în manager de Aplicații, în Setările dispozitivului.</string>
+    <string name="info_when_sure_write_permission_not_granted">Ați ales să nu acordați acestei aplicații permisiunea de a scrie sau citi memoria de stocare. Nu putem efectua acțiunea pe care ați inițiat-o.\nDacă doriți în continuare să faceți ce vi-ați propus, trebuie să mergeți în Manager de aplicații, aplicația de față, acolo puteți acorda manual permisiunea necesară.</string>
+    <string name="info_about_premium_version">Am observat că sunteți un utilizator fidel al acestui dicționar.\nȘtiați că puteți achiziționa versiunea premium a acestui dicționar doar pentru %1$s?\nDacă sunteți interesat(ă), mergeți în meniul principal al dicționarului, la Versiune Premium.\nCu versiunea premium vă veți putea bucura de acest program fără reclame în partea de jos a ferestrelor principale.\nAcest mesaj nu va mai apărea în viitor, a fost doar o informare despre ceva care s-ar fi putut să vă scape. Oricum, dicționarul va funcționa fără probleme la fel ca până acum în versiune standard, dacă nu intenționați să faceți această achiziție.</string>
+
+    <!-- TTS Settings -->
+    <string name="mnu_tts_settings">Setări voce (TTS)</string>
+    <string name="title_activity_ttssettings">Setări voce (TTS)</string>
+    <string name="tv_engines_initial_message">Aici va apărea o listă cu motoarele de redare text în vorbire (TTS) detectate în aparatul dumneavoastră…</string>
+    <!-- A plurals resource for results: -->
+    <plurals name="tv_number_of_engines">
+        <item quantity="one">Am detectat un motor de redare text în vorbire instalat pe aparatul dumneavoastră.\nAlegeți-l atingând butonul de mai jos:</item>
+        <item quantity="few">Am detectat %d motoare de redare text în vorbire instalate în aparatul dumneavoastră.\nAlegeți unul din lista de mai jos:</item>
+        <item quantity="other">Am detectat %d de motoare de redare text în vorbire instalate în aparatul dumneavoastră.\nAlegeți unul din lista de mai jos:</item>
+    </plurals>
+
+    <string name="tv_voices_initial_message">Aici va apărea o listă cu vocile în limba franceză existente în cadrul unui motor de redare text în vorbire ales…</string>
+    <string name="error_after_choosing_engine">Motorul TTS ales nu poate fi inițializat.\nA apărut o eroare necunoscută.\nVă rugăm să încercați un alt motor.</string>
+    <string name="tv_chose_a_voice">Alegeți o voce franceză a motorului &lt;i>%1$s&lt;/i> pentru mai multe detalii sau pentru a o salva:</string>
+    <string name="tv_no_english_available">Nu am detectat nicio voce pentru limba franceză în cadrul motorului TTS ales.\nVă rugăm să alegeți un alt motor din lista de mai sus.</string>
+    <string name="one_english_voice_in_list">%1$s &lt;b>%2$s&lt;/b> &lt;i>%3$s&lt;/i></string>
+    <string name="bt_tts_sample">Exemplu!</string>
+    <string name="bt_tts_save">Salvați!</string>
+    <string name="tv_set_tts_rate">Viteza de vorbire:</string>
+    <string name="tv_set_tts_pitch">Frecvența vocii:</string>
+    <string name="the_sample">Textul</string>
+    <string name="the_sample_message">Textul vorbit atingând scurt butonul &lt;b>%1$s&lt;/b> este:&lt;br>&lt;i>%2$s&lt;/i></string>
+
+    <!-- Strings added in 2.5: -->
+    <string name="tv_hidden_for_main_windows_central">Rezultatele vor apărea aici…</string>
+
+    <!-- For background settings: -->
+    <string name="mnu_background_settings">Alegere fundal</string>
+    <string name="title_activity_background">Alegere fundal</string>
+    <string name="tv_background_caption">Alegeți un fundal utilizând butoanele de mai jos și salvați-l pe cel care vă place mai mult.</string>
+    <string name="tv_background_caption2">Acesta este un text de exemplu, pentru a vedea cum arată pe fundalul ales.</string>
+    <string name="tv_current_background">FUNDAL %1$s</string>
+    <string name="tv_without_background">FĂRĂ FUNDAL</string>
+    <string name="bt_previous_background">&lt;- Anteriorul</string>
+    <string name="bt_next_background">Următorul -&gt;</string>
+    <string name="bt_save_background">Salvați acest fundal!</string>
+
+    <!-- New in 2.0: -->
+    <string name="bt_voice">Căutare vocală</string>
+
+    <string-array name="speech_direction_array">
+        <item>Spuneți un cuvânt în franceză…</item>
+        <item>Spuneți un cuvânt în română…</item>
+    </string-array>
+
+    <string name="speech_not_supported">Ne pare rău! Dispozitivul dumneavoastră nu suportă recunoașterea vocală.</string>
+
+    <!-- For search history: -->
+    <string name="title_activity_search_history">Istoric căutări</string>
+    <string name="mnu_search_history">Istoric</string>
+    <!-- A plurals resource for number of searches: -->
+    <plurals name="tv_number_of_searches">
+        <item quantity="one">Este doar o căutare în istoric.</item>
+        <item quantity="few">Sunt %d căutări în istoric.</item>
+        <item quantity="other">Sunt %d de căutări în istoric.</item>
+    </plurals>
+
+    <string name="bt_delete_history">Ștergere istoric căutări</string>
+    <string name="sh_title_delete_history">Ștergere istoric</string>
+    <string name="sh_body_delete_history">Sunteți sigur că vreți să ștergeți istoricul căutărilor?</string>
+    <string name="tv_searched_word">&lt;b>%1$s&lt;/b>&lt;br>&lt;i>%2$s&lt;/i></string>
+    <string name="sh_word_and_date_separator">&lt;br></string>
+
+    <array name="array_history_options">
+        <item>Franceză – găsite – alfabetic</item>
+        <item>Franceză – găsite – dată</item>
+        <item>Franceză – negăsite – alfabetic</item>
+        <item>Franceză – negăsite – dată</item>
+        <item>Română – găsite – alfabetic</item>
+        <item>Română – găsite – dată</item>
+        <item>Română – negăsite – alfabetic</item>
+        <item>Română – negăsite – dată</item>
+    </array>
+
+    <string name="tv_no_results_found_in_history">&lt;b>Nu au fost găsite înregistrări în istoric pentru categoria aleasă.&lt;/b></string>
+    <string name="no_romanian_language_to_speak">Cuvintele în limba română nu pot fi pronunțate încă.</string>
+    <string name="sh_cm_copy_result">Copiază acest cuvânt în clipboard</string>
+    <string name="sh_cm_delete_result">Șterge această căutare</string>
+    <string name="sh_title_delete_word_history">Ștergere căutare</string>
+    <string name="sh_body_delete_word_history">Sunteți sigur că vreți să ștergeți această căutare din istoric?</string>
+    <string name="sh_is_disabled">Istoricul căutărilor este dezactivat.\nPentru a-l activa, mergeți în Dictionar, meniu, Setări generale.</string>
+    <string name="sh_disable_now">Vreți să ștergeți căutările efectuate anterior?\nIstoricul va fi gol.</string>
+    <string name="enable_history">Activare istoric căutări</string>
+    <string name="sh_cm_search_result">Căutare în dicționar</string>
+
+</resources>

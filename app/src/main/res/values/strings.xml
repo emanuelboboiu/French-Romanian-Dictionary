@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Generalities: -->
+    <string name="app_name">French – Romanian – French Dictionary</string>
+    <string name="hello_world">Welcome world!</string>
+    <string name="action_settings">General settings</string>
+    <string name="bt_switch">Switch languages</string>
+    <string name="cautare_termen">Search word</string>
+    <string name="ellipsis">…</string>
+
+    <string-array name="direction_array">
+        <item>Write a French word…</item>
+        <item>Write a Romanian word…</item>
+    </string-array>
+
+    <!-- A plurals resource for number of words in DB: -->
+    <plurals name="tv_number_of_words">
+        <item quantity="one">There is one word in DataBase</item>
+        <item quantity="other">There are %1$s words</item>
+    </plurals>
+
+    <string name="tv_website">www.pontes.ro</string>
+    <string name="hint_scrie_aici">Write here…</string>
+    <string name="bt_search">Search</string>
+    <string name="bt_cancel_search">Clear</string>
+    <string name="bt_learn_irregular_verbs">Irregular verbs…</string>
+    <string name="warning">Warning!</string>
+    <string name="error">Error!</string>
+    <string name="warning_wrong_search">You must write at least two letters to search!</string>
+    <string name="warning_not_results">No results found!&lt;br>Searched for: &lt;i>%1$s&lt;/i>.&lt;br>Try again.</string>
+    <string name="warning_no_tts_available_fr">Text to Speech voice is not available for chosen locale.\nTry to set another language in Settings.\nYou can also install a TTS engine with an French voice language.</string>
+    <string name="warning_no_tts_available_ro">Text to Speech voice is not available for Romanian language.\nTry to update the Google Text-to-speech engine in Google Play Store.\nStarting January 2018, Google included a Romanian voice in their free speech synthesizer.</string>
+    <string name="tv_word_and_explanation">&lt;b>%1$s&lt;/b> – %2$s</string>
+    <!-- A plurals resource for results: -->
+    <plurals name="tv_number_of_results">
+        <item quantity="one">One result found:</item>
+        <item quantity="other">%d results found:</item>
+    </plurals>
+
+    <!-- The Main Menu Items: -->
+    <string name="mnu_settings">General settings</string>
+    <string name="mnu_display">Text size</string>
+    <string name="mnu_about">About dictionary…</string>
+    <string name="mnu_go_to_web_page">Application web page</string>
+    <string name="mnu_online_version">Go to dictionary web version</string>
+    <string name="mnu_app_in_play_store">View the application in Play Store</string>
+    <string name="mnu_default_settings">Reset to defaults…</string>
+    <string name="title_default_settings">Reset to defaults</string>
+    <string name="body_default_settings">Are you sure you want to reset it?\nThe programm will be in its initial state.\nIf you bought the Premium version, this will be re-activated after a new launch of the application.</string>
+
+    <!-- Settings Activity: -->
+    <string name="title_activity_settings">General Settings</string>
+    <string name="enable_sounds">Enable sounds</string>
+    <string name="enable_shake">Shake to initiate a new search</string>
+    <string name="enable_screen_awake">Keep screen awake</string>
+    <string name="enable_ime_action">Start searching when the lower right corner button of the virtual keyboards is pressed</string>
+    <string name="search_full_text">Enable full text search (this will display only whole words, delimited by non-alphanumeric characters)</string>
+
+    <!-- Text size activity, old was display settings Activity: -->
+    <string name="title_activity_display_settings">Text size</string>
+    <string name="display_choose_size">Choose the size of the results text:</string>
+
+    <!-- About dialog: -->
+    <string name="about">About Dictionary</string>
+    <string name="app_version">French – Romanian Dictionary, version 2.3.1</string>
+    <string name="app_release_date">The 1.0 version was released on Wednesday, 10 February 2016</string>
+    <string name="app_last_update">Last update was released on Sunday, August 12th, 2018</string>
+    <string name="app_creator">Programmed by Emanuel Boboiu (Manu)</string>
+    <string name="phone_number">Phone: +40740203043</string>
+    <string name="email_address">E-mail: android@pontes.ro</string>
+    <string name="web_address">Web: www.android.pontes.ro</string>
+    <string name="app_credits2">Icon and images created by Iulian Duma and Ștefan Halus</string>
+    <string name="app_credits3">Database created by Florin Rădulescu</string>
+    <string name="app_credits4">Beta testing: Iulian Duma and Ioto Hăinală</string>
+
+    <!-- Help strings in an array: -->
+    <string name="mnu_help">Help…</string>
+    <string name="help_alert_title">Help for Dictionary</string>
+
+    <string-array name="information_array">
+        <item>French Romanian Dictionary is very simple, easy to use and comprehensive.</item>
+        <item>It contains thousands of words.</item>
+        <item>Allows translation from French to Romanian and from Romanian to French.</item>
+        <item>The database is stored in your phone or tablet, no internet connection is needed (there is an offline database).</item>
+        <item>---------------</item>
+        <item>To search a term, fill in the edit field found in the upper part of the main window and tap the search button.</item>
+        <item>The results will appear in a list of maximum 300 items.</item>
+        <item>To change the search direction, tap the Switch languages button found above the edit field.</item>
+        <item>---------------</item>
+        <item>Tapping the results, the French fragments are read by a voice found in your phone to hear their pronunciation.</item>
+        <item>Tapping long the results, a context menu appears.</item>
+        <item>In this context menu you can choose to add a result into vocabulary, hear the French part pronounced by a voice, to hear the word spelled by the same voice, to copy the result into clipboard.</item>
+        <item>---------------</item>
+        <item>There are many options which can be enabled or disabled in settings: change search mode, all occurrences or full words only, keep screen awake, play sounds or not for some events, shake device for a new search, choose text size.</item>
+        <item>There is also a possibility to change the background of all screens. By default a random background is chosen at first launch of the dictionary. The background can be also disabled. All these settings can be found in Settings, Choose background.</item>
+        <item>In Voice settings (TTS) it\'s possible to change the preferred voice for pronouncing French parts of the results. All synthesizer engines available are shown, for each of them appearing the French voice variants. There is also possible to change the speed and pitch of the voice.</item>
+        <item>---------------</item>
+        <item>My vocabulary module is a tool which allows to add words sorted into sections in a separate database.</item>
+        <item>Tap long a result and choose in the context menu Add to My vocabulary.\nAn alert to choose an existing section or to create a new one where to add the result appears.</item>
+        <item>In the My vocabulary window it is possible to view records by sections, to delete them and other actions.\nThis way it is possible to learn easily new French words.</item>
+        <item>Any section can be exported in a file with .frd extension on the external storage.\nTo import a section from file, just open it using a file manager.</item>
+        <item>There are also predefined sections like Animals, Colors which can be imported.\nThese predefined sections can be found in the menu of My vocabulary module.</item>
+        <item>---------------</item>
+        <item>In the Standard version, in the bottom part of the main windows of the application some Google ads appear.</item>
+        <item>There is a Premium version which removes the ads, this way the application works better.</item>
+        <item>Go in main menu of the dictionary and choose Premium version to make the purchase. Paying a small among, the Premium version will be available forever, even after a re-installation of the dictionary.</item>
+        <item>The paid version is available for all devices signed-in with the same Google account.</item>
+        <item>---------------</item>
+        <item>For other questions or to make suggestions, please write to emanuelboboiu@gmail.com.</item>
+        <item>---------------</item>
+    </string-array>
+
+    <!-- Unique IDs for advertising: -->
+    <string name="banner_ad_unit_id_test">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="banner_ad_unit_id">ca-app-pub-9705662823127450/1072686782</string>
+    <string name="banner_ad_application_id">ca-app-pub-9705662823127450~8951493264</string>
+
+    <!-- About irregular verbs activity: -->
+    <string name="title_activity_verbs">Irregular Verbs</string>
+    <string name="mnu_irregular_verbs">Verbs</string>
+    <string name="mnu_go_to_dictionary">Dictionary</string>
+    <string name="tv_welcome_verbs_message">We know %1$s irregular verbs.\nYou can learn them reading the alphabetical list, or you can choose our quizzes.</string>
+    <string name="bt_verbs_list">List</string>
+    <string name="bt_verbs_quiz">Quiz</string>
+    <string name="tv_choose_letter">Choose an initial to show verbs</string>
+    <string name="in_spinner_choose_a_letter">- choose here -</string>
+    <string name="in_spinner_all_initials">all - %1$s</string>
+    <string name="verb_in_list">%1$s. &lt;b>%2$s&lt;/b>, %3$s, %4$s – &lt;i>%5$s&lt;/i></string>
+    <string name="choose_forms_to_fill_in">Choose the forms to fill in:</string>
+    <string name="bt_start_quiz">Start!</string>
+    <string name="bt_next_item">Next…</string>
+    <string name="bt_finish_quiz">Finish!</string>
+    <string name="text_unfilled">.......</string>
+    <string name="content_description_unfilled">The %1$s form is missing. Tap here to fill in it.</string>
+
+    <string-array name="verb_forms_array">
+        <item>Nothing</item>
+        <item>1st</item>
+        <item>2nd</item>
+        <item>3rd</item>
+    </string-array>
+
+    <string name="no_forms_were_chosen">You must choose at least one form to fill in.\nCheck the forms you want to fill in and tap again the Start button.</string>
+    <string name="item_title_in_quiz">Item %1$s of %2$s:</string>
+    <string name="quiz_message_before_start">Choose one, two or three forms to fill in, after tap the Start button.\nThe items will appear here one by one.</string>
+    <string name="quiz_progress_bar">Progress bar %1$s%%</string>
+    <string name="final_mark">You\'ve got %1$s.</string>
+    <!-- A plurals resource for mistakes: -->
+    <plurals name="tv_number_of_mistakes">
+        <item quantity="one">You had only one mistake:</item>
+        <item quantity="other">You had %d mistakes:</item>
+    </plurals>
+
+    <string name="tv_you_had_no_mistakes">Congratulations! You were perfect, no mistakes found.\n</string>
+    <string name="final_item_error">Item %1$s, the %2$s form of the verb %3$s:\ncorrect – %4$s, you wrote %5$s.</string>
+    <string name="mnu_view_statistics">View Statistics…</string>
+    <string name="title_view_statistics">Statistics</string>
+    <string name="bt_close">Close</string>
+
+    <!-- A plurals resource for number of tests: -->
+    <plurals name="tv_number_of_tests">
+        <item quantity="one">You\'ve been tested one time.</item>
+        <item quantity="other">You\'ve been tested %1$s times.</item>
+    </plurals>
+
+    <string name="tv_general_average">Your general average is %1$s.</string>
+    <string name="tv_no_average">The general average will appear here.</string>
+    <string name="tv_average_of_last_marks">The average for last %1$s marks is %2$s</string>
+    <string name="no_average_for_last_marks">The average for last %1$s marks will appear here</string>
+    <string name="one_of_last_marks">%1$s – %2$s</string>
+    <string name="no_last_x_marks">A list containing the last %1$s marks will appear here.</string>
+    <string name="today">today</string>
+    <string name="yesterday">yesterday</string>
+    <string name="date_format">%1$s, %2$s %3$s %4$s, %5$s.%6$s</string>
+    <string name="mnu_view_online_stats">View online score boards and statistics</string>
+    <string name="mnu_nickname">Your nickname…</string>
+    <string name="nickname_title">Nickname</string>
+    <string name="change_nickname_message">Your current nickname is %1$s.\nFill in your new nickname. It will appear in online statistics:</string>
+    <string name="anonymous">Anonymous</string>
+    <string name="unknown">unknown</string>
+    <string name="change_nickname_hint">Tap here to write you nickname…</string>
+    <string name="nickname_too_short">Your nickname must contain at least two letters.\nPlease write again.</string>
+    <string name="nickname_success">The change was finished successfully!\nYour new nickname is %1$s.\nThis will appear in online statistics and score boards.</string>
+    <string name="no_connection_available">We detect there is no a connection available.\n Please connect your device to the Internet and try again.</string>
+    <string name="correctness_of_a_result">Correct: %1$s. </string>
+    <string name="dictionary">Dictionary</string>
+    <string name="verbs">Verbs</string>
+    <string name="please_wait">Connecting to server…\nPlease wait!</string>
+    <string name="message_for_more_results">To avoid an excessive resources request of the device, only %1$s results were displayed.\nYou can try a more specific search or you can enable full text words searching in General Settings to narrow the results.</string>
+
+    <!-- Some new string in 2.0 version: -->
+    <string name="main_menu_title">Main Menu</string>
+    <string name="mnu_settings_submenu">Settings</string>
+    <string name="mnu_web_submenu">WEB resources</string>
+    <!-- String for in_app_billing, Premium version: -->
+    <string name="mnu_get_premium_version">Premium version…</string>
+    <string name="tv_premium_version_status">This is the Premium Version</string>
+    <string name="premium_version_alert_title">Premium Version</string>
+    <string name="non_premium_version_alert_message">If you don\'t want the ads to appear anymore, you can make a payment of only %1$s.\nYou will have the Premium Version of the dictionary, the app will not connect to the internet to query the ads, data packets won\'t be consumed anymore for that.</string>
+    <string name="premium_version_alert_message">You already have the Premium Version, thanks for your interest in this dictionary.</string>
+    <string name="bt_buy_premium">Get the Premium now!</string>
+    <string name="title_activity_premium_version">Premium Version</string>
+    <string name="activity_premium_message">Congratulations!\nYou have purchased successfully the Premium Version of the French Romanian Dictionary.\nThe ads won\'t appear anymore.\nThanks for your interest in this dictionary.</string>
+
+    <!-- Context menu of the results: -->
+    <string name="cm_result_title">Additional options</string>
+    <string name="cm_add_to_vocabulary">Add to My Vocabulary</string>
+    <string name="cm_speak_result">Say aloud</string>
+    <string name="cm_spell_result">Spell aloud</string>
+    <string name="cm_copy_result">Copy whole result into clipboard</string>
+    <string name="cm_copy_word">Copy only the term into clipboard</string>
+    <string name="cm_copy_explanation">Copy only the explanation into clipboard</string>
+
+    <!-- Strings for my vocabulary -->
+    <string name="add_to_vocabulary_alert_title">Add to my vocabularies</string>
+    <string name="tv_add_this_word">Add &lt;%1$s&lt;/i>:</string>
+    <string name="et_new_vocabulary_hint">Write a new section name</string>
+    <!-- A plurals resource for all categories total number in dropdown list: -->
+    <plurals name="number_of_all_words_in_vocabulary">
+        <item quantity="one">All – one word</item>
+        <item quantity="other">All – %1$s words</item>
+    </plurals>
+
+    <string name="dropdown_category">&lt;b>%1$s&lt;/b> – %2$s</string>
+    <string name="cbt_category">&lt;b>%1$s&lt;/b> (%2$s)</string>
+    <!-- A plurals resource for category and number of words in it: -->
+    <plurals name="number_of_words_in_category">
+        <item quantity="one">one word</item>
+        <item quantity="other">%1$s words</item>
+    </plurals>
+
+    <string name="bt_add_now">Add!</string>
+    <string name="bt_cancel">Cancel</string>
+    <string name="no_category_chosen">You didn\'t choose a vocabulary section for selected result.\nPlease try again!.</string>
+    <string name="this_record_already_exists_in_vocabulary">This word and explanation already exists in the vocabulary.\nYou cannot add the same word twice.</string>
+    <string name="this_vocabulary_section_already_exists">You filled in a vocabulary section name that already exists.\nThe selected result was inserted into the existing section.</string>
+    <string name="title_activity_vocabulary">My vocabulary</string>
+    <string name="mnu_vocabulary">Vocabulary</string>
+    <string name="tv_choose_category">Choose a vocabulary section: </string>
+    <string name="tv_welcome_vocabulary_message">Your vocabulary contains:\n - sections: %1$s,\n - records: %2$s,\n - records per section: %3$s.</string>
+    <string name="no_records_yet">You didn\'t add any word to your vocabularyes.\nTo add a word, tap long a result in Dictionary window.</string>
+    <string name="in_spinner_choose_category">- choose here -</string>
+    <string name="record_in_list">&lt;b>%1$s&lt;/b> – &lt;i>%2$s&lt;/i></string>
+    <string name="cm_vocabulary_title">Context menu</string>
+    <string name="cm_properties">Properties…</string>
+    <string name="alert_properties_title">Properties</string>
+    <string name="properties_word">Term: &lt;b>%1$s&lt;/b></string>
+    <string name="properties_explanation">Explanation: &lt;i>%1$s&lt;/i></string>
+    <string name="properties_direction">Dictionary: &lt;b>%1$s&lt;/b></string>
+    <string name="properties_category">Section: &lt;b>%1$s&lt;/b></string>
+    <string name="properties_date">Added: &lt;i>%1$s&lt;/i></string>
+    <string name="properties_english_romanian">French – Romanian</string>
+    <string name="properties_romanian_english">Romanian – French</string>
+    <string name="cm_delete">Delete</string>
+    <string name="title_delete_record_in_vocabulary">Delete record</string>
+    <string name="body_delete_record_in_vocabulary">Are you sure you want to delete &lt;b>%1$s&lt;/b> from your vocabulary?</string>
+    <string name="title_category_deleted">Section deleted</string>
+    <string name="body_category_deleted">The section &lt;b>%1$s&lt;/b> has been deleted.\nIt wasn\'t containing records anymore.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="title_delete_entire_vocabulary">Erase all</string>
+    <string name="body_delete_entire_vocabulary">Are you sure you want to delete all the sections and records in your vocabulary?\nThis cannot be undone.</string>
+    <string name="mnu_delete_all">Empty the vocabulary…</string>
+    <string name="mnu_delete_section">Delete section…</string>
+    <string name="title_delete_entire_category">Delete section</string>
+    <string name="body_delete_entire_category">Are you sure you want to delete the section &lt;b>%1$s&lt;/b> and all its records?\nThis cannot be undone.</string>
+    <string name="warning_no_category_chosen">You didn\'t select any section.</string>
+    <string name="mnu_section_information">Section information…</string>
+    <string name="title_alert_section_information">Section Information</string>
+    <string name="info_category_name">Name: &lt;b>%1$s&lt;/b></string>
+    <string name="info_section_contains">Records: &lt;b>%1$s&lt;/b></string>
+    <string name="info_date">Created: &lt;i>%1$s&lt;/i></string>
+    <string name="bt_my_vocabulary">My vocabulary</string>
+    <string name="title_default_vocabulary">Reset My vocabulary</string>
+    <string name="body_default_vocabulary">Do you also want to delete all the records in your vocabulary?\nThis will take effect at the next launch of the dictionary.</string>
+    <string name="cm_edit">Edit</string>
+    <string name="title_edit_record_in_vocabulary">Edit record</string>
+    <string name="save">Save!</string>
+    <string name="no_texts_for_edit">Both edit fields must contain text.\nPlease try again!</string>
+    <string name="mnu_add_in_section">Add in section…</string>
+    <string name="title_add_in_section">Add new word</string>
+    <string name="message_add_in_section">Fill in the edit fields below to add a new record in &lt;b>%1$s&lt;/b>:</string>
+    <string name="hint_add_new_word">Write here the word…</string>
+    <string name="hint_add_new_explanation">Write here the explanation…</string>
+
+    <!-- For Export and import vocabulary: -->
+    <string name="mnu_export_category">Export section…</string>
+    <string name="title_export_category">Export section</string>
+    <string name="body_export_category">The &lt;b>%1$s&lt;/b> section will be exported into &lt;b>%2$s&lt;/b> file.\nThis file will be created in the folder named &lt;b>%3$s&lt;/b>, found on the external storage.</string>
+    <string name="category_exported_successfully">The section &lt;b>%1$s&lt;/b> was exported successfully.\nNumber of records: &lt;b>%2$s&lt;/b>.</string>
+    <string name="bt_continue">Continue!</string>
+    <string name="export_error">The export process didn\'t succeed.\nBe sure the necessar permission was granted to this application.</string>
+    <string name="title_import">Import section</string>
+    <string name="file_not_found">The file could not be found or opened.\nBe sure the necessar permission was granted to this application.</string>
+    <string name="import_final_information">Import into &lt;b>%1$s&lt;/b> section finished:&lt;br> - records added: &lt;b>%2$s&lt;/b>;&lt;br> - duplicates ignored: &lt;b>%3$s&lt;/b>.</string>
+    <string name="import_unknown_error">An unknown error has occurred while importing…</string>
+    <string name="mnu_import_predefined">Import predefined sections…</string>
+    <string name="title_import_predefined">Import predefined sections</string>
+    <string name="body_import_predefined">Choose a section to import:</string>
+    <string name="bt_import_predefined_categories">Import predefined word categories…</string>
+
+    <!-- Other strings: -->
+    <string name="mnu_rate">Rate application…</string>
+    <string name="title_rate_app">Rate application</string>
+    <string name="body_rate_app">If you find this dictionary useful, please rate it in Google Play.</string>
+    <string name="bt_rate">Rate now!</string>
+    <string name="bt_not_now">Not now!</string>
+
+    <!-- String for permissions and others: -->
+    <string name="information">Information</string>
+    <string name="info_when_permission_accounts_not_granted">This dictionary works well without any permisions granted.\nWe need that permission only to know your Google Id, this way more actions are available in this app.\nWe don\'t show anywhere publicly your Google Id.\nNext time you can choose not to be asked anymore about this permission.\nYou can also give manually the permission in Application Manager, if your needs gets changed in future.</string>
+    <string name="no_account_name_detected_because_permission">We don\'t know your Google Id, this way we cannot post on the server your results obtained solving quizzes.\nSometime ago you didn\'t accepted to give us the permission to read your Google account name.\nIf you want to view in future your results and other personal information, please go in Application Manager, this App, and turn on requested permissions.\nWe don\'t show publicly your Google Id.\nYou can also solve quizzes without turning on the necessary permission for reading Google account name.</string>
+    <string name="info_when_permission_write_not_granted">It is impossible to export or import a section if we haven\'t the permission granted.\nIf you want to export or import sections in this vocabulary, try again and give the permission to this app to read and write external storage.\nThe dictionary continues to work well even you don\'t accept this in future.\nYou can also give manually the permission in Application Manager, if your needs gets changed in future.</string>
+    <string name="info_when_sure_write_permission_not_granted">You have chosen not to give the permission to write or read external storage to this dictionary app, we cannot do what you wanted.\nIf you want to do this action, please go in Application Manager, this App, and turn on requested permissions.</string>
+    <string name="info_about_premium_version">We noticed you are a loyal user of this dictionary.\nDid you know about the possibility to buy a premium version just for %1$s?\nIf you are interested, go in main menu of the dictionary, Premium version.\nWith premium version you will enjoy this app without ads in the bottom part of the main windows.\nThis message will not appear anymore, it was just a notice for you, the dictionary continues to work well even you keep the standard version.</string>
+
+    <!-- TTS Settings -->
+    <string name="mnu_tts_settings">Voice settings (TTS)</string>
+    <string name="title_activity_ttssettings">Voice Settings (TTS)</string>
+    <string name="tv_engines_initial_message">A list of TTS engines will appear here…</string>
+    <!-- A plurals resource for results: -->
+    <plurals name="tv_number_of_engines">
+        <item quantity="one">We detected one text to speech engine available in your device.\nChoose it below:</item>
+        <item quantity="other">We detected %d text to speech engines available in your device.\nChoose one from the list below:</item>
+    </plurals>
+
+    <string name="tv_voices_initial_message">A list of French voices will appear here…</string>
+    <string name="error_after_choosing_engine">The chosen TTS engine cannot be load.\nThere is an unknown error.\nPlease try another one.</string>
+    <string name="tv_chose_a_voice">Choose an French voice of the &lt;i>%1$s&lt;/i> engine for more details:</string>
+    <string name="tv_no_english_available">No French voice was detected for this Text to Speech engine.\nPlease try another engine from the list above.</string>
+    <string name="one_english_voice_in_list">%1$s &lt;b>%2$s&lt;/b> &lt;i>%3$s&lt;/i></string>
+    <string name="a_voice_chosen_to_check">&lt;b>%1$s (%2$s)&lt;/b></string>
+    <string name="bt_tts_sample">Sample!</string>
+    <string name="bt_tts_save">Save!</string>
+    <string name="tv_set_tts_rate">Voice rate:</string>
+    <string name="tv_set_tts_pitch">Voice pitch:</string>
+    <string name="the_sample">The text</string>
+    <string name="the_sample_message">The text spoken tapping short the &lt;b>%1$s&lt;/b> button is:&lt;br>&lt;i>%2$s&lt;/i></string>
+
+    <!-- Strings added in 2.5: -->
+    <string name="tv_hidden_for_main_windows_central">The results will appear here…</string>
+
+    <!-- For background settings: -->
+    <string name="mnu_background_settings">Choose background</string>
+    <string name="title_activity_background">Choose background</string>
+    <string name="tv_background_caption">Choose a background using the buttons below and save your preferred one.</string>
+    <string name="tv_background_caption2">This is an example text, just to see how it appears on the chosen background.</string>
+    <string name="tv_current_background">BACKGROUND %1$s</string>
+    <string name="tv_without_background">NO BACKGROUND</string>
+    <string name="bt_previous_background">&lt;- Previous</string>
+    <string name="bt_next_background">Next -&gt;</string>
+    <string name="bt_save_background">Save this background!</string>
+
+    <!-- New in 2.0: -->
+    <string name="bt_voice">Voice search</string>
+
+    <string-array name="speech_direction_array">
+        <item>Say a French word…</item>
+        <item>Say a Romanian word…</item>
+    </string-array>
+
+    <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input.</string>
+
+    <!-- For search history: -->
+    <string name="title_activity_search_history">Search History (log)</string>
+    <string name="mnu_search_history">Log</string>
+    <!-- A plurals resource for number of searches: -->
+    <plurals name="tv_number_of_searches">
+        <item quantity="one">There is only one search in history.</item>
+        <item quantity="other">There are %d searches in history.</item>
+    </plurals>
+
+    <string name="bt_delete_history">Clear search history</string>
+    <string name="sh_title_delete_history">Delete log</string>
+    <string name="sh_body_delete_history">Are you sure you want to delete the entire search history?</string>
+    <string name="tv_searched_word">&lt;b>%1$s&lt;/b>&lt;br>&lt;i>%2$s&lt;/i></string>
+    <string name="sh_word_and_date_separator">&lt;br></string>
+
+    <array name="array_history_options">
+        <item>French – found – alfabetically</item>
+        <item>French – found – date</item>
+        <item>French – not found – alfabetically</item>
+        <item>French – not found – date</item>
+        <item>Romanian – found – alfabetically</item>
+        <item>Romanian – found – date</item>
+        <item>Romanian – not found – alfabetically</item>
+        <item>Romanian – not found – date</item>
+    </array>
+
+    <string name="tv_no_results_found_in_history">&lt;b>No records were found in history for the chosen category.&lt;/b></string>
+    <string name="no_romanian_language_to_speak">Romanian words cannot be pronounced yet.</string>
+    <string name="sh_cm_copy_result">Copy this word into clipboard</string>
+    <string name="sh_cm_delete_result">Delete this record from log</string>
+    <string name="sh_title_delete_word_history">Delete record</string>
+    <string name="sh_body_delete_word_history">Are you sure you want to delete this search from history?</string>
+    <string name="sh_is_disabled">The log is disabled.\nTo activate it, go in Dictionary, menu, General Settings.</string>
+    <string name="sh_disable_now">Would you like to delete the searches done before?\nThe log will be empty.</string>
+    <string name="enable_history">Enable search history (log)</string>
+    <string name="sh_cm_search_result">Search in dictionary</string>
+
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="whiteText">#FFFFFF</color>
+    <color name="white">#00FFFFFF</color>
+    <color name="black">#00000000</color>
+    <color name="search_icons">#333333</color>
+    <color name="ll_action_bar_background">#333333</color>
+    <color name="ll_action_bar_text">#FFFFFF</color>
+
+</resources>
