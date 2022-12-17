@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Generalities -->
-    <string name="app_name">Dicționar Francez – Român – Francez</string>
+    <string name="app_name">Dicționar Francez – Român</string>
     <string name="hello_world">Bine ați venit!</string>
     <string name="action_settings">Setări generale</string>
     <string name="bt_switch">Inversează limbile</string>

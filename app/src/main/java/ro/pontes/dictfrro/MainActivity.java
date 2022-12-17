@@ -1,22 +1,11 @@
 package ro.pontes.dictfrro;
 
-import java.util.ArrayList;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import ro.pontes.dictfrro.ShakeDetector.OnShakeListener;
-
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender.SendIntentException;
-import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -24,9 +13,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Looper;
-import android.os.RemoteException;
 import android.speech.RecognizerIntent;
 import android.text.InputType;
 import android.util.TypedValue;
@@ -51,16 +38,14 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
-// For billing:
-import com.android.vending.billing.IInAppBillingService;
-// For Google Ads:
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
+import java.util.ArrayList;
 
 /*
  * Class started on Friday, 04 September 2015, created by Emanuel Boboiu.
@@ -91,9 +76,9 @@ public class MainActivity extends Activity {
     public static int resultsLimit = 300;
     public static int mPaddingDP = 3; // for padding at text views of results.
     public static int direction = 0; // 0 en_ro, 1 ro_en.
-    private static String myUniqueId = "xyzxyzxyz890890890";
+    private static final String myUniqueId = "xyzxyzxyz890890890";
     public static boolean isPremium = false;
-    private String mProduct = "frd.premium";
+    private final String mProduct = "frd.premium";
     public static String mUpgradePrice = "�";
     private int idSection = 0;
     public static int numberOfLaunches = 0;
@@ -128,24 +113,6 @@ public class MainActivity extends Activity {
     private AdView bannerAdView;
 
     // Starting here there are things for billing:
-    IInAppBillingService mService;
-
-    ServiceConnection mServiceConn = new ServiceConnection() {
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mService = null;
-        }
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = IInAppBillingService.Stub.asInterface(service);
-
-            // A method to check if is or not premium version:
-            makeInitialThingsForInAppBilling();
-        }
-    };
-
-    // end inAppBilling zone for service.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,13 +127,6 @@ public class MainActivity extends Activity {
         } else {
             setContentView(R.layout.activity_main);
         } // end charging the correct layout.
-
-        // Bind the service for InAppBilling:
-        Intent serviceIntent = new Intent(
-                "com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
-        bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
-        // End binding the service for InAppBilling.
 
         // Calculate the pixels in DP for mPaddingDP, for TextViews of the
         // results:
@@ -191,10 +151,10 @@ public class MainActivity extends Activity {
         aSpeechDirection = res.getStringArray(R.array.speech_direction_array);
 
         // Find the llResults:
-        llResults = (LinearLayout) findViewById(R.id.llResults);
+        llResults = findViewById(R.id.llResults);
 
         // Charge the bottom linear layout:
-        llBottomInfo = (LinearLayout) findViewById(R.id.llBottomInfo);
+        llBottomInfo = findViewById(R.id.llBottomInfo);
 
         speak = new SpeakText(this);
         searchHistory = new SearchHistory(this);
@@ -209,16 +169,11 @@ public class MainActivity extends Activity {
                 .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mShakeDetector = new ShakeDetector();
         mShakeDetector.setShakeThresholdGravity(MainActivity.onshakeMagnitude);
-        mShakeDetector.setOnShakeListener(new OnShakeListener() {
-            @Override
-            public void onShake(int count) {
-                /*
-                 * Method you would use to setup whatever you want done once the
-                 * device has been shook.
-                 */
-                handleShakeEvent(count);
-            }
-        });
+        /*
+         * Method you would use to setup whatever you want done once the
+         * device has been shook.
+         */
+        mShakeDetector.setOnShakeListener(this::handleShakeEvent);
         // End initialisation of the shake detector.
 
         GUITools.checkIfRated(this);
@@ -279,11 +234,6 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         // Close the database connection:
         mDbHelper.close();
-
-        // Unbind the service for InAppBilling:
-        if (mService != null) {
-            unbindService(mServiceConn);
-        }
 
         // Shut down also the TTS:
         speak.close();
@@ -366,7 +316,7 @@ public class MainActivity extends Activity {
     public boolean onContextItemSelected(MenuItem item) {
         // First we take the text from the longly clicked result:
         String result = tvResultForContext.getText().toString();
-        String[] aResult = result.split("\\ � ");
+        String[] aResult = result.split(" – ");
         String w = aResult[0];
         String e = aResult[1];
         @SuppressWarnings("unused")
@@ -402,7 +352,7 @@ public class MainActivity extends Activity {
     private void goToSettings() {
         // Called when the user clicks the settings option in menu:
         Intent intent = new Intent(this, SettingsActivity.class);
-        String message = new String();
+        String message;
         message = "Francaise Dictionary"; // without a reason, just to be
         // something
         // sent by the intent.
@@ -413,7 +363,7 @@ public class MainActivity extends Activity {
     private void goToTTSSettings() {
         // Called when the user clicks the Voice settings option in menu:
         Intent intent = new Intent(this, TTSSettingsActivity.class);
-        String message = new String();
+        String message;
         message = "Francaise Dictionary"; // without a reason.
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
@@ -422,7 +372,7 @@ public class MainActivity extends Activity {
     private void goToDisplaySettings() {
         // Called when the user clicks the display settings option in menu:
         Intent intent = new Intent(this, DisplaySettingsActivity.class);
-        String message = new String();
+        String message;
         message = "Francaise Dictionary"; // without a reason, just to be
         // something
         // sent by the intent.
@@ -433,7 +383,7 @@ public class MainActivity extends Activity {
     private void goToBackgroundSettings() {
         // Called when the user clicks the background settings option in menu:
         Intent intent = new Intent(this, BackgroundActivity.class);
-        String message = new String();
+        String message;
         message = "Francaise Dictionary"; // without a reason.
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
@@ -466,11 +416,11 @@ public class MainActivity extends Activity {
                 R.plurals.tv_number_of_words, totalWords, totalWords);
 
         // Update the tvStatus TextView:
-        TextView tv = (TextView) findViewById(R.id.tvStatus);
+        TextView tv = findViewById(R.id.tvStatus);
         tv.setText(numberOfWordsMessage);
 
         // Add an action listener for the keyboard:
-        EditText input = (EditText) findViewById(R.id.etWord);
+        EditText input = findViewById(R.id.etWord);
         input.setInputType(input.getInputType()
                 | EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         input.setOnEditorActionListener(new OnEditorActionListener() {
@@ -499,7 +449,7 @@ public class MainActivity extends Activity {
 
     // A method to get the text filled in the search EditText:
     private String getTextFromEditText() {
-        EditText input = (EditText) findViewById(R.id.etWord);
+        EditText input = findViewById(R.id.etWord);
         InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(input.getWindowToken(), 0);
         String text = input.getText().toString();
@@ -542,7 +492,7 @@ public class MainActivity extends Activity {
         if (word != null) {
             // Make now the query string depending if is search middle or
             // not:
-            String SQL = null;
+            String SQL;
 
             // Make the SQL query string depending of the search type:
             if (isSearchFullText) {
@@ -689,7 +639,7 @@ public class MainActivity extends Activity {
 
     private void cancelSearchActions(int where) {
         // Find the edit text to erase all content:
-        EditText et = (EditText) findViewById(R.id.etWord);
+        EditText et = findViewById(R.id.etWord);
         et.setText("");
 
         // Show the keyboard for a new search:
@@ -753,12 +703,12 @@ public class MainActivity extends Activity {
 
     // The method which updates the text view for search message:
     private void updateSearchMessage() {
-        EditText et = (EditText) findViewById(R.id.etWord);
+        EditText et = findViewById(R.id.etWord);
         et.setHint(aDirection[direction]);
 
         // Set also the image with flags for switch button:
         String flagFileName = "flag" + direction;
-        ImageButton ib = (ImageButton) findViewById(R.id.btSwitch);
+        ImageButton ib = findViewById(R.id.btSwitch);
         String uri = "@drawable/" + flagFileName;
         int imageResource = getResources().getIdentifier(uri, null,
                 getPackageName());
@@ -819,52 +769,6 @@ public class MainActivity extends Activity {
         bannerAdView.loadAd(adRequest);
     } // end loadBannerAd() method.
 
-    // Method to request InAppBilling:
-    private void getSubsDetails() {
-        new Thread(new Runnable() {
-            public void run() {
-                // An ArrayList of Strings for products details:
-                ArrayList<String> skuList = new ArrayList<String>();
-                skuList.add(mProduct);
-
-                // A bundle which will contain this ArrayList:
-                Bundle querySkus = new Bundle();
-                querySkus.putStringArrayList("ITEM_ID_LIST", skuList);
-
-                // Get now things from Google Play:
-                try {
-                    Bundle skuDetails = mService.getSkuDetails(3,
-                            "ro.pontes.dictfrro", "inapp", querySkus);
-
-                    // Retrieve the prices of the skuDetails Bundle returned
-                    // from the previous code:
-                    int response = skuDetails.getInt("RESPONSE_CODE");
-                    if (response == 0) {
-                        ArrayList<String> responseList = skuDetails
-                                .getStringArrayList("DETAILS_LIST");
-
-                        for (String thisResponse : responseList) {
-                            JSONObject object = new JSONObject(thisResponse);
-                            String sku = object.getString("productId");
-                            String price = object.getString("price");
-                            if (sku.equals(mProduct)) {
-                                mUpgradePrice = price;
-                            }
-                            // else if (sku.equals("gas")) mGasPrice = price;
-                        }
-                    }
-
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-
-            }
-        }).start();
-    } // end getSubsDetails() method.
-
     public void upgradeToPremium(View view) {
         upgradeAlert();
     } // end upgradeToPremium() method.
@@ -880,7 +784,7 @@ public class MainActivity extends Activity {
             TextView tv = new TextView(this);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
             tv.setPadding(mPaddingDP, mPaddingDP, mPaddingDP, mPaddingDP);
-            String message = "";
+            String message;
             if (isPremium) {
                 message = getString(R.string.premium_version_alert_message);
             } else {
@@ -901,7 +805,7 @@ public class MainActivity extends Activity {
             alertDialog.setView(sv);
 
             // The button can be close or Get now!:
-            String buttonName = "";
+            String buttonName;
             if (isPremium) {
                 buttonName = getString(R.string.bt_close);
             } else {
@@ -915,7 +819,7 @@ public class MainActivity extends Activity {
                             // Start the payment process:
                             // Only if is not premium:
                             if (!isPremium) {
-                                upgradeToPremiumActions();
+                                // upgradeToPremiumActions();
                             }
                         }
                     });
@@ -930,54 +834,9 @@ public class MainActivity extends Activity {
         } // end if connection is not available.
     } // end upgradeAlert() method.
 
-    public void upgradeToPremiumActions() {
-        try {
-            Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(),
-                    mProduct, "inapp",
-                    "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ");
-
-            int response = buyIntentBundle.getInt("RESPONSE_CODE");
-            if (response == 0) {
-                PendingIntent pendingIntent = buyIntentBundle
-                        .getParcelable("BUY_INTENT");
-
-                startIntentSenderForResult(pendingIntent.getIntentSender(),
-                        1001, new Intent(), Integer.valueOf(0),
-                        Integer.valueOf(0), Integer.valueOf(0));
-
-            } // end if result is OK.
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (SendIntentException e) {
-            e.printStackTrace();
-        }
-    } // end upgradeToPremiumActions() method.
-
     // The finishing of the purchasing or other things:
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1001) {
-            @SuppressWarnings("unused")
-            int responseCode = data.getIntExtra("RESPONSE_CODE", 0);
-            String purchaseData = data.getStringExtra("INAPP_PURCHASE_DATA");
-            @SuppressWarnings("unused")
-            String dataSignature = data.getStringExtra("INAPP_DATA_SIGNATURE");
-
-            if (resultCode == RESULT_OK) {
-                try {
-                    JSONObject jo = new JSONObject(purchaseData);
-                    @SuppressWarnings("unused")
-                    String sku = jo.getString("productId");
-                    /*
-                     * We need to restart here the activity to have the activity
-                     * windows as a premium one.
-                     */
-                    recreateThisActivityAfterRegistering();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } // end if resultCode is OK.
-        } // end if requestCode is 1001.
 
         // Now if it's here after speech:
         if (requestCode == REQ_CODE_SPEECH_INPUT) {
@@ -986,72 +845,12 @@ public class MainActivity extends Activity {
                         .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 String spoken = result.get(0);
                 // Now set the etWord:
-                EditText et = (EditText) findViewById(R.id.etWord);
+                EditText et = findViewById(R.id.etWord);
                 et.setText(spoken);
                 getWordFromDB(direction);
             }
         } // end if it's here after a speech.
     } // end onActivityResult() method.
-
-    // A method which takes owned items:
-    public void checkOwnedItems() {
-        new Thread(new Runnable() {
-            public void run() {
-
-                Bundle ownedItems;
-                try {
-                    ownedItems = mService.getPurchases(3, "ro.pontes.dictfrro",
-                            "inapp", null);
-
-                    int response = ownedItems.getInt("RESPONSE_CODE");
-                    if (response == 0) {
-                        ArrayList<String> ownedSkus = ownedItems
-                                .getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
-                        ArrayList<String> purchaseDataList = ownedItems
-                                .getStringArrayList("INAPP_PURCHASE_DATA_LIST");
-                        ArrayList<String> signatureList = ownedItems
-                                .getStringArrayList("INAPP_DATA_SIGNATURE_LIST");
-                        @SuppressWarnings("unused")
-                        String continuationToken = ownedItems
-                                .getString("INAPP_CONTINUATION_TOKEN");
-
-                        for (int i = 0; i < purchaseDataList.size(); ++i) {
-                            @SuppressWarnings("unused")
-                            String purchaseData = purchaseDataList.get(i);
-                            @SuppressWarnings("unused")
-                            String signature = signatureList.get(i);
-                            String sku = ownedSkus.get(i);
-
-                            // do something with this purchase information:
-                            if (sku.equals(mProduct)) {
-                                /*
-                                 * We need to restart here the activity to have
-                                 * the activity windows as a premium one.
-                                 */
-                                recreateThisActivityAfterRegistering();
-                                break;
-                            }
-                        } // end for.
-
-                    } // end if response is OK, 0.
-
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-
-            } // end run method of the thread.
-        }).start();
-    } // end checkOwnedItems() method.
-
-    // A method to make initial things:
-    public void makeInitialThingsForInAppBilling() {
-        if (!isPremium) {
-            checkOwnedItems();
-            getSubsDetails();
-        } else {
-
-        }
-    } // end makeInitialThingsForInAppBilling() method.
 
     // A method which recreates this activity after upgrading:
     private void recreateThisActivityAfterRegistering() {
@@ -1391,7 +1190,7 @@ public class MainActivity extends Activity {
     // A method to search a word from history:.
     public void searchFromHistory(String word, final int historyDirection) {
         // Find the edit text to put there the word from history:
-        EditText et = (EditText) findViewById(R.id.etWord);
+        EditText et = findViewById(R.id.etWord);
         et.setText(word);
 
         final Handler handler = new Handler();

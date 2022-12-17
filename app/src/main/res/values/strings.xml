@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Generalities: -->
-    <string name="app_name">French – Romanian – French Dictionary</string>
+    <string name="app_name">French – Romanian Dictionary</string>
     <string name="hello_world">Welcome world!</string>
     <string name="action_settings">General settings</string>
     <string name="bt_switch">Switch languages</string>
