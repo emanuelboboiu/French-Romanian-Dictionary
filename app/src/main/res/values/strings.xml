@@ -47,7 +47,7 @@
     <string name="mnu_app_in_play_store">View the application in Play Store</string>
     <string name="mnu_default_settings">Reset to defaults…</string>
     <string name="title_default_settings">Reset to defaults</string>
-    <string name="body_default_settings">Are you sure you want to reset it?\nThe programm will be in its initial state.\nIf you bought the Premium version, this will be re-activated after a new launch of the application.</string>
+    <string name="body_default_settings">Are you sure you want to reset it?\nThe program will be in its initial state.\nIf you bought the Premium version, this will be re-activated after a new launch of the application.</string>
 
     <!-- Settings Activity: -->
     <string name="title_activity_settings">General Settings</string>
@@ -239,7 +239,7 @@
     <string name="mnu_vocabulary">Vocabulary</string>
     <string name="tv_choose_category">Choose a vocabulary section: </string>
     <string name="tv_welcome_vocabulary_message">Your vocabulary contains:\n - sections: %1$s,\n - records: %2$s,\n - records per section: %3$s.</string>
-    <string name="no_records_yet">You didn\'t add any word to your vocabularyes.\nTo add a word, tap long a result in Dictionary window.</string>
+    <string name="no_records_yet">You didn\'t add any word to your vocabularies.\nTo add a word, tap long a result in Dictionary window.</string>
     <string name="in_spinner_choose_category">- choose here -</string>
     <string name="record_in_list">&lt;b>%1$s&lt;/b> – &lt;i>%2$s&lt;/i></string>
     <string name="cm_vocabulary_title">Context menu</string>
@@ -290,9 +290,9 @@
     <string name="body_export_category">The &lt;b>%1$s&lt;/b> section will be exported into &lt;b>%2$s&lt;/b> file.\nThis file will be created in the folder named &lt;b>%3$s&lt;/b>, found on the external storage.</string>
     <string name="category_exported_successfully">The section &lt;b>%1$s&lt;/b> was exported successfully.\nNumber of records: &lt;b>%2$s&lt;/b>.</string>
     <string name="bt_continue">Continue!</string>
-    <string name="export_error">The export process didn\'t succeed.\nBe sure the necessar permission was granted to this application.</string>
+    <string name="export_error">The export process didn\'t succeed.\nBe sure the necessary permission was granted to this application.</string>
     <string name="title_import">Import section</string>
-    <string name="file_not_found">The file could not be found or opened.\nBe sure the necessar permission was granted to this application.</string>
+    <string name="file_not_found">The file could not be found or opened.\nBe sure the necessary permission was granted to this application.</string>
     <string name="import_final_information">Import into &lt;b>%1$s&lt;/b> section finished:&lt;br> - records added: &lt;b>%2$s&lt;/b>;&lt;br> - duplicates ignored: &lt;b>%3$s&lt;/b>.</string>
     <string name="import_unknown_error">An unknown error has occurred while importing…</string>
     <string name="mnu_import_predefined">Import predefined sections…</string>
@@ -309,7 +309,7 @@
 
     <!-- String for permissions and others: -->
     <string name="information">Information</string>
-    <string name="info_when_permission_accounts_not_granted">This dictionary works well without any permisions granted.\nWe need that permission only to know your Google Id, this way more actions are available in this app.\nWe don\'t show anywhere publicly your Google Id.\nNext time you can choose not to be asked anymore about this permission.\nYou can also give manually the permission in Application Manager, if your needs gets changed in future.</string>
+    <string name="info_when_permission_accounts_not_granted">This dictionary works well without any permission granted.\nWe need that permission only to know your Google Id, this way more actions are available in this app.\nWe don\'t show anywhere publicly your Google Id.\nNext time you can choose not to be asked anymore about this permission.\nYou can also give manually the permission in Application Manager, if your needs gets changed in future.</string>
     <string name="no_account_name_detected_because_permission">We don\'t know your Google Id, this way we cannot post on the server your results obtained solving quizzes.\nSometime ago you didn\'t accepted to give us the permission to read your Google account name.\nIf you want to view in future your results and other personal information, please go in Application Manager, this App, and turn on requested permissions.\nWe don\'t show publicly your Google Id.\nYou can also solve quizzes without turning on the necessary permission for reading Google account name.</string>
     <string name="info_when_permission_write_not_granted">It is impossible to export or import a section if we haven\'t the permission granted.\nIf you want to export or import sections in this vocabulary, try again and give the permission to this app to read and write external storage.\nThe dictionary continues to work well even you don\'t accept this in future.\nYou can also give manually the permission in Application Manager, if your needs gets changed in future.</string>
     <string name="info_when_sure_write_permission_not_granted">You have chosen not to give the permission to write or read external storage to this dictionary app, we cannot do what you wanted.\nIf you want to do this action, please go in Application Manager, this App, and turn on requested permissions.</string>
@@ -378,13 +378,13 @@
     <string name="sh_word_and_date_separator">&lt;br></string>
 
     <array name="array_history_options">
-        <item>French – found – alfabetically</item>
+        <item>French – found – alphabetically</item>
         <item>French – found – date</item>
-        <item>French – not found – alfabetically</item>
+        <item>French – not found – alphabetically</item>
         <item>French – not found – date</item>
-        <item>Romanian – found – alfabetically</item>
+        <item>Romanian – found – alphabetically</item>
         <item>Romanian – found – date</item>
-        <item>Romanian – not found – alfabetically</item>
+        <item>Romanian – not found – alphabetically</item>
         <item>Romanian – not found – date</item>
     </array>
 
@@ -398,5 +398,10 @@
     <string name="sh_disable_now">Would you like to delete the searches done before?\nThe log will be empty.</string>
     <string name="enable_history">Enable search history (log)</string>
     <string name="sh_cm_search_result">Search in dictionary</string>
+
+    <!-- Strings added in 3.0, starting with Sunday, 18th December: -->
+    <string name="purchase_canceled">The purchase process was canceled.</string>
+    <string name="no_purchases_available">There are no items to be purchased.</string>
+    <string name="billing_unknown_error">An unknown error has occurred during purchase process.</string>
 
 </resources>

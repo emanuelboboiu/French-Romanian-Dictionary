@@ -1,5 +1,7 @@
 package ro.pontes.dictfrro;
 
+import static com.google.android.gms.common.util.CollectionUtils.listOf;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -39,6 +41,17 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
+import com.android.billingclient.api.AcknowledgePurchaseParams;
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.ProductDetails;
+import com.android.billingclient.api.ProductDetailsResponseListener;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.android.billingclient.api.QueryProductDetailsParams;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -46,6 +59,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Class started on Friday, 04 September 2015, created by Emanuel Boboiu.
@@ -112,7 +126,11 @@ public class MainActivity extends Activity {
     // Creating object of AdView:
     private AdView bannerAdView;
 
-    // Starting here there are things for billing:
+    // For billing:
+    private PurchasesUpdatedListener purchasesUpdatedListener;
+    private BillingClient billingClient;
+    private AcknowledgePurchaseResponseListener acknowledgePurchaseResponseListener;
+    List<ProductDetails> myProducts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +146,10 @@ public class MainActivity extends Activity {
             setContentView(R.layout.activity_main);
         } // end charging the correct layout.
 
+        // For billing:
+        if (!isPremium) {
+            startBillingDependencies();
+        }
         // Calculate the pixels in DP for mPaddingDP, for TextViews of the
         // results:
         int paddingPixel = 3;
@@ -142,7 +164,9 @@ public class MainActivity extends Activity {
         } // end wake lock.
 
         // Start things for our database:
-        mDbHelper = new DBAdapter(this);
+        mDbHelper = new
+
+                DBAdapter(this);
         mDbHelper.createDatabase();
         mDbHelper.open();
 
@@ -151,23 +175,37 @@ public class MainActivity extends Activity {
         aSpeechDirection = res.getStringArray(R.array.speech_direction_array);
 
         // Find the llResults:
-        llResults = findViewById(R.id.llResults);
+        llResults =
+
+                findViewById(R.id.llResults);
 
         // Charge the bottom linear layout:
-        llBottomInfo = findViewById(R.id.llBottomInfo);
+        llBottomInfo =
 
-        speak = new SpeakText(this);
-        searchHistory = new SearchHistory(this);
+                findViewById(R.id.llBottomInfo);
+
+        speak = new
+
+                SpeakText(this);
+
+        searchHistory = new
+
+                SearchHistory(this);
 
         // Other things at onCreate:
         // a method found in this class.
         updateGUIFirst();
 
         // ShakeDetector initialisation:
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager = (SensorManager)
+
+                getSystemService(Context.SENSOR_SERVICE);
+
         mAccelerometer = mSensorManager
                 .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mShakeDetector = new ShakeDetector();
+        mShakeDetector = new
+
+                ShakeDetector();
         mShakeDetector.setShakeThresholdGravity(MainActivity.onshakeMagnitude);
         /*
          * Method you would use to setup whatever you want done once the
@@ -192,8 +230,13 @@ public class MainActivity extends Activity {
 
         // For Google Ads::
         // Initializing the AdView object
-        bannerAdView = findViewById(R.id.bannerAdView);
-        adMobSequence();
+        bannerAdView =
+
+                findViewById(R.id.bannerAdView);
+
+        if (!isPremium) {
+            adMobSequence();
+        }
     } // end onCreate() method.
 
     @Override
@@ -423,15 +466,11 @@ public class MainActivity extends Activity {
         EditText input = findViewById(R.id.etWord);
         input.setInputType(input.getInputType()
                 | EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-        input.setOnEditorActionListener(new OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId,
-                                          KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    searchDirectlyFromKeyboard();
-                }
-                return false;
+        input.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                searchDirectlyFromKeyboard();
             }
+            return false;
         });
         // End add action listener.
     } // end updateGUIFIrst() method.
@@ -584,12 +623,7 @@ public class MainActivity extends Activity {
                     tv.setNextFocusDownId(++curResultId);
                     tv.setFocusable(true);
                     // For a short click, speak result:
-                    tv.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            speakResult(w, e);
-                        }
-                    });
+                    tv.setOnClickListener(view -> speakResult(w, e));
                     // End add listener for short click on a result.
 
                     registerForContextMenu(tv);
@@ -768,18 +802,18 @@ public class MainActivity extends Activity {
         // load Ad with the Request
         bannerAdView.loadAd(adRequest);
     } // end loadBannerAd() method.
+// end Google ads section.
 
+    // In app billing section starts here:
     public void upgradeToPremium(View view) {
         upgradeAlert();
     } // end upgradeToPremium() method.
 
     public void upgradeAlert() {
         if (GUITools.isNetworkAvailable(this)) {
-
             ScrollView sv = new ScrollView(this);
             LinearLayout ll = new LinearLayout(this);
             ll.setOrientation(LinearLayout.VERTICAL);
-
             // The message:
             TextView tv = new TextView(this);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
@@ -788,22 +822,16 @@ public class MainActivity extends Activity {
             if (isPremium) {
                 message = getString(R.string.premium_version_alert_message);
             } else {
-                message = String.format(
-                        getString(R.string.non_premium_version_alert_message),
-                        mUpgradePrice);
+                message = String.format(getString(R.string.non_premium_version_alert_message), mUpgradePrice);
             } // end if is not premium.
             tv.setText(message);
             ll.addView(tv);
-
             // Add the LinearLayout into ScrollView:
             sv.addView(ll);
-
             // Create now the alert:
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-            alertDialog
-                    .setTitle(getString(R.string.premium_version_alert_title));
+            alertDialog.setTitle(getString(R.string.premium_version_alert_title));
             alertDialog.setView(sv);
-
             // The button can be close or Get now!:
             String buttonName;
             if (isPremium) {
@@ -811,38 +839,34 @@ public class MainActivity extends Activity {
             } else {
                 buttonName = getString(R.string.bt_buy_premium);
             }
-
             alertDialog.setPositiveButton(buttonName,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog,
-                                            int whichButton) {
-                            // Start the payment process:
-                            // Only if is not premium:
-                            if (!isPremium) {
-                                // upgradeToPremiumActions();
-                            }
+                    (dialog, whichButton) -> {
+                        // Start the payment process:
+                        // Only if is not premium:
+                        if (!isPremium) {
+                            upgradeToPremiumActions();
                         }
                     });
-
             alertDialog.create();
             alertDialog.show();
-
         } // end if is connection available.
         else {
-            GUITools.alert(this, getString(R.string.warning),
-                    getString(R.string.no_connection_available));
+            GUITools.alert(this, getString(R.string.warning), getString(R.string.no_connection_available));
         } // end if connection is not available.
     } // end upgradeAlert() method.
 
-    // The finishing of the purchasing or other things:
+    public void upgradeToPremiumActions() {
+        initiatePurchase();
+    } // end upgradeToPremiumActions() method.
+
+    // The finishing of some actions, an overrided method of the activity class:
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         // Now if it's here after speech:
         if (requestCode == REQ_CODE_SPEECH_INPUT) {
             if (resultCode == RESULT_OK && null != data) {
-                ArrayList<String> result = data
-                        .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 String spoken = result.get(0);
                 // Now set the etWord:
                 EditText et = findViewById(R.id.etWord);
@@ -858,17 +882,13 @@ public class MainActivity extends Activity {
         isPremium = true;
         Settings set = new Settings(this);
         set.saveBooleanSettings("isPremium", isPremium);
-
         // This will go in a meteoric activity and will come back:
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(MainActivity.this,
-                        PremiumVersionActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        handler.post(() -> {
+            Intent intent = new Intent(MainActivity.this,
+                    PremiumVersionActivity.class);
+            startActivity(intent);
+            finish();
         });
     } // end recreateThisActivity() method.
     // End methods for InAppBilling.
@@ -1255,5 +1275,141 @@ public class MainActivity extends Activity {
                             }
                         }).setNegativeButton(R.string.no, null).show();
     } // end resetToDefaults() method.
+
+    // Now for billing:
+    private void startBillingDependencies() {
+        purchasesUpdatedListener = new PurchasesUpdatedListener() {
+            @Override
+            public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchases) {
+                // If item newly purchased
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && purchases != null) {
+                    for (Purchase purchase : purchases) {
+                        handlePurchase(purchase);
+                    } // end for.
+                }
+                // If item already purchased then check and reflect changes
+                else if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
+                    recreateThisActivityAfterRegistering();
+                }
+                //if purchase cancelled
+                else if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.USER_CANCELED) {
+                    GUITools.alert(mFinalContext, getString(R.string.warning), getString(R.string.purchase_canceled));
+                }
+                // Handle any other error msgs
+                else {
+                    GUITools.alert(mFinalContext, getString(R.string.warning), getString(R.string.billing_unknown_error));
+                }
+                // xxx
+            } // end onPurchasesUpdated() method.
+        };
+
+        billingClient = BillingClient.newBuilder(this)
+                .setListener(purchasesUpdatedListener)
+                .enablePendingPurchases()
+                .build();
+
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+
+                    // The BillingClient is ready. You can query purchases here.
+                    QueryProductDetailsParams queryProductDetailsParams =
+                            QueryProductDetailsParams.newBuilder()
+                                    .setProductList(
+                                            listOf(
+                                                    QueryProductDetailsParams.Product.newBuilder()
+                                                            .setProductId(mProduct)
+                                                            .setProductType(BillingClient.ProductType.INAPP)
+                                                            .build()))
+                                    .build();
+
+                    // Now let's query for our product:
+                    billingClient.queryProductDetailsAsync(
+                            queryProductDetailsParams,
+                            new ProductDetailsResponseListener() {
+                                public void onProductDetailsResponse(BillingResult billingResult,
+                                                                     List<ProductDetails> productDetailsList) {
+                                    // check billingResult
+                                    // process returned productDetailsList
+                                    myProducts = productDetailsList;
+                                    // Get the price of the 0 item if there is at least one product:
+                                    if (myProducts != null && myProducts.size() > 0) {
+                                        ProductDetails productDetail = myProducts.get(0);
+                                        ProductDetails.OneTimePurchaseOfferDetails offer = productDetail.getOneTimePurchaseOfferDetails();
+                                        mUpgradePrice = offer.getFormattedPrice();
+                                    }
+                                }
+                            }
+                    );
+                    // End query purchase.
+                }
+            } // end startConnection successfully.
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                // Try to restart the connection on the next request to
+                // Google Play by calling the startConnection() method.
+            }
+        }); // end startConnection.
+
+        // Create also the acknowledge purchase listener:
+        acknowledgePurchaseResponseListener = new AcknowledgePurchaseResponseListener() {
+            @Override
+            public void onAcknowledgePurchaseResponse(BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    // if purchase is acknowledged
+                    // Grant entitlement to the user. and restart activity
+                    // recreateThisActivityAfterRegistering(); // here is also saved everything in shared preferences.
+                    GUITools.alert(mFinalContext, "Warning", "You already have it!");
+                }
+            }
+        };
+// End acknowledge listener creation..
+    } // end startBillingDependencies() method.
+
+    private void checkIfIsAlreadyPurchased() {
+        // TODO Check if already purchased.
+    } // end checkIfIsAlreadyPurchased() method.
+
+    private void initiatePurchase() {
+        // We purchase here the only one item found in myProducts list:
+        if (myProducts.size() > 0) { // only if there is at least one product available:
+            ProductDetails productDetails = myProducts.get(0);
+
+// An activity reference from which the billing flow will be launched.
+            Activity activity = this;
+
+            List productDetailsParamsList =
+                    listOf(
+                            BillingFlowParams.ProductDetailsParams.newBuilder()
+                                    // retrieve a value for "productDetails" by calling queryProductDetailsAsync()
+                                    .setProductDetails(productDetails)
+                                    .build()
+                    );
+
+            BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder()
+                    .setProductDetailsParamsList(productDetailsParamsList)
+                    .build();
+
+// Launch the billing flow
+            BillingResult billingResult = billingClient.launchBillingFlow(activity, billingFlowParams);
+        } // end if there is at least one productDetails object in myProducts list.
+        else { // no items available:
+            GUITools.alert(mFinalContext, getString(R.string.warning), getString(R.string.no_purchases_available));
+        }
+    } // end initiatePurchase() method.
+
+    void handlePurchase(Purchase purchase) {
+        if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+            if (!purchase.isAcknowledged()) {
+                AcknowledgePurchaseParams acknowledgePurchaseParams =
+                        AcknowledgePurchaseParams.newBuilder()
+                                .setPurchaseToken(purchase.getPurchaseToken())
+                                .build();
+                billingClient.acknowledgePurchase(acknowledgePurchaseParams, acknowledgePurchaseResponseListener);
+            }
+        }
+    } // end handlePurchase() method.
 
 } // end MainActivity class.

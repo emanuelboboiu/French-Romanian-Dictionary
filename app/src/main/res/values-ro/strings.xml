@@ -406,4 +406,9 @@
     <string name="enable_history">Activare istoric căutări</string>
     <string name="sh_cm_search_result">Căutare în dicționar</string>
 
+    <!-- Strings added in 3.0, starting with Sunday, 18th December: -->
+    <string name="purchase_canceled">Procesul de achiziție a versiunii Premium a fost anulat.</string>
+    <string name="no_purchases_available">Nu există articole de cumpărat.</string>
+    <string name="billing_unknown_error">A apărut o eroare necunoscută în procesul de achiziție.</string>
+
 </resources>
