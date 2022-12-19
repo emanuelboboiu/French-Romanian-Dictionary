@@ -63,7 +63,7 @@
 
     <!-- About dialog: -->
     <string name="about">About Dictionary</string>
-    <string name="app_version">French – Romanian Dictionary, version 3.0</string>
+    <string name="app_version">French Romanian Dictionary, version 3.0</string>
     <string name="app_release_date">The 1.0 version was released on Wednesday, 10 February 2016</string>
     <string name="app_last_update">Last update was released on Tuesday, December 20th, 2022</string>
     <string name="app_creator">Programmed by Emanuel Boboiu (Manu)</string>

@@ -125,6 +125,17 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
+        <Button
+            android:id="@+id/bt_premium"
+            style="@style/style_main_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:onClick="upgradeToPremium"
+            android:text="@string/bt_premium" />
+
         <TextView
             android:id="@+id/tvStatus"
             android:layout_width="match_parent"

@@ -794,61 +794,6 @@ public class MainActivity extends Activity {
     } // end loadBannerAd() method.
 // end Google ads section.
 
-    // In app billing section starts here:
-    public void upgradeToPremium(View view) {
-        upgradeAlert();
-    } // end upgradeToPremium() method.
-
-    public void upgradeAlert() {
-        if (GUITools.isNetworkAvailable(this)) {
-            ScrollView sv = new ScrollView(this);
-            LinearLayout ll = new LinearLayout(this);
-            ll.setOrientation(LinearLayout.VERTICAL);
-            // The message:
-            TextView tv = new TextView(this);
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
-            tv.setPadding(mPaddingDP, mPaddingDP, mPaddingDP, mPaddingDP);
-            String message;
-            if (isPremium) {
-                message = getString(R.string.premium_version_alert_message);
-            } else {
-                message = String.format(getString(R.string.non_premium_version_alert_message), mUpgradePrice);
-            } // end if is not premium.
-            tv.setText(message);
-            ll.addView(tv);
-            // Add the LinearLayout into ScrollView:
-            sv.addView(ll);
-            // Create now the alert:
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-            alertDialog.setTitle(getString(R.string.premium_version_alert_title));
-            alertDialog.setView(sv);
-            // The button can be close or Get now!:
-            String buttonName;
-            if (isPremium) {
-                buttonName = getString(R.string.bt_close);
-            } else {
-                buttonName = getString(R.string.bt_buy_premium);
-            }
-            alertDialog.setPositiveButton(buttonName,
-                    (dialog, whichButton) -> {
-                        // Start the payment process:
-                        // Only if is not premium:
-                        if (!isPremium) {
-                            upgradeToPremiumActions();
-                        }
-                    });
-            alertDialog.create();
-            alertDialog.show();
-        } // end if is connection available.
-        else {
-            GUITools.alert(this, getString(R.string.warning), getString(R.string.no_connection_available));
-        } // end if connection is not available.
-    } // end upgradeAlert() method.
-
-    public void upgradeToPremiumActions() {
-        initiatePurchase();
-    } // end upgradeToPremiumActions() method.
-
     // The finishing of some actions, an overrided method of the activity class:
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -866,22 +811,6 @@ public class MainActivity extends Activity {
         } // end if it's here after a speech.
     } // end onActivityResult() method.
 
-    // A method which recreates this activity after upgrading:
-    private void recreateThisActivityAfterRegistering() {
-        // We save it as an premium version:
-        isPremium = true;
-        Settings set = new Settings(this);
-        set.saveBooleanSettings("isPremium", isPremium);
-        // This will go in a meteoric activity and will come back:
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(() -> {
-            Intent intent = new Intent(MainActivity.this,
-                    PremiumVersionActivity.class);
-            startActivity(intent);
-            finish();
-        });
-    } // end recreateThisActivity() method.
-    // End methods for InAppBilling.
 
     // Methods for add to vocabulary:
     private void addToVocabulary(final String word, final String explanation) {
@@ -1267,6 +1196,60 @@ public class MainActivity extends Activity {
     } // end resetToDefaults() method.
 
     // Now for billing:
+    // In app billing section starts here:
+    public void upgradeToPremium(View view) {
+        upgradeAlert();
+    } // end upgradeToPremium() method.
+
+    public void upgradeAlert() {
+        if (GUITools.isNetworkAvailable(this)) {
+            ScrollView sv = new ScrollView(this);
+            LinearLayout ll = new LinearLayout(this);
+            ll.setOrientation(LinearLayout.VERTICAL);
+            // The message:
+            TextView tv = new TextView(this);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+            tv.setPadding(mPaddingDP, mPaddingDP, mPaddingDP, mPaddingDP);
+            String message;
+            if (isPremium) {
+                message = getString(R.string.premium_version_alert_message);
+            } else {
+                message = String.format(getString(R.string.non_premium_version_alert_message), mUpgradePrice);
+            } // end if is not premium.
+            tv.setText(message);
+            ll.addView(tv);
+            // Add the LinearLayout into ScrollView:
+            sv.addView(ll);
+            // Create now the alert:
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle(getString(R.string.premium_version_alert_title));
+            alertDialog.setView(sv);
+            // The button can be close or Get now!:
+            String buttonName;
+            if (isPremium) {
+                buttonName = getString(R.string.bt_close);
+            } else {
+                buttonName = getString(R.string.bt_buy_premium);
+            }
+            alertDialog.setPositiveButton(buttonName,
+                    (dialog, whichButton) -> {
+                        // Start the payment process only if is not premium:
+                        if (!isPremium) {
+                            upgradeToPremiumActions();
+                        }
+                    });
+            alertDialog.create();
+            alertDialog.show();
+        } // end if is connection available.
+        else {
+            GUITools.alert(this, getString(R.string.warning), getString(R.string.no_connection_available));
+        } // end if connection is not available.
+    } // end upgradeAlert() method.
+
+    public void upgradeToPremiumActions() {
+        initiatePurchase();
+    } // end upgradeToPremiumActions() method.
+
     private void startBillingDependencies() {
         purchasesUpdatedListener = new PurchasesUpdatedListener() {
             @Override
@@ -1433,5 +1416,22 @@ public class MainActivity extends Activity {
             }
         }
     } // end handlePurchase() method.
+
+    // A method which recreates this activity after upgrading:
+    private void recreateThisActivityAfterRegistering() {
+        // We save it as an premium version:
+        isPremium = true;
+        Settings set = new Settings(this);
+        set.saveBooleanSettings("isPremium", isPremium);
+        // This will go in a meteoric activity and will come back:
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(() -> {
+            Intent intent = new Intent(MainActivity.this,
+                    PremiumVersionActivity.class);
+            startActivity(intent);
+            finish();
+        });
+    } // end recreateThisActivity() method.
+    // End methods for InAppBilling.
 
 } // end MainActivity class.

@@ -88,8 +88,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Bottom part, banner and site: -->
-
+    <!-- Bottom part, Google Ads: -->
     <LinearLayout
         android:id="@+id/llBottomInfo"
         android:layout_width="fill_parent"
