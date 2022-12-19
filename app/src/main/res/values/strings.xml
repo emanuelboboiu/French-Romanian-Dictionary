@@ -63,9 +63,9 @@
 
     <!-- About dialog: -->
     <string name="about">About Dictionary</string>
-    <string name="app_version">French – Romanian Dictionary, version 2.3.1</string>
+    <string name="app_version">French – Romanian Dictionary, version 3.0</string>
     <string name="app_release_date">The 1.0 version was released on Wednesday, 10 February 2016</string>
-    <string name="app_last_update">Last update was released on Sunday, August 12th, 2018</string>
+    <string name="app_last_update">Last update was released on Tuesday, December 20th, 2022</string>
     <string name="app_creator">Programmed by Emanuel Boboiu (Manu)</string>
     <string name="phone_number">Phone: +40740203043</string>
     <string name="email_address">E-mail: android@pontes.ro</string>
@@ -403,5 +403,6 @@
     <string name="purchase_canceled">The purchase process was canceled.</string>
     <string name="no_purchases_available">There are no items to be purchased.</string>
     <string name="billing_unknown_error">An unknown error has occurred during purchase process.</string>
+    <string name="bt_premium">Premium!</string>
 
 </resources>

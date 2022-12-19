@@ -65,9 +65,9 @@
 
     <!-- About dialog: -->
     <string name="about">Despre Dicționar</string>
-    <string name="app_version">Dicționar Francez – Român, versiunea 2.3.1</string>
+    <string name="app_version">Dicționar Francez – Român, versiunea 3.0</string>
     <string name="app_release_date">Versiune 1.0 finalizată miercuri, 10 februarie 2016</string>
-    <string name="app_last_update">Ultima actualizare finalizată duminică, 12 august 2018</string>
+    <string name="app_last_update">Ultima actualizare finalizată marți, 20 decembrie 2022</string>
     <string name="app_creator">Programat de Emanuel Boboiu (Manu)</string>
     <string name="phone_number">Telefon: +40740203043</string>
     <string name="email_address">E-mail: android@pontes.ro</string>
@@ -410,5 +410,6 @@
     <string name="purchase_canceled">Procesul de achiziție a versiunii Premium a fost anulat.</string>
     <string name="no_purchases_available">Nu există articole de cumpărat.</string>
     <string name="billing_unknown_error">A apărut o eroare necunoscută în procesul de achiziție.</string>
+    <string name="bt_premium">Premium!</string>
 
 </resources>

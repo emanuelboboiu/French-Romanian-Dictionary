@@ -50,8 +50,10 @@ import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ProductDetails;
 import com.android.billingclient.api.ProductDetailsResponseListener;
 import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.QueryProductDetailsParams;
+import com.android.billingclient.api.QueryPurchasesParams;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -1299,7 +1301,6 @@ public class MainActivity extends Activity {
                 else {
                     GUITools.alert(mFinalContext, getString(R.string.warning), getString(R.string.billing_unknown_error));
                 }
-                // xxx
             } // end onPurchasesUpdated() method.
         };
 
@@ -1312,8 +1313,7 @@ public class MainActivity extends Activity {
             @Override
             public void onBillingSetupFinished(BillingResult billingResult) {
                 if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-
-                    // The BillingClient is ready. You can query purchases here.
+                    // The BillingClient is ready. You can query purchases here,
                     QueryProductDetailsParams queryProductDetailsParams =
                             QueryProductDetailsParams.newBuilder()
                                     .setProductList(
@@ -1323,6 +1323,26 @@ public class MainActivity extends Activity {
                                                             .setProductType(BillingClient.ProductType.INAPP)
                                                             .build()))
                                     .build();
+
+                    // Now check if it is already purchased:
+                    billingClient.queryPurchasesAsync(
+                            QueryPurchasesParams.newBuilder()
+                                    .setProductType(BillingClient.ProductType.INAPP)
+                                    .build(),
+                            new PurchasesResponseListener() {
+                                public void onQueryPurchasesResponse(BillingResult billingResult, List<Purchase> purchases) {
+                                    // check billingResult and process returned purchase list, e.g. display the products user owns
+                                    if (purchases != null && purchases.size() > 0) { // it means there are items:
+// xxx
+                                        Purchase myOldPurchase = purchases.get(0);
+                                        if (myOldPurchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+                                            recreateThisActivityAfterRegistering();
+                                        }
+                                    } // end process the purchases list.
+                                }
+                            }
+                    );
+                    // end check if it is already purchased.
 
                     // Now let's query for our product:
                     billingClient.queryProductDetailsAsync(
@@ -1360,8 +1380,7 @@ public class MainActivity extends Activity {
                 if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
                     // if purchase is acknowledged
                     // Grant entitlement to the user. and restart activity
-                    // recreateThisActivityAfterRegistering(); // here is also saved everything in shared preferences.
-                    GUITools.alert(mFinalContext, "Warning", "You already have it!");
+                    recreateThisActivityAfterRegistering(); // here is also saved everything in shared preferences.
                 }
             }
         };
@@ -1369,7 +1388,22 @@ public class MainActivity extends Activity {
     } // end startBillingDependencies() method.
 
     private void checkIfIsAlreadyPurchased() {
-        // TODO Check if already purchased.
+        billingClient.queryPurchasesAsync(
+                QueryPurchasesParams.newBuilder()
+                        .setProductType(BillingClient.ProductType.INAPP)
+                        .build(),
+                new PurchasesResponseListener() {
+                    public void onQueryPurchasesResponse(BillingResult billingResult, List purchases) {
+                        // check billingResult and process returned purchase list, e.g. display the products user owns
+                        if (purchases != null && purchases.size() > 0) { // it means there are items:
+                            GUITools.alert(mFinalContext, "Mesaj", "Sunt itemi");
+                        } else { // it means there are not items purchased:
+                            GUITools.alert(mFinalContext, "Mesaj", "Nu sunt itemi");
+                        }
+                        // end process the purchases list.
+                    }
+                }
+        );
     } // end checkIfIsAlreadyPurchased() method.
 
     private void initiatePurchase() {
@@ -1400,7 +1434,7 @@ public class MainActivity extends Activity {
         }
     } // end initiatePurchase() method.
 
-    void handlePurchase(Purchase purchase) {
+    private void handlePurchase(Purchase purchase) {
         if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
             if (!purchase.isAcknowledged()) {
                 AcknowledgePurchaseParams acknowledgePurchaseParams =
