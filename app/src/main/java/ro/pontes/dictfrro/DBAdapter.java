@@ -9,66 +9,42 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class DBAdapter {
 
-	// protected static final String TAG = "DataAdapter";
+    // protected static final String TAG = "DataAdapter";
 
-	private final Context mContext;
-	private SQLiteDatabase mDb;
-	private DataBaseHelper mDbHelper;
+    private final Context mContext;
+    private SQLiteDatabase mDb;
+    private final DataBaseHelper mDbHelper;
 
-	public DBAdapter(Context context) {
-		this.mContext = context;
-		mDbHelper = new DataBaseHelper(mContext);
-	}
+    public DBAdapter(Context context) {
+        this.mContext = context;
+        mDbHelper = new DataBaseHelper(mContext);
+    }
 
-	public DBAdapter createDatabase() throws SQLException {
-		try {
-			mDbHelper.createDataBase();
-		} catch (IOException mIOException) {
-			// Log.e(TAG, mIOException.toString() + "  UnableToCreateDatabase");
-			throw new Error("UnableToCreateDatabase");
-		}
-		return this;
-	}
+    public void createDatabase() throws SQLException {
+        try {
+            mDbHelper.createDataBase();
+        } catch (IOException mIOException) {
+            // Log.e(TAG, mIOException.toString() + "  UnableToCreateDatabase");
+            throw new Error("UnableToCreateDatabase");
+        }
+    }
 
-	public DBAdapter open() throws SQLException {
-		try {
-			mDbHelper.openDataBase();
-			mDbHelper.close();
-			mDb = mDbHelper.getWritableDatabase();
-		} catch (SQLException mSQLException) {
-			// Log.e(TAG, "open >>"+ mSQLException.toString());
-			throw mSQLException;
-		}
-		return this;
-	}
+    public void open() throws SQLException {
+        mDbHelper.openDataBase();
+        mDbHelper.close();
+        mDb = mDbHelper.getWritableDatabase();
+    }
 
-	public void close() {
-		mDbHelper.close();
-	}
+    public void close() {
+        mDbHelper.close();
+    }
 
-	public Cursor queryData(String sql) {
-		try {
-			Cursor mCur = mDb.rawQuery(sql, null);
-			if (mCur != null) {
-				mCur.moveToNext();
-			}
-			return mCur;
-		} catch (SQLException mSQLException) {
-			// Log.e(TAG, "getTestData >>"+ mSQLException.toString());
-			throw mSQLException;
-		}
-	}
-
-	// A method to update a table:
-	public boolean updateData(String sql) {
-		mDb.execSQL(sql);
-		return true;
-	} // end update data.
-
-	// A method to insert into a table:
-	public boolean insertData(String sql) {
-		mDb.execSQL(sql);
-		return true;
-	} // end insert data.
+    public Cursor queryData(String sql) {
+        Cursor mCur = mDb.rawQuery(sql, null);
+        if (mCur != null) {
+            mCur.moveToNext();
+        }
+        return mCur;
+    }
 
 } // end class DBAdapter.

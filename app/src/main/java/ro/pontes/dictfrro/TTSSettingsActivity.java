@@ -1,29 +1,25 @@
 package ro.pontes.dictfrro;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.view.Gravity;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 public class TTSSettingsActivity extends Activity {
 
@@ -34,8 +30,8 @@ public class TTSSettingsActivity extends Activity {
     private String chosenEngine = "";
     private float ttsRate = 1.0F;
     private float ttsPitch = 1.0F;
-    private float granularity = 10F;
-    private float granularityMultiplier = 10F;
+    private final float granularity = 10F;
+    private final float granularityMultiplier = 10F;
     float granularity2 = granularity * granularityMultiplier;
 
     @Override
@@ -67,19 +63,16 @@ public class TTSSettingsActivity extends Activity {
     private void detectEngines() {
 
         // TextToSpeech initialisation:
-        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status != TextToSpeech.ERROR) {
-                    // tts.setLanguage(locale.US);
-                }
+        tts = new TextToSpeech(this, status -> {
+            if (status != TextToSpeech.ERROR) {
+                // tts.setLanguage(locale.US);
             }
         });
 
         List<TextToSpeech.EngineInfo> mEngines = tts.getEngines();
 
         // First of all we take the llEngines LinearLayout:
-        LinearLayout llEngines = (LinearLayout) findViewById(R.id.llEngines);
+        LinearLayout llEngines = findViewById(R.id.llEngines);
         llEngines.removeAllViews();
 
         /*
@@ -110,29 +103,23 @@ public class TTSSettingsActivity extends Activity {
             bt.setText(engineLabel);
             final String engineName = mEngines.get(i).name;
 
-            bt.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Let's initialise the chosen TTS engine:
-                    // TextToSpeech initialisation:
-                    tts = new TextToSpeech(mFinalContext,
-                            new TextToSpeech.OnInitListener() {
-                                @Override
-                                public void onInit(int status) {
-                                    if (status != TextToSpeech.ERROR) {
-                                        // We do something good:
-                                        detectVoices(engineName, engineLabel);
-                                    } else {
-                                        // Show an error:
-                                        GUITools.alert(
-                                                mFinalContext,
-                                                getString(R.string.error),
-                                                getString(R.string.error_after_choosing_engine));
-                                    }
-                                }
-                            }, engineName);
-                    // End initialisation.
-                }
+            bt.setOnClickListener(view -> {
+                // Let's initialise the chosen TTS engine:
+                // TextToSpeech initialisation:
+                tts = new TextToSpeech(mFinalContext,
+                        status -> {
+                            if (status != TextToSpeech.ERROR) {
+                                // We do something good:
+                                detectVoices(engineName, engineLabel);
+                            } else {
+                                // Show an error:
+                                GUITools.alert(
+                                        mFinalContext,
+                                        getString(R.string.error),
+                                        getString(R.string.error_after_choosing_engine));
+                            }
+                        }, engineName);
+                // End initialisation.
             });
             // End add listener for tap on button.
             llEngines.addView(bt, llParams);
@@ -145,7 +132,7 @@ public class TTSSettingsActivity extends Activity {
         SoundPlayer.playSimple(this, "element_clicked");
         chosenEngine = engineName; // to have it for saving.
         // First of all we take the llVoices LinearLayout:
-        LinearLayout llVoices = (LinearLayout) findViewById(R.id.llVoices);
+        LinearLayout llVoices = findViewById(R.id.llVoices);
         llVoices.removeAllViews();
 
         /*
@@ -163,25 +150,12 @@ public class TTSSettingsActivity extends Activity {
         llVoices.addView(tv, llParams);
 
         // Detect all voice locale:
-        ArrayList<Locale> localeList = new ArrayList<Locale>();
+        ArrayList<Locale> localeList = new ArrayList<>();
 
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                // If is a newer version of Android, API 21:
-                Set<Locale> tempLocaleList = tts.getAvailableLanguages();
-                localeList = new ArrayList<Locale>(tempLocaleList);
-            } // end if is a newer version.
-
-            else {
-                // An older version:
-                Locale[] locales = Locale.getAvailableLocales();
-                for (Locale locale : locales) {
-                    int res = tts.isLanguageAvailable(locale);
-                    if (res == TextToSpeech.LANG_COUNTRY_AVAILABLE) {
-                        localeList.add(locale);
-                    }
-                }
-            } // end if is an older version than API 21.
+            // If is a newer version of Android, API 21:
+            Set<Locale> tempLocaleList = tts.getAvailableLanguages();
+            localeList = new ArrayList<>(tempLocaleList);
         } catch (Exception e) {
             // e.printStackTrace();
         } // end try .. catch block.
@@ -189,7 +163,7 @@ public class TTSSettingsActivity extends Activity {
         // We have all languages of this TTS:
 
         // Now we extract only the French variants removing the others:
-        if (localeList != null && localeList.size() > 0) {
+        if (localeList.size() > 0) {
             for (int i = localeList.size() - 1; i >= 0; i--) {
                 String curTempLang = localeList.get(i).getLanguage();
                 if (!(curTempLang.equalsIgnoreCase("fr") || curTempLang
@@ -201,7 +175,7 @@ public class TTSSettingsActivity extends Activity {
 
         // Now, let's create buttons for each voice found:
         // If no languages are available, we must show a text view:
-        if (localeList == null || localeList.size() < 1) {
+        if (localeList.size() < 1) {
             TextView tv2 = new TextView(this);
             tv2.setText(getString(R.string.tv_no_english_available));
             llVoices.addView(tv2, llParams);
@@ -219,12 +193,7 @@ public class TTSSettingsActivity extends Activity {
                         getString(R.string.one_english_voice_in_list),
                         language, country, variant));
                 bt.setText(curLanguage.toString().trim());
-                bt.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showVoice(tempLocale, engineLabel);
-                    }
-                });
+                bt.setOnClickListener(view -> showVoice(tempLocale, engineLabel));
                 // End add listener for tap on button.
                 llVoices.addView(bt, llParams);
             } // end for each button for a language.
@@ -235,7 +204,7 @@ public class TTSSettingsActivity extends Activity {
     private void showVoice(final Locale tempLocale, String engineLabel) {
         SoundPlayer.playSimple(this, "element_clicked");
         // First of all we take the llVoices LinearLayout:
-        LinearLayout llVoices = (LinearLayout) findViewById(R.id.llVoices);
+        LinearLayout llVoices = findViewById(R.id.llVoices);
         llVoices.removeAllViews();
 
         // A LayoutParams to add some controls into llVoices:
@@ -355,23 +324,15 @@ public class TTSSettingsActivity extends Activity {
         Button btSample = new Button(this);
         btSample.setText(getString(R.string.bt_tts_sample));
         final String sampleText = "Salut! Je peux lire en français. Si vous aimez ma voix, me choisir en cliquant sur le bouton Sauvegarder. Merci!";
-        btSample.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                speakTheSample(sampleText);
-            }
-        });
+        btSample.setOnClickListener(view -> speakTheSample(sampleText));
         // End add listener for tap on btSample.
-        btSample.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                CharSequence theMessage = MyHtml.fromHtml(String.format(
-                        getString(R.string.the_sample_message),
-                        getString(R.string.bt_tts_sample), sampleText));
-                GUITools.alert(mFinalContext, getString(R.string.the_sample),
-                        theMessage.toString());
-                return true;
-            }
+        btSample.setOnLongClickListener(view -> {
+            CharSequence theMessage = MyHtml.fromHtml(String.format(
+                    getString(R.string.the_sample_message),
+                    getString(R.string.bt_tts_sample), sampleText));
+            GUITools.alert(mFinalContext, getString(R.string.the_sample),
+                    theMessage.toString());
+            return true;
         });
         // End add listener for tap on btSample.
 
@@ -381,35 +342,22 @@ public class TTSSettingsActivity extends Activity {
         Button btSave = new Button(this);
         btSave.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         btSave.setText(getString(R.string.bt_tts_save));
-        btSave.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveVoice(tempLocale);
-            }
-        });
+        btSave.setOnClickListener(view -> saveVoice(tempLocale));
         // End add listener for tap on btSave.
         ll.addView(btSave, params);
         llVoices.addView(ll, llParams);
     }// end showVoice() method.
 
     // A method to speak a sample:
-    @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
     private void speakTheSample(final String text) {
         // Speak the sample:
         final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Do something after 250ms:
-                // Write the text to be spoken:
+        handler.postDelayed(() -> {
+            // Do something after 250ms:
+            // Write the text to be spoken:
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
-                } else {
-                    tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-                } // end if it's an older Android version.
-            }
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
         }, 250);
     } // end speakTheSample() method.
 
@@ -440,7 +388,7 @@ public class TTSSettingsActivity extends Activity {
      * 0% and 10.0 being 100%.
      */
     private int getProcentFromFloat(float val) {
-        int toReturn = 50;
+        int toReturn;
 
         if (val >= 1.0F) {
             toReturn = Math.round(50 + granularity * (val - 1));
@@ -453,7 +401,7 @@ public class TTSSettingsActivity extends Activity {
 
     /* A method which makes the opposite thing, see the method above: */
     private float getFloatFromProcent(int proc) {
-        float toReturn = 1.0F;
+        float toReturn;
 
         if (proc >= 50) {
             toReturn = (proc - 40) / granularity;

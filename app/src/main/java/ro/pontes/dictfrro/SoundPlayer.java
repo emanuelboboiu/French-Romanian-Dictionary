@@ -10,24 +10,20 @@ import android.media.MediaPlayer;
 
 public class SoundPlayer {
 
-	// A method to play sound, a static one:
-	public static void playSimple(Context context, String fileName) {
-		if (MainActivity.isSound) {
-			MediaPlayer mp = new MediaPlayer();
+    // A method to play sound, a static one:
+    public static void playSimple(Context context, String fileName) {
+        if (MainActivity.isSound) {
+            MediaPlayer mp = new MediaPlayer();
 
-			int resID;
-			resID = context.getResources().getIdentifier(fileName, "raw",
-					context.getPackageName());
-			mp = MediaPlayer.create(context, resID);
+            int resID;
+            resID = context.getResources().getIdentifier(fileName, "raw",
+                    context.getPackageName());
+            mp = MediaPlayer.create(context, resID);
 
-			mp.start();
+            mp.start();
 
-			mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-				public void onCompletion(MediaPlayer player) {
-					player.release();
-				}
-			});
-		} // end if is sound activated.
-	} // end static method playSimple.
+            mp.setOnCompletionListener(MediaPlayer::release);
+        } // end if is sound activated.
+    } // end static method playSimple.
 
 } // end sound player class.

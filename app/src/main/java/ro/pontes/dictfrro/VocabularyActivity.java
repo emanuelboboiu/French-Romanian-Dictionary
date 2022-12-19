@@ -1,20 +1,9 @@
 package ro.pontes.dictfrro;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
@@ -26,12 +15,10 @@ import android.text.InputType;
 import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -45,17 +32,32 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+// For AdMob:
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
+
 public class VocabularyActivity extends Activity implements
         OnItemSelectedListener {
 
-    public final static String EXTRA_MESSAGE = "ro.pontes.englishromaniandictonary.MESSAGE";
-    private static String FOLDER_NAME = "DictFrRo";
-    private static String EXTENSION = ".frd";
+    private static final String FOLDER_NAME = "DictFrRo";
+    private static final String EXTENSION = ".frd";
 
     private DBAdapter2 mDbHelper;
     private SpeakText speak;
@@ -83,6 +85,9 @@ public class VocabularyActivity extends Activity implements
      * needed and other things:
      */
     private AlertDialog alertToShow;
+
+    // Creating object of AdView:
+    private AdView bannerAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,11 +119,6 @@ public class VocabularyActivity extends Activity implements
             updateSpinner();
         } // end if there is at least one record.
 
-        // Call the method to show banner if is not premium:
-        if (!MainActivity.isPremium) {
-            adMobSequence();
-        }
-
         // To keep screen awake:
         if (MainActivity.isWakeLock) {
             getWindow()
@@ -143,6 +143,11 @@ public class VocabularyActivity extends Activity implements
         } // end if it was a file received.
         // end process the file received.
 
+        // Call the method to show banner if is not premium:
+        if (!MainActivity.isPremium) {
+            bannerAdView = findViewById(R.id.bannerAdView);
+            adMobSequence();
+        }
     } // end onCreate() method.
 
     protected void onResume() {
@@ -162,8 +167,8 @@ public class VocabularyActivity extends Activity implements
         numberOfCategories = cursor.getInt(0);
         cursor.close();
 
-        TextView tv = (TextView) findViewById(R.id.tvNumberOfRecords);
-        String message = "";
+        TextView tv = findViewById(R.id.tvNumberOfRecords);
+        String message;
         if (numberOfRecords > 0) {
             // Calculate also the average:
             double average = (double) numberOfRecords
@@ -223,9 +228,9 @@ public class VocabularyActivity extends Activity implements
         // end do ... while.
         cursor.close();
 
-        Spinner dropdown = (Spinner) findViewById(R.id.spinnerChoose);
+        Spinner dropdown = findViewById(R.id.spinnerChoose);
         String[] items = sb.toString().split("\\|");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, items);
         dropdown.setAdapter(adapter);
         dropdown.setOnItemSelectedListener(this);
@@ -243,7 +248,7 @@ public class VocabularyActivity extends Activity implements
             createList("%");
         } else {
             String chosen = parent.getItemAtPosition(position).toString();
-            String[] aChosen = chosen.split("\\ - ");
+            String[] aChosen = chosen.split(" - ");
             String chosenCategoryName = aChosen[0];
             createList(chosenCategoryName);
         } // end if position is greater than 1, a category.
@@ -251,13 +256,13 @@ public class VocabularyActivity extends Activity implements
 
     // The method which writes the list of records:
     private void createList(String categoryName) {
-        curCategoryName = new String(categoryName);
+        curCategoryName = categoryName;
         categoryName = st.realEscapeString(categoryName);
         // Hide the bottom layout, AdMob:
         hideAdMob(true);
 
         // Clear the previous content of the llList layout:
-        LinearLayout ll = (LinearLayout) findViewById(R.id.llList);
+        LinearLayout ll = findViewById(R.id.llList);
         ll.removeAllViews();
 
         // Determine the id of the section:
@@ -301,13 +306,7 @@ public class VocabularyActivity extends Activity implements
                 englishPart = curExplanation;
             }
 
-            tv.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    speak.sayUsingLanguage(englishPart, false);
-                }
-            });
+            tv.setOnClickListener(view -> speak.sayUsingLanguage(englishPart, false));
             // End add listener for tap on verb form.
 
             // For a long click, add a context menu:
@@ -323,13 +322,31 @@ public class VocabularyActivity extends Activity implements
     } // end onNothingSelected() implemented method.
 
     // The method to generate the AdMob sequence:
-    private void adMobSequence() {
 
+    // The method to generate the AdMob sequence:
+    private void adMobSequence() {
+        //initializing the Google Admob SDK
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                // Now, because it is initialized, we load the ad:
+                loadBannerAd();
+            }
+        });
     } // end adMobSequence().
+
+    // Now we will create a simple method to load the Banner Ad inside QuizActivity class as shown below:
+    private void loadBannerAd() {
+        // Creating  a Ad Request
+        AdRequest adRequest = new AdRequest.Builder().build();
+        // load Ad with the Request
+        bannerAdView.loadAd(adRequest);
+    } // end loadBannerAd() method.
+// end Google ads section.
 
     // A method to hide or show AdMob zone:
     private void hideAdMob(boolean isHide) {
-        LinearLayout llBottomInfo = (LinearLayout) findViewById(R.id.llBottomInfo);
+        LinearLayout llBottomInfo = findViewById(R.id.llBottomInfo);
         if (isHide) {
             // Hide the llBottomInfo layout:
             llBottomInfo.setVisibility(View.GONE);
@@ -356,7 +373,7 @@ public class VocabularyActivity extends Activity implements
         } else if (id == R.id.mnuSectionInformation) {
             showSectionInformation();
         } else if (id == R.id.mnuImportPredefined) {
-            importPredefinedCategories("predefined_categories");
+            importPredefinedCategories();
         } else if (id == R.id.mnuSectionExport) {
             // Chef for permissions in Android 6.0:
             int permissionCheck = ContextCompat.checkSelfPermission(this,
@@ -506,7 +523,7 @@ public class VocabularyActivity extends Activity implements
     public boolean onContextItemSelected(MenuItem item) {
         // First we take the text from the longly clicked result:
         String result = tvResultForContext.getText().toString();
-        String[] aResult = result.split("\\ � ");
+        String[] aResult = result.split(" - ");
         String w = aResult[0];
         String e = aResult[1];
 
@@ -517,7 +534,7 @@ public class VocabularyActivity extends Activity implements
 
         Cursor cur = mDbHelper.queryData(sql);
         int direction = cur.getInt(5);
-        String englishPart = "";
+        String englishPart;
         if (direction == 0) {
             englishPart = cur.getString(2);
         } else {
@@ -603,37 +620,31 @@ public class VocabularyActivity extends Activity implements
                             | EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
             etExplanation.setImeOptions(EditorInfo.IME_ACTION_DONE);
             etExplanation
-                    .setOnEditorActionListener(new OnEditorActionListener() {
-                        @Override
-                        public boolean onEditorAction(TextView v, int actionId,
-                                                      KeyEvent event) {
-                            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                                String newWord = etWord.getText().toString();
-                                String newExplanation = etExplanation.getText()
-                                        .toString();
-                                if (saveAdd(newWord, newExplanation)) {
-                                    alertToShow.dismiss();
-                                }
-                            } // end if DONE key was pressed.
-                            return false;
-                        }
+                    .setOnEditorActionListener((v, actionId, event) -> {
+                        if (actionId == EditorInfo.IME_ACTION_DONE) {
+                            String newWord = etWord.getText().toString();
+                            String newExplanation = etExplanation.getText()
+                                    .toString();
+                            if (saveAdd(newWord, newExplanation)) {
+                                alertToShow.dismiss();
+                            }
+                        } // end if DONE key was pressed.
+                        return false;
                     });
             // End add action listener.
             ll.addView(etExplanation, etlp);
 
+            // end if save button was pressed.
             AlertDialog.Builder alert = new AlertDialog.Builder(this)
                     .setTitle(tempTitle)
                     .setView(ll)
                     .setPositiveButton(R.string.save,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,
-                                                    int whichButton) {
-                                    String newWord = etWord.getText()
-                                            .toString();
-                                    String newExplanation = etExplanation
-                                            .getText().toString();
-                                    saveAdd(newWord, newExplanation);
-                                } // end if save button was pressed.
+                            (dialog, whichButton) -> {
+                                String newWord = etWord.getText()
+                                        .toString();
+                                String newExplanation = etExplanation
+                                        .getText().toString();
+                                saveAdd(newWord, newExplanation);
                             }).setNegativeButton(android.R.string.cancel, null);
 
             alertToShow = alert.create();
@@ -738,35 +749,29 @@ public class VocabularyActivity extends Activity implements
         etExplanation.setInputType(InputType.TYPE_TEXT_VARIATION_SHORT_MESSAGE
                 | EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         etExplanation.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        etExplanation.setOnEditorActionListener(new OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId,
-                                          KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String newWord = etWord.getText().toString();
-                    String newExplanation = etExplanation.getText().toString();
-                    if (saveEdit(newWord, newExplanation, idRecordTemp)) {
-                        alertToShow.dismiss();
-                    }
-                } // end if DONE key was pressed.
-                return false;
-            }
+        etExplanation.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                String newWord = etWord.getText().toString();
+                String newExplanation = etExplanation.getText().toString();
+                if (saveEdit(newWord, newExplanation, idRecordTemp)) {
+                    alertToShow.dismiss();
+                }
+            } // end if DONE key was pressed.
+            return false;
         });
         // End add action listener.
         ll.addView(etExplanation, etlp);
 
+        // end if save button was pressed.
         AlertDialog.Builder alert = new AlertDialog.Builder(this)
                 .setTitle(tempTitle)
                 .setView(ll)
                 .setPositiveButton(R.string.save,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int whichButton) {
-                                String newWord = etWord.getText().toString();
-                                String newExplanation = etExplanation.getText()
-                                        .toString();
-                                saveEdit(newWord, newExplanation, idRecordTemp);
-                            } // end if save button was pressed.
+                        (dialog, whichButton) -> {
+                            String newWord = etWord.getText().toString();
+                            String newExplanation = etExplanation.getText()
+                                    .toString();
+                            saveEdit(newWord, newExplanation, idRecordTemp);
                         }).setNegativeButton(android.R.string.cancel, null);
 
         alertToShow = alert.create();
@@ -854,41 +859,39 @@ public class VocabularyActivity extends Activity implements
         String tempTitle = getString(R.string.title_delete_record_in_vocabulary);
         String tempBody = String.format(
                 getString(R.string.body_delete_record_in_vocabulary), word);
+        // end if yes button was pressed.
         new AlertDialog.Builder(this)
                 .setTitle(tempTitle)
                 .setMessage(MyHtml.fromHtml(tempBody))
                 .setIcon(android.R.drawable.ic_delete)
                 .setPositiveButton(R.string.yes,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int whichButton) {
+                        (dialog, whichButton) -> {
 
-                                // Delete now the record:
-                                String sql = "DELETE FROM vocabular where termen='"
-                                        + st.realEscapeString(word)
-                                        + "' AND explicatie ='"
-                                        + st.realEscapeString(explanation)
-                                        + "'";
-                                mDbHelper.deleteData(sql);
+                            // Delete now the record:
+                            String sql1 = "DELETE FROM vocabular where termen='"
+                                    + st.realEscapeString(word)
+                                    + "' AND explicatie ='"
+                                    + st.realEscapeString(explanation)
+                                    + "'";
+                            mDbHelper.deleteData(sql1);
 
-                                /*
-                                 * Check if this category idSectionTemp has
-                                 * records left:
-                                 */
-                                Cursor cur = mDbHelper
-                                        .queryData("SELECT COUNT(*) FROM vocabular WHERE idSectiune = '"
-                                                + idSectionTemp + "'");
-                                int recordsLeft = cur.getInt(0);
-                                if (recordsLeft > 0) {
-                                    updateSpinner();
-                                    createList(curCategoryName);
-                                } else {
-                                    deleteCategory(idSectionTemp);
-                                } // end if there are no records left.
-                                // Play a sound for this action:
-                                SoundPlayer.playSimple(mFinalContext,
-                                        "vocabulary_deleted");
-                            } // end if yes button was pressed.
+                            /*
+                             * Check if this category idSectionTemp has
+                             * records left:
+                             */
+                            Cursor cur1 = mDbHelper
+                                    .queryData("SELECT COUNT(*) FROM vocabular WHERE idSectiune = '"
+                                            + idSectionTemp + "'");
+                            int recordsLeft = cur1.getInt(0);
+                            if (recordsLeft > 0) {
+                                updateSpinner();
+                                createList(curCategoryName);
+                            } else {
+                                deleteCategory(idSectionTemp);
+                            } // end if there are no records left.
+                            // Play a sound for this action:
+                            SoundPlayer.playSimple(mFinalContext,
+                                    "vocabulary_deleted");
                         }).setNegativeButton(R.string.no, null).show();
     } // end deleteRecord() method.
 
@@ -898,8 +901,8 @@ public class VocabularyActivity extends Activity implements
      * about the section deletion because no records left.
      */
     private void deleteCategory(int idSectionTemp) {
-        String sql = "";
-        String categoryName = "";
+        String sql;
+        String categoryName;
 
         // Get first the category name if isn't from menu:
         sql = "SELECT nume FROM sectiuni WHERE id='" + idSectionTemp + "'";
@@ -922,17 +925,15 @@ public class VocabularyActivity extends Activity implements
                 categoryName);
         alert.setMessage(MyHtml.fromHtml(body));
 
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                if (curCategoryName.equals("%") && getNumberOfRecords() > 0) {
-                    // Like after a word deletion if all records was
-                    // chosen:
-                    updateSpinner();
-                    createList(curCategoryName);
-                } else {
-                    recreateThisActivity();
-                } // end if we are on all words category.
-            }
+        alert.setPositiveButton("Ok", (dialog, whichButton) -> {
+            if (curCategoryName.equals("%") && getNumberOfRecords() > 0) {
+                // Like after a word deletion if all records was
+                // chosen:
+                updateSpinner();
+                createList(curCategoryName);
+            } else {
+                recreateThisActivity();
+            } // end if we are on all words category.
         });
         alert.show();
     } // end deleteCategory() method.
@@ -946,28 +947,26 @@ public class VocabularyActivity extends Activity implements
             String tempBody = String.format(
                     getString(R.string.body_delete_entire_category),
                     curCategoryName);
+            // end if yes button was pressed.
             new AlertDialog.Builder(this)
                     .setTitle(tempTitle)
                     .setMessage(MyHtml.fromHtml(tempBody))
                     .setIcon(android.R.drawable.ic_delete)
                     .setPositiveButton(R.string.yes,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,
-                                                    int whichButton) {
+                            (dialog, whichButton) -> {
 
-                                    // Delete now the category entirely:
-                                    /*
-                                     * We delete only the section, the records
-                                     * will be deleted in cascade:
-                                     */
-                                    String sql = "DELETE FROM sectiuni WHERE nume='"
-                                            + st.realEscapeString(curCategoryName)
-                                            + "'";
-                                    mDbHelper.deleteData(sql);
-                                    SoundPlayer.playSimple(mFinalContext,
-                                            "vocabulary_deleted");
-                                    recreateThisActivity();
-                                } // end if yes button was pressed.
+                                // Delete now the category entirely:
+                                /*
+                                 * We delete only the section, the records
+                                 * will be deleted in cascade:
+                                 */
+                                String sql = "DELETE FROM sectiuni WHERE nume='"
+                                        + st.realEscapeString(curCategoryName)
+                                        + "'";
+                                mDbHelper.deleteData(sql);
+                                SoundPlayer.playSimple(mFinalContext,
+                                        "vocabulary_deleted");
+                                recreateThisActivity();
                             }).setNegativeButton(R.string.no, null).show();
         } else {
             // If no category is selected, all or nothing:
@@ -981,26 +980,24 @@ public class VocabularyActivity extends Activity implements
         // Get the strings to make an alert:
         String tempTitle = getString(R.string.title_delete_entire_vocabulary);
         String tempBody = getString(R.string.body_delete_entire_vocabulary);
+        // end if yes button was pressed.
         new AlertDialog.Builder(this)
                 .setTitle(tempTitle)
                 .setMessage(MyHtml.fromHtml(tempBody))
                 .setIcon(android.R.drawable.ic_delete)
                 .setPositiveButton(R.string.yes,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int whichButton) {
+                        (dialog, whichButton) -> {
 
-                                // Delete now the vocabulary entirely:
-                                /*
-                                 * We delete only the sections, the records will
-                                 * be deleted in cascade:
-                                 */
-                                String sql = "DELETE FROM sectiuni";
-                                mDbHelper.deleteData(sql);
-                                SoundPlayer.playSimple(mFinalContext,
-                                        "vocabulary_deleted");
-                                recreateThisActivity();
-                            } // end if yes button was pressed.
+                            // Delete now the vocabulary entirely:
+                            /*
+                             * We delete only the sections, the records will
+                             * be deleted in cascade:
+                             */
+                            String sql = "DELETE FROM sectiuni";
+                            mDbHelper.deleteData(sql);
+                            SoundPlayer.playSimple(mFinalContext,
+                                    "vocabulary_deleted");
+                            recreateThisActivity();
                         }).setNegativeButton(R.string.no, null).show();
     } // end deleteEntireVocabulary() method.
 
@@ -1027,7 +1024,7 @@ public class VocabularyActivity extends Activity implements
         ll.addView(tv);
 
         // Determine now the section:
-        String dictionary = "";
+        String dictionary;
         if (direction == 0) {
             dictionary = getString(R.string.properties_english_romanian);
         } else {
@@ -1169,11 +1166,6 @@ public class VocabularyActivity extends Activity implements
         GUITools.goToDictionary(this);
     } // end onBackPressed()
 
-    // A method to restart activity:
-    public void restartThisActivity(View view) {
-        recreateThisActivity();
-    } // end restartThisActivity() method.
-
     // A method which recreates this activity:
     private void recreateThisActivity() {
         startActivity(getIntent());
@@ -1199,6 +1191,7 @@ public class VocabularyActivity extends Activity implements
         // Only if a category was chosen:
         if (!curCategoryName.equals("%")) {
             // Create an alert to export:
+            // end if continue button was pressed.
             new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.title_export_category))
                     .setMessage(
@@ -1207,100 +1200,97 @@ public class VocabularyActivity extends Activity implements
                                     curCategoryName, curCategoryName
                                             + EXTENSION, FOLDER_NAME)))
                     .setPositiveButton(R.string.bt_continue,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,
-                                                    int whichButton) {
+                            (dialog, whichButton) -> {
 
-                                    // A variable for number of records
-                                    // exported:
-                                    int tempNumber = 0;
-                                    File folder = new File(Environment
-                                            .getExternalStorageDirectory()
-                                            + "/" + FOLDER_NAME);
-                                    boolean success = true;
-                                    if (!folder.exists()) {
-                                        success = folder.mkdir();
-                                    } // end if folder doesn't exist yet.
+                                // A variable for number of records
+                                // exported:
+                                int tempNumber = 0;
+                                File folder = new File(Environment
+                                        .getExternalStorageDirectory()
+                                        + "/" + FOLDER_NAME);
+                                boolean success = true;
+                                if (!folder.exists()) {
+                                    success = folder.mkdir();
+                                } // end if folder doesn't exist yet.
 
-                                    if (success) {
-                                        // Save the exported file effectively:
-                                        // Create now the file in the directory
-                                        // above:
-                                        File file = new File(folder,
-                                                curCategoryName + EXTENSION);
-                                        try {
-                                            // Query now data:
-                                            String sql = "SELECT id FROM sectiuni WHERE nume='"
-                                                    + st.realEscapeString(curCategoryName)
-                                                    + "'";
-                                            Cursor cur = mDbHelper
-                                                    .queryData(sql);
-                                            int sectionId = cur.getInt(0);
-                                            cur.close();
-                                            // Select now all records with this
-                                            // sectionId:
-                                            sql = "SELECT termen, explicatie FROM vocabular WHERE idSectiune='"
-                                                    + sectionId + "'";
-                                            cur = mDbHelper.queryData(sql);
-                                            // end query data.
-                                            FileOutputStream f = new FileOutputStream(
-                                                    file);
-                                            PrintWriter pw = new PrintWriter(f);
-                                            // Write each record into file if
-                                            // count is greater than 0:
-                                            if (cur.getCount() > 0) {
-                                                cur.moveToFirst();
-                                                do {
-                                                    String record = cur
-                                                            .getString(0)
-                                                            + "-=-"
-                                                            + cur.getString(1);
-                                                    pw.println(record);
-                                                    tempNumber++; // increase
-                                                    // the
-                                                    // number of
-                                                    // records.
-                                                } while (cur.moveToNext());
-                                            } // end if there are records.
-                                            else {
-                                                // If there are no records:
-                                                success = false;
-                                            } // end if there are no records.
-                                            cur.close();
-                                            pw.flush();
-                                            pw.close();
-                                            f.close();
-                                        } catch (FileNotFoundException e) {
+                                if (success) {
+                                    // Save the exported file effectively:
+                                    // Create now the file in the directory
+                                    // above:
+                                    File file = new File(folder,
+                                            curCategoryName + EXTENSION);
+                                    try {
+                                        // Query now data:
+                                        String sql = "SELECT id FROM sectiuni WHERE nume='"
+                                                + st.realEscapeString(curCategoryName)
+                                                + "'";
+                                        Cursor cur = mDbHelper
+                                                .queryData(sql);
+                                        int sectionId = cur.getInt(0);
+                                        cur.close();
+                                        // Select now all records with this
+                                        // sectionId:
+                                        sql = "SELECT termen, explicatie FROM vocabular WHERE idSectiune='"
+                                                + sectionId + "'";
+                                        cur = mDbHelper.queryData(sql);
+                                        // end query data.
+                                        FileOutputStream f = new FileOutputStream(
+                                                file);
+                                        PrintWriter pw = new PrintWriter(f);
+                                        // Write each record into file if
+                                        // count is greater than 0:
+                                        if (cur.getCount() > 0) {
+                                            cur.moveToFirst();
+                                            do {
+                                                String record = cur
+                                                        .getString(0)
+                                                        + "-=-"
+                                                        + cur.getString(1);
+                                                pw.println(record);
+                                                tempNumber++; // increase
+                                                // the
+                                                // number of
+                                                // records.
+                                            } while (cur.moveToNext());
+                                        } // end if there are records.
+                                        else {
+                                            // If there are no records:
                                             success = false;
-                                            // e.printStackTrace();
-                                        } catch (IOException e) {
-                                            success = false;
-                                            // e.printStackTrace();
-                                        }
-                                        // End save the file effectively.
-                                    } // end if folder was created successfully.
+                                        } // end if there are no records.
+                                        cur.close();
+                                        pw.flush();
+                                        pw.close();
+                                        f.close();
+                                    } catch (FileNotFoundException e) {
+                                        success = false;
+                                        // e.printStackTrace();
+                                    } catch (IOException e) {
+                                        success = false;
+                                        // e.printStackTrace();
+                                    }
+                                    // End save the file effectively.
+                                } // end if folder was created successfully.
 
-                                    if (success) {
-                                        // Say about this save and name of file:
-                                        GUITools.alert(
-                                                mFinalContext,
-                                                getString(R.string.title_export_category),
-                                                MyHtml.fromHtml(
-                                                                String.format(
-                                                                        getString(R.string.category_exported_successfully),
-                                                                        curCategoryName,
-                                                                        "" + tempNumber))
-                                                        .toString());
-                                        // Post in statistics this export:
-                                        // Statistics.postStats("46", 1);
-                                    } else {
-                                        // If an error occurred:
-                                        GUITools.alert(
-                                                mFinalContext,
-                                                getString(R.string.error),
-                                                getString(R.string.export_error));
-                                    } // end if error in writing file.
-                                } // end if continue button was pressed.
+                                if (success) {
+                                    // Say about this save and name of file:
+                                    GUITools.alert(
+                                            mFinalContext,
+                                            getString(R.string.title_export_category),
+                                            MyHtml.fromHtml(
+                                                            String.format(
+                                                                    getString(R.string.category_exported_successfully),
+                                                                    curCategoryName,
+                                                                    "" + tempNumber))
+                                                    .toString());
+                                    // Post in statistics this export:
+                                    // Statistics.postStats("46", 1);
+                                } else {
+                                    // If an error occurred:
+                                    GUITools.alert(
+                                            mFinalContext,
+                                            getString(R.string.error),
+                                            getString(R.string.export_error));
+                                } // end if error in writing file.
                             }).setNegativeButton(android.R.string.cancel, null)
                     .show();
         } else {
@@ -1322,7 +1312,7 @@ public class VocabularyActivity extends Activity implements
             String finalMessage = getString(R.string.import_unknown_error);
             if (file.exists()) {
                 // Determine the file and section name:
-                int sectionId = 0;
+                int sectionId;
                 String path = file.toString();
                 String fileName = path.substring(path.lastIndexOf("/") + 1);
                 String categoryName = fileName.replaceFirst("[.][^.]+$", "");
@@ -1365,7 +1355,7 @@ public class VocabularyActivity extends Activity implements
                         // We process current line:
                         line = st.realEscapeString(line);
                         // Make an array for word and explanation:
-                        String[] aLine = line.split("\\-=-");
+                        String[] aLine = line.split("-=-");
                         if (aLine.length == 2) {
                             String word = aLine[0].trim();
                             String explanation = aLine[1].trim();
@@ -1398,7 +1388,7 @@ public class VocabularyActivity extends Activity implements
                         updateSpinner();
                         createList(categoryName);
                         // Determine the selected item in DropDown:
-                        Spinner dropdown = (Spinner) findViewById(R.id.spinnerChoose);
+                        Spinner dropdown = findViewById(R.id.spinnerChoose);
                         sql = "SELECT nume FROM sectiuni ORDER BY nume COLLATE NOCASE";
                         cur = mDbHelper.queryData(sql);
                         int position = 1;
@@ -1442,7 +1432,7 @@ public class VocabularyActivity extends Activity implements
     } // end importFromFile() method.
 
     // A method to choose a vocabulary category from assets:
-    private void importPredefinedCategories(String dirFrom) {
+    private void importPredefinedCategories() {
         int mPaddingDP = MainActivity.mPaddingDP;
         int textSize = MainActivity.textSize;
         Resources res = getResources();
@@ -1461,26 +1451,22 @@ public class VocabularyActivity extends Activity implements
             tv.setFocusable(true);
             ll.addView(tv);
 
-            fileList = am.list(dirFrom);
+            fileList = am.list("predefined_categories");
             if (fileList != null) {
-                for (int i = 0; i < fileList.length; i++) {
-                    final String fileName = fileList[i];
+                for (final String fileName : fileList) {
                     String fileNameToShow = fileName.replaceFirst("[.][^.]+$",
                             "");
                     Button bt = new Button(this);
                     bt.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
                     bt.setText(fileNameToShow);
-                    bt.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            alertToShow.dismiss();
-                            String toPath = getFilesDir().getPath() + "/"
-                                    + fileName;
-                            if (copyAsset(am, "predefined_categories/"
-                                    + fileName, toPath)) {
-                                file = new File(toPath);
-                                importFromFile(file);
-                            }
+                    bt.setOnClickListener(view -> {
+                        alertToShow.dismiss();
+                        String toPath = getFilesDir().getPath() + "/"
+                                + fileName;
+                        if (copyAsset(am, "predefined_categories/"
+                                + fileName, toPath)) {
+                            file = new File(toPath);
+                            importFromFile(file);
                         }
                     });
                     // End add listener for tap the button.
@@ -1506,18 +1492,16 @@ public class VocabularyActivity extends Activity implements
     // A method to copy a file from AssetsManager:
     private static boolean copyAsset(AssetManager assetManager,
                                      String fromAssetPath, String toPath) {
-        InputStream in = null;
-        OutputStream out = null;
+        InputStream in;
+        OutputStream out;
         try {
             in = assetManager.open(fromAssetPath);
             new File(toPath).createNewFile();
             out = new FileOutputStream(toPath);
             copyFile(in, out);
             in.close();
-            in = null;
             out.flush();
             out.close();
-            out = null;
             return true;
         } catch (Exception e) {
             return false;
@@ -1536,7 +1520,7 @@ public class VocabularyActivity extends Activity implements
 
     // A method for import predefined from XML button:
     public void importPredefinedCategoriesButton(View view) {
-        importPredefinedCategories("predefined_categories");
+        importPredefinedCategories();
     } // end importPredefinedCategoriesButton() method.
 
 } // end VocabularyActivity class.

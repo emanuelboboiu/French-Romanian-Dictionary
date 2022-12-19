@@ -125,14 +125,14 @@ public class MainActivity extends Activity {
      */
     private TextView tvResultForContext;
 
-    // Creating object of AdView:
-    private AdView bannerAdView;
-
     // For billing:
     private PurchasesUpdatedListener purchasesUpdatedListener;
     private BillingClient billingClient;
     private AcknowledgePurchaseResponseListener acknowledgePurchaseResponseListener;
     List<ProductDetails> myProducts;
+
+    // Creating object of AdView:
+    private AdView bannerAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,10 +148,6 @@ public class MainActivity extends Activity {
             setContentView(R.layout.activity_main);
         } // end charging the correct layout.
 
-        // For billing:
-        if (!isPremium) {
-            startBillingDependencies();
-        }
         // Calculate the pixels in DP for mPaddingDP, for TextViews of the
         // results:
         int paddingPixel = 3;
@@ -182,9 +178,7 @@ public class MainActivity extends Activity {
                 findViewById(R.id.llResults);
 
         // Charge the bottom linear layout:
-        llBottomInfo =
-
-                findViewById(R.id.llBottomInfo);
+        llBottomInfo = findViewById(R.id.llBottomInfo);
 
         speak = new
 
@@ -230,13 +224,11 @@ public class MainActivity extends Activity {
         }
         // end search from history via intent.
 
-        // For Google Ads::
-        // Initializing the AdView object
-        bannerAdView =
-
-                findViewById(R.id.bannerAdView);
-
         if (!isPremium) {
+            // For billing:
+            startBillingDependencies();
+            // Initializing the AdView object
+            bannerAdView = findViewById(R.id.bannerAdView);
             adMobSequence();
         }
     } // end onCreate() method.
@@ -445,10 +437,6 @@ public class MainActivity extends Activity {
     private void updateGUIFirst() {
         // To have correct the direction as message above search edit:
         updateSearchMessage();
-
-        if (!isPremium) {
-            adMobSequence();
-        }
 
         // The number of words in DB:
         String sql = "SELECT COUNT(*) FROM dictionar" + direction;

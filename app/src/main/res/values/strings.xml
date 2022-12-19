@@ -195,7 +195,7 @@
     <string name="mnu_web_submenu">WEB resources</string>
     <!-- String for in_app_billing, Premium version: -->
     <string name="mnu_get_premium_version">Premium version…</string>
-    <string name="tv_premium_version_status">This is the Premium Version</string>
+    <string name="tv_premium_version_status">Premium Version</string>
     <string name="premium_version_alert_title">Premium Version</string>
     <string name="non_premium_version_alert_message">If you don\'t want the ads to appear anymore, you can make a payment of only %1$s.\nYou will have the Premium Version of the dictionary, the app will not connect to the internet to query the ads, data packets won\'t be consumed anymore for that.</string>
     <string name="premium_version_alert_message">You already have the Premium Version, thanks for your interest in this dictionary.</string>
