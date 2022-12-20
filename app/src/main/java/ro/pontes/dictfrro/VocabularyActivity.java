@@ -1,11 +1,9 @@
 package ro.pontes.dictfrro;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -33,24 +31,20 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-// For AdMob:
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 
 public class VocabularyActivity extends Activity implements
@@ -66,8 +60,6 @@ public class VocabularyActivity extends Activity implements
     private int numberOfCategories = 0;
     private String curCategoryName = "%";
     private int curSpinnerPosition = 0;
-    private final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
-    private final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private File file = null;
     private StringTools st = null;
 
@@ -86,7 +78,7 @@ public class VocabularyActivity extends Activity implements
      */
     private AlertDialog alertToShow;
 
-    // Creating object of AdView:
+    // Creating a null object of AdView:
     private AdView bannerAdView;
 
     @Override
@@ -121,8 +113,7 @@ public class VocabularyActivity extends Activity implements
 
         // To keep screen awake:
         if (MainActivity.isWakeLock) {
-            getWindow()
-                    .addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         } // end wake lock.
 
         speak = new SpeakText(this);
@@ -158,15 +149,12 @@ public class VocabularyActivity extends Activity implements
 
     // A method to update the text view with welcome message:
     private void updateWelcomeMessage() {
-
         numberOfRecords = getNumberOfRecords();
-
         // The number of categories in DB:
         String sql = "SELECT COUNT(*) AS total FROM sectiuni";
         Cursor cursor = mDbHelper.queryData(sql);
         numberOfCategories = cursor.getInt(0);
         cursor.close();
-
         TextView tv = findViewById(R.id.tvNumberOfRecords);
         String message;
         if (numberOfRecords > 0) {
@@ -174,7 +162,6 @@ public class VocabularyActivity extends Activity implements
             double average = (double) numberOfRecords
                     / (double) numberOfCategories;
             average = GUITools.round(average, 2);
-
             message = String.format(
                     getString(R.string.tv_welcome_vocabulary_message), ""
                             + numberOfCategories, "" + numberOfRecords, ""
@@ -248,7 +235,7 @@ public class VocabularyActivity extends Activity implements
             createList("%");
         } else {
             String chosen = parent.getItemAtPosition(position).toString();
-            String[] aChosen = chosen.split(" - ");
+            String[] aChosen = chosen.split(" – ");
             String chosenCategoryName = aChosen[0];
             createList(chosenCategoryName);
         } // end if position is greater than 1, a category.
@@ -258,8 +245,10 @@ public class VocabularyActivity extends Activity implements
     private void createList(String categoryName) {
         curCategoryName = categoryName;
         categoryName = st.realEscapeString(categoryName);
-        // Hide the bottom layout, AdMob:
-        hideAdMob(true);
+        // Hide the bottom layout if is premium version:
+        if (MainActivity.isPremium) {
+            hideAdMob(true);
+        }
 
         // Clear the previous content of the llList layout:
         LinearLayout ll = findViewById(R.id.llList);
@@ -298,20 +287,18 @@ public class VocabularyActivity extends Activity implements
             // No add an listener for short tap:
             // Get also the tip, the direction EN_RO or RO_EN:
             final int direction = cursor.getInt(5);
-            // Determine the English part to be spoken or spelled:
-            final String englishPart;
+            // Determine the French part to be spoken or spelled:
+            final String frenchPart;
             if (direction == 0) {
-                englishPart = curWord;
+                frenchPart = curWord;
             } else {
-                englishPart = curExplanation;
+                frenchPart = curExplanation;
             }
-
-            tv.setOnClickListener(view -> speak.sayUsingLanguage(englishPart, false));
+            tv.setOnClickListener(view -> speak.sayUsingLanguage(frenchPart, false));
             // End add listener for tap on verb form.
 
             // For a long click, add a context menu:
             registerForContextMenu(tv);
-
             ll.addView(tv);
         } while (cursor.moveToNext());
     }// end createList() method.
@@ -320,8 +307,6 @@ public class VocabularyActivity extends Activity implements
     public void onNothingSelected(AdapterView<?> parent) {
         // Do nothing.
     } // end onNothingSelected() implemented method.
-
-    // The method to generate the AdMob sequence:
 
     // The method to generate the AdMob sequence:
     private void adMobSequence() {
@@ -374,30 +359,14 @@ public class VocabularyActivity extends Activity implements
             showSectionInformation();
         } else if (id == R.id.mnuImportPredefined) {
             importPredefinedCategories();
-        } else if (id == R.id.mnuSectionExport) {
-            // Chef for permissions in Android 6.0:
-            int permissionCheck = ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-                // All right, we can write it, export section:
-                exportCategoryToStorage();
-            } else {
-                // It means we haven't the permission to access identities:
-                // We can request the permission.
-
-                ActivityCompat
-                        .requestPermissions(
-                                this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-                /*
-                 * MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE is an
-                 * app-defined int constant. The callback method gets the result
-                 * of the request.
-                 */
-            } // end if permission wasn't granted.
-        } else if (id == R.id.mnuDeleteSection) {
+        }
+        /*
+        else if (id == R.id.mnuSectionExport) {
+// This is not available at the moment.
+            exportCategoryToStorage();
+        }
+        */
+        else if (id == R.id.mnuDeleteSection) {
             deleteEntireCategory();
         } else if (id == R.id.mnuDeleteAll) {
             deleteEntireVocabulary();
@@ -416,96 +385,6 @@ public class VocabularyActivity extends Activity implements
         return super.onOptionsItemSelected(item);
     } // end onOptionsItemSelected() method.
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    /*
-                     * Permission was granted, good! Do the task you need to do.
-                     */
-                    exportCategoryToStorage();
-                } else {
-                    /*
-                     * Permission denied, boo! Disable the functionality that
-                     * depends on this permission:
-                     */
-                    // Should we show an explanation?
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        /*
-                         * Show an explanation to the user *asynchronously* -- don't
-                         * block this thread waiting for the user's response! After
-                         * the user sees the explanation, try again to request the
-                         * permission.
-                         */
-
-                        // Show an alert about it:
-                        GUITools.alert(
-                                mFinalContext,
-                                getString(R.string.information),
-                                getString(R.string.info_when_permission_write_not_granted));
-                    } else {
-                        // Another explanation, it means it is sure he don't want:
-                        GUITools.alert(
-                                mFinalContext,
-                                getString(R.string.warning),
-                                getString(R.string.info_when_sure_write_permission_not_granted));
-
-                    } // end if no explanation needed.
-                }
-                return;
-            }
-
-            // If is from file, clicked in a file manager:
-            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    /*
-                     * Permission was granted, good! Do the task you need to do.
-                     */
-                    importFromFile(file);
-                } else {
-                    /*
-                     * Permission denied, boo! Disable the functionality that
-                     * depends on this permission:
-                     */
-                    // Should we show an explanation?
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        /*
-                         * Show an explanation to the user *asynchronously* -- don't
-                         * block this thread waiting for the user's response! After
-                         * the user sees the explanation, try again to request the
-                         * permission.
-                         */
-
-                        // Show an alert about it:
-                        GUITools.alert(
-                                mFinalContext,
-                                getString(R.string.information),
-                                getString(R.string.info_when_permission_write_not_granted));
-                    } else {
-                        // Another explanation, it means it is sure he don't want:
-                        GUITools.alert(
-                                mFinalContext,
-                                getString(R.string.warning),
-                                getString(R.string.info_when_sure_write_permission_not_granted));
-
-                    } // end if no explanation needed.
-                }
-                return;
-            }
-
-            /*
-             * Other 'case' lines to check for other permissions this app might
-             * request
-             */
-        } // end switch.
-    } // end onRequestPermissionsResult() method.
-
     // The implementations for context menu:
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
@@ -523,7 +402,7 @@ public class VocabularyActivity extends Activity implements
     public boolean onContextItemSelected(MenuItem item) {
         // First we take the text from the longly clicked result:
         String result = tvResultForContext.getText().toString();
-        String[] aResult = result.split(" - ");
+        String[] aResult = result.split(" – ");
         String w = aResult[0];
         String e = aResult[1];
 
@@ -534,11 +413,11 @@ public class VocabularyActivity extends Activity implements
 
         Cursor cur = mDbHelper.queryData(sql);
         int direction = cur.getInt(5);
-        String englishPart;
+        String frenchPart;
         if (direction == 0) {
-            englishPart = cur.getString(2);
+            frenchPart = cur.getString(2);
         } else {
-            englishPart = cur.getString(3);
+            frenchPart = cur.getString(3);
         }
         int curTime = cur.getInt(4);
         int idSection = cur.getInt(1);
@@ -549,10 +428,10 @@ public class VocabularyActivity extends Activity implements
                 .getMenuInfo();
         switch (item.getItemId()) {
             case R.id.cmSpeakResult:
-                speak.sayUsingLanguage(englishPart, false);
+                speak.sayUsingLanguage(frenchPart, false);
                 return true;
             case R.id.cmSpellResult:
-                speak.spellUsingLanguage(englishPart);
+                speak.spellUsingLanguage(frenchPart);
                 return true;
             case R.id.cmCopyResult:
                 GUITools.copyIntoClipboard(this, result);
@@ -576,7 +455,6 @@ public class VocabularyActivity extends Activity implements
                 return super.onContextItemSelected(item);
         }
     } // end selected item in context menu.
-
     // End context menu implementation.
 
     // A method to add a word:
@@ -679,9 +557,7 @@ public class VocabularyActivity extends Activity implements
                 int sectionId = cur.getInt(0);
 
                 // Insert into:
-                sql = "INSERT INTO vocabular (idSectiune, termen, explicatie, data) VALUES ('"
-                        + sectionId
-                        + "', '"
+                sql = "INSERT INTO vocabular (idSectiune, termen, explicatie, data) VALUES ('" + sectionId + "', '"
                         + st.realEscapeString(newWord)
                         + "', '"
                         + st.realEscapeString(newExplanation)
@@ -716,7 +592,6 @@ public class VocabularyActivity extends Activity implements
 
     // A method to edit a word:
     private void editRecord(int idRecord) {
-
         String sql = "SELECT * FROM vocabular where id = '" + idRecord + "'";
         Cursor cur = mDbHelper.queryData(sql);
         final int idRecordTemp = cur.getInt(0);
@@ -761,7 +636,6 @@ public class VocabularyActivity extends Activity implements
         });
         // End add action listener.
         ll.addView(etExplanation, etlp);
-
         // end if save button was pressed.
         AlertDialog.Builder alert = new AlertDialog.Builder(this)
                 .setTitle(tempTitle)
@@ -773,7 +647,6 @@ public class VocabularyActivity extends Activity implements
                                     .toString();
                             saveEdit(newWord, newExplanation, idRecordTemp);
                         }).setNegativeButton(android.R.string.cancel, null);
-
         alertToShow = alert.create();
         alertToShow.getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -811,15 +684,11 @@ public class VocabularyActivity extends Activity implements
                 toReturn = true;
             } // end if record doesn't exist, the best scenario.
             else {
-                GUITools.alert(
-                        mFinalContext,
-                        getString(R.string.warning),
-                        getString(R.string.this_record_already_exists_in_vocabulary));
+                GUITools.alert(mFinalContext, getString(R.string.warning), getString(R.string.this_record_already_exists_in_vocabulary));
             } // end if record already exist.
         } // end if both edit text have texts.
         else {
-            GUITools.alert(mFinalContext, getString(R.string.warning),
-                    getString(R.string.no_texts_for_edit));
+            GUITools.alert(mFinalContext, getString(R.string.warning), getString(R.string.no_texts_for_edit));
         } // end if edit text haven't text.
         return toReturn;
     } // end save Edit() method.
@@ -908,23 +777,18 @@ public class VocabularyActivity extends Activity implements
         sql = "SELECT nume FROM sectiuni WHERE id='" + idSectionTemp + "'";
         Cursor cur = mDbHelper.queryData(sql);
         categoryName = cur.getString(0);
-
         // Delete now it:
         sql = "DELETE FROM sectiuni WHERE id='" + idSectionTemp + "'";
         mDbHelper.deleteData(sql);
-
         // Show an alert and restart the activity:
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
         // The title:
         String title = getString(R.string.title_category_deleted);
         alert.setTitle(title);
-
         // The body:
         String body = String.format(getString(R.string.body_category_deleted),
                 categoryName);
         alert.setMessage(MyHtml.fromHtml(body));
-
         alert.setPositiveButton("Ok", (dialog, whichButton) -> {
             if (curCategoryName.equals("%") && getNumberOfRecords() > 0) {
                 // Like after a word deletion if all records was
@@ -954,7 +818,6 @@ public class VocabularyActivity extends Activity implements
                     .setIcon(android.R.drawable.ic_delete)
                     .setPositiveButton(R.string.yes,
                             (dialog, whichButton) -> {
-
                                 // Delete now the category entirely:
                                 /*
                                  * We delete only the section, the records
@@ -1007,15 +870,12 @@ public class VocabularyActivity extends Activity implements
         ScrollView sv = new ScrollView(this);
         LinearLayout ll = new LinearLayout(this);
         ll.setOrientation(LinearLayout.VERTICAL);
-
         // TV for word:
         TextView tv = createTextViewForProperties();
         CharSequence text = MyHtml.fromHtml(String.format(
                 getString(R.string.properties_word), word));
         tv.setText(text);
-
         ll.addView(tv);
-
         // For explanation:
         tv = createTextViewForProperties();
         text = MyHtml.fromHtml(String.format(
@@ -1261,9 +1121,6 @@ public class VocabularyActivity extends Activity implements
                                         pw.flush();
                                         pw.close();
                                         f.close();
-                                    } catch (FileNotFoundException e) {
-                                        success = false;
-                                        // e.printStackTrace();
                                     } catch (IOException e) {
                                         success = false;
                                         // e.printStackTrace();
@@ -1301,134 +1158,109 @@ public class VocabularyActivity extends Activity implements
 
     // A method to import into a category from a file:
     private void importFromFile(File file) {
-        // Ask first for permission if was not granted:
-        // Chef for permissions in Android 6.0:
-        int permissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        String finalMessage = getString(R.string.import_unknown_error);
+        if (file.exists()) {
+            // Determine the file and section name:
+            int sectionId;
+            String path = file.toString();
+            String fileName = path.substring(path.lastIndexOf("/") + 1);
+            String categoryName = fileName.replaceFirst("[.][^.]+$", "");
+            long data = GUITools.getTimeInSeconds();
+            int nrAdded = 0;
+            int nrRejected = 0;
 
-        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            // All right, we can read it, import section:
-
-            String finalMessage = getString(R.string.import_unknown_error);
-            if (file.exists()) {
-                // Determine the file and section name:
-                int sectionId;
-                String path = file.toString();
-                String fileName = path.substring(path.lastIndexOf("/") + 1);
-                String categoryName = fileName.replaceFirst("[.][^.]+$", "");
-                long data = GUITools.getTimeInSeconds();
-                int nrAdded = 0;
-                int nrRejected = 0;
-
-                // Determine the section id:
-                String sql = "SELECT COUNT(*) FROM sectiuni WHERE nume='"
+            // Determine the section id:
+            String sql = "SELECT COUNT(*) FROM sectiuni WHERE nume='"
+                    + st.realEscapeString(categoryName) + "'";
+            Cursor cur = mDbHelper.queryData(sql);
+            int count = cur.getInt(0);
+            cur.close();
+            if (count > 0) {
+                // It means the category already exists:
+                sql = "SELECT id FROM sectiuni  WHERE nume='"
                         + st.realEscapeString(categoryName) + "'";
-                Cursor cur = mDbHelper.queryData(sql);
-                int count = cur.getInt(0);
+                cur = mDbHelper.queryData(sql);
+                sectionId = cur.getInt(0);
                 cur.close();
-                if (count > 0) {
-                    // It means the category already exists:
-                    sql = "SELECT id FROM sectiuni  WHERE nume='"
-                            + st.realEscapeString(categoryName) + "'";
+            } else {
+                // The category doesn't exist, we create it:
+                sql = "INSERT INTO sectiuni (nume, data) VALUES ('"
+                        + st.realEscapeString(categoryName) + "', '" + data
+                        + "')";
+                mDbHelper.insertData(sql);
+                // Determine now the sectionId:
+                cur.close();
+                sql = "SELECT id FROM sectiuni WHERE nume='"
+                        + st.realEscapeString(categoryName) + "'";
+                cur = mDbHelper.queryData(sql);
+                sectionId = cur.getInt(0);
+                cur.close();
+            } // end if category doesn't exist.
+            // Read text from file:
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    // We process current line:
+                    line = st.realEscapeString(line);
+                    // Make an array for word and explanation:
+                    String[] aLine = line.split("-=-");
+                    if (aLine.length == 2) {
+                        String word = aLine[0].trim();
+                        String explanation = aLine[1].trim();
+                        // Check if this record already exist:
+                        if (!recordExistsInVocabulary(word, explanation)) {
+                            sql = "INSERT INTO vocabular (idSectiune, termen, explicatie, data) VALUES ('"
+                                    + sectionId
+                                    + "', '"
+                                    + word
+                                    + "', '"
+                                    + explanation + "', '" + data + "')";
+                            mDbHelper.insertData(sql);
+                            nrAdded++;
+                        } // end if record doesn't exist.
+                        else {
+                            nrRejected++;
+                        } // end if record already exists.
+                    } // end if it's a correct line.
+                } // end while.
+                br.close();
+                finalMessage = MyHtml
+                        .fromHtml(
+                                String.format(
+                                        getString(R.string.import_final_information),
+                                        categoryName, "" + nrAdded, ""
+                                                + nrRejected)).toString();
+                // Charge this section if words were found:
+                if (nrAdded > 0 || nrRejected > 0) {
+                    // Statistics.postStats("47", 1);
+                    updateSpinner();
+                    createList(categoryName);
+                    // Determine the selected item in DropDown:
+                    Spinner dropdown = findViewById(R.id.spinnerChoose);
+                    sql = "SELECT nume FROM sectiuni ORDER BY nume COLLATE NOCASE";
                     cur = mDbHelper.queryData(sql);
-                    sectionId = cur.getInt(0);
+                    int position = 1;
+                    do {
+                        position++;
+                        if (categoryName.equals(cur.getString(0))) {
+                            break;
+                        }
+                    } while (cur.moveToNext());
                     cur.close();
-                } else {
-                    // The category doesn't exist, we create it:
-                    sql = "INSERT INTO sectiuni (nume, data) VALUES ('"
-                            + st.realEscapeString(categoryName) + "', '" + data
-                            + "')";
-                    mDbHelper.insertData(sql);
-                    // Determine now the sectionId:
-                    cur.close();
-                    sql = "SELECT id FROM sectiuni WHERE nume='"
-                            + st.realEscapeString(categoryName) + "'";
-                    cur = mDbHelper.queryData(sql);
-                    sectionId = cur.getInt(0);
-                    cur.close();
-                } // end if category doesn't exist.
-                // Read text from file:
-                try {
-                    BufferedReader br = new BufferedReader(new FileReader(file));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        // We process current line:
-                        line = st.realEscapeString(line);
-                        // Make an array for word and explanation:
-                        String[] aLine = line.split("-=-");
-                        if (aLine.length == 2) {
-                            String word = aLine[0].trim();
-                            String explanation = aLine[1].trim();
-                            // Check if this record already exist:
-                            if (!recordExistsInVocabulary(word, explanation)) {
-                                sql = "INSERT INTO vocabular (idSectiune, termen, explicatie, data) VALUES ('"
-                                        + sectionId
-                                        + "', '"
-                                        + word
-                                        + "', '"
-                                        + explanation + "', '" + data + "')";
-                                mDbHelper.insertData(sql);
-                                nrAdded++;
-                            } // end if record doesn't exist.
-                            else {
-                                nrRejected++;
-                            } // end if record already exists.
-                        } // end if it's a correct line.
-                    } // end while.
-                    br.close();
-                    finalMessage = MyHtml
-                            .fromHtml(
-                                    String.format(
-                                            getString(R.string.import_final_information),
-                                            categoryName, "" + nrAdded, ""
-                                                    + nrRejected)).toString();
-                    // Charge this section if words were found:
-                    if (nrAdded > 0 || nrRejected > 0) {
-                        // Statistics.postStats("47", 1);
-                        updateSpinner();
-                        createList(categoryName);
-                        // Determine the selected item in DropDown:
-                        Spinner dropdown = findViewById(R.id.spinnerChoose);
-                        sql = "SELECT nume FROM sectiuni ORDER BY nume COLLATE NOCASE";
-                        cur = mDbHelper.queryData(sql);
-                        int position = 1;
-                        do {
-                            position++;
-                            if (categoryName.equals(cur.getString(0))) {
-                                break;
-                            }
-                        } while (cur.moveToNext());
-                        cur.close();
-                        dropdown.setSelection(position);
-                        curCategoryName = categoryName;
-                    } // end if words were found to charge section.
-                } catch (IOException e) {
-                    // You'll need to add proper error handling here
-                }
-            } // end if file exists.
-            else {
-                finalMessage = getString(R.string.file_not_found);
-            } // end if file not exists.
-
-            // At the finish, we show the message:
-            GUITools.alert(this, getString(R.string.title_import), finalMessage);
-        }
-
-        // Now if permission was not granted:
+                    dropdown.setSelection(position);
+                    curCategoryName = categoryName;
+                } // end if words were found to charge section.
+            } catch (IOException e) {
+                // You'll need to add proper error handling here
+            }
+        } // end if file exists.
         else {
-            // It means we haven't the permission to read external storage:
-            // We can request the permission.
+            finalMessage = getString(R.string.file_not_found);
+        } // end if file not exists.
 
-            ActivityCompat
-                    .requestPermissions(
-                            this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-            /*
-             * MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an app-defined
-             * int constant. The callback method gets the result of the request.
-             */
-        } // end if permission wasn't granted.
+        // At the finish, we show the message:
+        GUITools.alert(this, getString(R.string.title_import), finalMessage);
     } // end importFromFile() method.
 
     // A method to choose a vocabulary category from assets:
@@ -1437,7 +1269,7 @@ public class VocabularyActivity extends Activity implements
         int textSize = MainActivity.textSize;
         Resources res = getResources();
         final AssetManager am = res.getAssets();
-        String fileList[];
+        String[] fileList;
         try {
             // Create a LinearLayout in ScrollView:
             ScrollView sv = new ScrollView(this);

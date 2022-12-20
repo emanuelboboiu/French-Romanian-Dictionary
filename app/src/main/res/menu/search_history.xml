@@ -1,11 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="ro.pontes.englishromaniandictionary.SearchHistoryActivity" >
+    tools:context="ro.pontes.englishromaniandictionary.SearchHistoryActivity">
 
     <item
         android:id="@+id/go_to_dictionary"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
-        android:title="@string/mnu_go_to_dictionary"/>
+        android:title="@string/mnu_go_to_dictionary" />
 
 </menu>

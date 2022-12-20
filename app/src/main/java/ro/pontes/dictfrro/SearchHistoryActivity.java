@@ -267,8 +267,7 @@ public class SearchHistoryActivity extends Activity implements
         // First we take the text from the longly clicked result:
         String result = tvResultForContext.getText().toString();
         String[] aResult = result
-                .split(""
-                        + MyHtml.fromHtml(getString(R.string.sh_word_and_date_separator)));
+                .split(MyHtml.fromHtml(getString(R.string.sh_word_and_date_separator)).toString());
         String w = st.cleanString(aResult[0]);
 
         // We take also the id of the word in database:

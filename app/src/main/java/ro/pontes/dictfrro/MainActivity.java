@@ -554,8 +554,10 @@ public class MainActivity extends Activity {
                 // Play a specific sound for results shown:
                 SoundPlayer.playSimple(this, "results_shown");
 
-                // Hide the llBottomInfo layout:
-                llBottomInfo.setVisibility(View.GONE);
+                // We hide the bottom layout if is premium:
+                if (isPremium) {
+                    llBottomInfo.setVisibility(View.GONE);
+                }
 
                 // Clear the previous content of the llResult layout:
                 llResults.removeAllViews();
@@ -677,7 +679,10 @@ public class MainActivity extends Activity {
         llResults.removeAllViews();
 
         // Show again the llBottomInfo layout:
-        llBottomInfo.setVisibility(View.VISIBLE);
+        if (isPremium) {
+            // llBottomInfo.setVisibility(View.VISIBLE);
+        }
+
     } // end cancelSearchActions method.
 
     // A method to write in the results area that there are no results:

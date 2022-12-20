@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/cmSearchResult"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/sh_cm_search_result"/>
+        android:title="@string/sh_cm_search_result" />
     <item
         android:id="@+id/cmSpeakResult"
         android:orderInCategory="150"
         android:showAsAction="never"
-        android:title="@string/cm_speak_result"/>
+        android:title="@string/cm_speak_result" />
     <item
         android:id="@+id/cmSpellResult"
         android:orderInCategory="300"
         android:showAsAction="never"
-        android:title="@string/cm_spell_result"/>
+        android:title="@string/cm_spell_result" />
     <item
         android:id="@+id/cmCopyResult"
         android:orderInCategory="500"
         android:showAsAction="never"
-        android:title="@string/sh_cm_copy_result"/>
+        android:title="@string/sh_cm_copy_result" />
     <item
         android:id="@+id/cmDeleteResult"
         android:orderInCategory="700"
         android:showAsAction="never"
-        android:title="@string/sh_cm_delete_result"/>
+        android:title="@string/sh_cm_delete_result" />
 
 </menu>
