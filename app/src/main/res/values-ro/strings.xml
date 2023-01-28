@@ -200,7 +200,7 @@
     <string name="mnu_get_premium_version">Versiune Premium…</string>
     <string name="tv_premium_version_status">Versiune Premium</string>
     <string name="premium_version_alert_title">Versiune Premium</string>
-    <string name="non_premium_version_alert_message">Dacă vreți ca reclamele să nu mai apară niciodată în acest program, puteți achiziționa versiunea Premium pentru doar %1$s.\nAvând versiunea Premium va fi economisit de asemenea trafic de internet consumat în prezent pentru afișarea reclamelor.</string>
+    <string name="non_premium_version_alert_message">Dacă vreți ca reclamele să nu mai apară niciodată în acest dicționar, puteți achiziționa versiunea Premium pentru doar %1$s.\nAvând versiunea Premium va fi economisit de asemenea trafic de internet consumat în prezent pentru afișarea reclamelor.</string>
     <string name="premium_version_alert_message">Aveți deja versiunea Premium.\nVă mulțumim pentru interesul acordat acestui dicționar.</string>
     <string name="bt_buy_premium">Obțineți Premium acum!</string>
     <string name="title_activity_premium_version">Versiune Premium</string>

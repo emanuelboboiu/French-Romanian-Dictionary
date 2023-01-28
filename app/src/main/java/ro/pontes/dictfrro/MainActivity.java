@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -21,12 +20,10 @@ import android.text.InputType;
 import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -38,7 +35,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.android.billingclient.api.AcknowledgePurchaseParams;
@@ -57,8 +53,6 @@ import com.android.billingclient.api.QueryPurchasesParams;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -751,7 +745,7 @@ public class MainActivity extends Activity {
         // Post the statistics and return:
         if (searchedWords > 0) {
             int statsTip = 41 + direction;
-            // Statistics.postStats("" + statsTip, searchedWords);
+            Statistics.postStats("" + statsTip, searchedWords);
             searchedWords = 0;
         }
     } // end postStatistics() method.
@@ -781,12 +775,9 @@ public class MainActivity extends Activity {
     // The method to generate the AdMob sequence:
     private void adMobSequence() {
         //initializing the Google Admob SDK
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-                // Now, because it is initialized, we load the ad:
-                loadBannerAd();
-            }
+        MobileAds.initialize(this, initializationStatus -> {
+            // Now, because it is initialized, we load the ad:
+            loadBannerAd();
         });
     } // end adMobSequence().
 
@@ -858,16 +849,12 @@ public class MainActivity extends Activity {
                 | EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         et.setHint(getString(R.string.et_new_vocabulary_hint));
         et.setPadding(mPaddingDP, mPaddingDP * 3, mPaddingDP, mPaddingDP);
-        et.setOnEditorActionListener(new OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId,
-                                          KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    // We uncheck all radio buttons:
-                    rg.clearCheck();
-                } // end if action done was chosen.
-                return false;
-            }
+        et.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // We uncheck all radio buttons:
+                rg.clearCheck();
+            } // end if action done was chosen.
+            return false;
         });
         // End add action listener for the IME done button of the keyboard..
 
@@ -908,14 +895,11 @@ public class MainActivity extends Activity {
                                 nrOfWords, nrOfWords));
                 rbt.setText(MyHtml.fromHtml(catTitle));
 
-                rbt.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // Change the id of the chosen section:
-                        idSection = curSection;
-                        // Empty the edit text because a section was chosen:
-                        et.setText("");
-                    }
+                rbt.setOnClickListener(view -> {
+                    // Change the id of the chosen section:
+                    idSection = curSection;
+                    // Empty the edit text because a section was chosen:
+                    et.setText("");
                 });
                 // End add listener for tap on check box.
                 rg.addView(rbt, rgParams);
@@ -932,105 +916,102 @@ public class MainActivity extends Activity {
         alertDialog.setView(addLLMain);
 
         // The buttons can be add now and cancel!:
+        // end if add now was pressed.
         alertDialog.setPositiveButton(getString(R.string.bt_add_now),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        // Start the add process:
+                (dialog, whichButton) -> {
+                    // Start the add process:
 
-                        // We need the time in seconds:
-                        final long timeInSeconds = GUITools.getTimeInSeconds();
+                    // We need the time in seconds:
+                    final long timeInSeconds = GUITools.getTimeInSeconds();
 
-                        /*
-                         * If there is written something in the edit text, we
-                         * consider a new category:
-                         */
-                        String etText = et.getText().toString();
-                        if (!etText.equals("")) {
-                            etText = st.realEscapeString(etText);
-                            // Check if section doesn't already exist:
-                            if (!fieldExists("sectiuni", "nume", etText)) {
-                                String sql = "INSERT INTO sectiuni (nume, descriere, data) VALUES ('"
-                                        + etText
-                                        + "', 'none', '"
-                                        + timeInSeconds + "')";
-                                mDbHelper2.insertData(sql);
+                    /*
+                     * If there is written something in the edit text, we
+                     * consider a new category:
+                     */
+                    String etText = et.getText().toString();
+                    if (!etText.equals("")) {
+                        etText = st.realEscapeString(etText);
+                        // Check if section doesn't already exist:
+                        if (!fieldExists("sectiuni", "nume", etText)) {
+                            String sql1 = "INSERT INTO sectiuni (nume, descriere, data) VALUES ('"
+                                    + etText
+                                    + "', 'none', '"
+                                    + timeInSeconds + "')";
+                            mDbHelper2.insertData(sql1);
 
-                                /*
-                                 * Post a record into DB Statistics about
-                                 * section creation:
-                                 */
-                                // Statistics.postStats("43", 1);
-
-                            } // end if section name doesn't already exists.
-                            else {
-                                GUITools.alert(
-                                        mFinalContext,
-                                        getString(R.string.warning),
-                                        getString(R.string.this_vocabulary_section_already_exists));
-                            } // end if section name exists.
                             /*
-                             * After we created this new section, we must
-                             * extract the idSection of this:
+                             * Post a record into DB Statistics about
+                             * section creation:
                              */
-                            String sql = "SELECT id FROM sectiuni WHERE nume='"
-                                    + etText + "'";
-                            Cursor tempCursor = mDbHelper2.queryData(sql);
-                            idSection = tempCursor.getInt(0);
-                        } // end if etText was not empty.
+                            Statistics.postStats("43", 1);
 
-                        /*
-                         * Check now if idSection is greater than 0. It means a
-                         * section was written or it was chosen:
-                         */
-                        if (idSection > 0) {
-
-                            // Add the word and explanation effectively if
-                            // record doesn't exists:
-                            if (!recordExistsInVocabulary(
-                                    st.realEscapeString(word),
-                                    st.realEscapeString(explanation))) {
-                                String sql = "INSERT INTO vocabular (idSectiune, termen, explicatie, data, tip) VALUES ('"
-                                        + idSection
-                                        + "', '"
-                                        + st.realEscapeString(word)
-                                        + "', '"
-                                        + st.realEscapeString(explanation)
-                                        + "', '"
-                                        + timeInSeconds
-                                        + "', '"
-                                        + direction + "')";
-                                mDbHelper2.insertData(sql);
-                                SoundPlayer.playSimple(mFinalContext,
-                                        "hand_writting");
-
-                                /*
-                                 * Post in statistics about this insert of a
-                                 * word in DB:
-                                 */
-                                // Statistics.postStats("44", 1);
-                            } // end if record doesn't exist, the best scenario.
-                            else {
-                                GUITools.alert(
-                                        mFinalContext,
-                                        getString(R.string.warning),
-                                        getString(R.string.this_record_already_exists_in_vocabulary));
-                            } // end if record already exist.
-                        } else {
-                            // No section was chosen or written:
-                            GUITools.alert(mFinalContext,
+                        } // end if section name doesn't already exists.
+                        else {
+                            GUITools.alert(
+                                    mFinalContext,
                                     getString(R.string.warning),
-                                    getString(R.string.no_category_chosen));
-                        } // end if idSection isn't greater than 0.
-                        mDbHelper2.close();
-                    } // end if add now was pressed.
+                                    getString(R.string.this_vocabulary_section_already_exists));
+                        } // end if section name exists.
+                        /*
+                         * After we created this new section, we must
+                         * extract the idSection of this:
+                         */
+                        String sql1 = "SELECT id FROM sectiuni WHERE nume='"
+                                + etText + "'";
+                        Cursor tempCursor = mDbHelper2.queryData(sql1);
+                        idSection = tempCursor.getInt(0);
+                    } // end if etText was not empty.
+
+                    /*
+                     * Check now if idSection is greater than 0. It means a
+                     * section was written or it was chosen:
+                     */
+                    if (idSection > 0) {
+
+                        // Add the word and explanation effectively if
+                        // record doesn't exists:
+                        if (!recordExistsInVocabulary(
+                                st.realEscapeString(word),
+                                st.realEscapeString(explanation))) {
+                            String sql1 = "INSERT INTO vocabular (idSectiune, termen, explicatie, data, tip) VALUES ('"
+                                    + idSection
+                                    + "', '"
+                                    + st.realEscapeString(word)
+                                    + "', '"
+                                    + st.realEscapeString(explanation)
+                                    + "', '"
+                                    + timeInSeconds
+                                    + "', '"
+                                    + direction + "')";
+                            mDbHelper2.insertData(sql1);
+                            SoundPlayer.playSimple(mFinalContext,
+                                    "hand_writting");
+
+                            /*
+                             * Post in statistics about this insert of a
+                             * word in DB:
+                             */
+                            Statistics.postStats("44", 1);
+                        } // end if record doesn't exist, the best scenario.
+                        else {
+                            GUITools.alert(
+                                    mFinalContext,
+                                    getString(R.string.warning),
+                                    getString(R.string.this_record_already_exists_in_vocabulary));
+                        } // end if record already exist.
+                    } else {
+                        // No section was chosen or written:
+                        GUITools.alert(mFinalContext,
+                                getString(R.string.warning),
+                                getString(R.string.no_category_chosen));
+                    } // end if idSection isn't greater than 0.
+                    mDbHelper2.close();
                 });
 
         alertDialog.setNegativeButton(getString(R.string.bt_cancel),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        // Cancelled:
-                        mDbHelper2.close();
-                    }
+                (dialog, whichButton) -> {
+                    // Cancelled:
+                    mDbHelper2.close();
                 });
 
         alertDialog.create();
@@ -1138,12 +1119,9 @@ public class MainActivity extends Activity {
         et.setText(word);
 
         final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Do something after a while:
-                getWordFromDB(historyDirection);
-            }
+        handler.postDelayed(() -> {
+            // Do something after a while:
+            getWordFromDB(historyDirection);
         }, 300);
     } // end searchFromHistory.
 
@@ -1157,46 +1135,39 @@ public class MainActivity extends Activity {
                 .setMessage(tempBody)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(R.string.yes,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int whichButton) {
-                                Settings set = new Settings(mFinalContext);
-                                set.setDefaultSettings();
-                                set.chargeSettings();
-                                // We must re-initialise also the TTS
-                                // settings:
-                                speak = new SpeakText(mFinalContext);
-                                // We need also to delete the search
-                                // history:
-                                searchHistory.deleteSearchHistory();
+                        (dialog, whichButton) -> {
+                            Settings set = new Settings(mFinalContext);
+                            set.setDefaultSettings();
+                            set.chargeSettings();
+                            // We must re-initialise also the TTS
+                            // settings:
+                            speak = new SpeakText(mFinalContext);
+                            // We need also to delete the search
+                            // history:
+                            searchHistory.deleteSearchHistory();
 
-                                /*
-                                 * Get the strings to make an alert for reset
-                                 * the vocabulary:
-                                 */
-                                String tempTitle = getString(R.string.title_default_vocabulary);
-                                String tempBody = getString(R.string.body_default_vocabulary);
-                                new AlertDialog.Builder(mFinalContext)
-                                        .setTitle(tempTitle)
-                                        .setMessage(tempBody)
-                                        .setIcon(android.R.drawable.ic_delete)
-                                        .setPositiveButton(
-                                                R.string.yes,
-                                                new DialogInterface.OnClickListener() {
-                                                    public void onClick(
-                                                            DialogInterface dialog,
-                                                            int whichButton) {
-                                                        Settings set = new Settings(
-                                                                mFinalContext);
-                                                        set.saveIntSettings(
-                                                                "db2Ver", 0);
-                                                    }
-                                                })
-                                        .setNegativeButton(R.string.no, null)
-                                        .show();
-                                // End dialog for delete vocabulary at
-                                // reset.
-                            }
+                            /*
+                             * Get the strings to make an alert for reset
+                             * the vocabulary:
+                             */
+                            String tempTitle1 = getString(R.string.title_default_vocabulary);
+                            String tempBody1 = getString(R.string.body_default_vocabulary);
+                            new AlertDialog.Builder(mFinalContext)
+                                    .setTitle(tempTitle1)
+                                    .setMessage(tempBody1)
+                                    .setIcon(android.R.drawable.ic_delete)
+                                    .setPositiveButton(
+                                            R.string.yes,
+                                            (dialog1, whichButton1) -> {
+                                                Settings set1 = new Settings(
+                                                        mFinalContext);
+                                                set1.saveIntSettings(
+                                                        "db2Ver", 0);
+                                            })
+                                    .setNegativeButton(R.string.no, null)
+                                    .show();
+                            // End dialog for delete vocabulary at
+                            // reset.
                         }).setNegativeButton(R.string.no, null).show();
     } // end resetToDefaults() method.
 
@@ -1363,25 +1334,6 @@ public class MainActivity extends Activity {
 // End acknowledge listener creation..
     } // end startBillingDependencies() method.
 
-    private void checkIfIsAlreadyPurchased() {
-        billingClient.queryPurchasesAsync(
-                QueryPurchasesParams.newBuilder()
-                        .setProductType(BillingClient.ProductType.INAPP)
-                        .build(),
-                new PurchasesResponseListener() {
-                    public void onQueryPurchasesResponse(BillingResult billingResult, List purchases) {
-                        // check billingResult and process returned purchase list, e.g. display the products user owns
-                        if (purchases != null && purchases.size() > 0) { // it means there are items:
-                            GUITools.alert(mFinalContext, "Mesaj", "Sunt itemi");
-                        } else { // it means there are not items purchased:
-                            GUITools.alert(mFinalContext, "Mesaj", "Nu sunt itemi");
-                        }
-                        // end process the purchases list.
-                    }
-                }
-        );
-    } // end checkIfIsAlreadyPurchased() method.
-
     private void initiatePurchase() {
         // We purchase here the only one item found in myProducts list:
         if (myProducts.size() > 0) { // only if there is at least one product available:
@@ -1427,7 +1379,7 @@ public class MainActivity extends Activity {
         // We save it as an premium version:
         isPremium = true;
         Settings set = new Settings(this);
-        set.saveBooleanSettings("isPremium", isPremium);
+        set.saveBooleanSettings("isPremium", true);
         // This will go in a meteoric activity and will come back:
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(() -> {

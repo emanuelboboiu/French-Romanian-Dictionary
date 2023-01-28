@@ -34,8 +34,6 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -311,12 +309,9 @@ public class VocabularyActivity extends Activity implements
     // The method to generate the AdMob sequence:
     private void adMobSequence() {
         //initializing the Google Admob SDK
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-                // Now, because it is initialized, we load the ad:
-                loadBannerAd();
-            }
+        MobileAds.initialize(this, initializationStatus -> {
+            // Now, because it is initialized, we load the ad:
+            loadBannerAd();
         });
     } // end adMobSequence().
 
@@ -569,7 +564,7 @@ public class VocabularyActivity extends Activity implements
                 /*
                  * Post in statistics about this insert of a word in DB:
                  */
-                // Statistics.postStats("44", 1);
+                Statistics.postStats("44", 1);
 
                 // Re-charge this section:
                 updateSpinner();
@@ -677,7 +672,7 @@ public class VocabularyActivity extends Activity implements
                 /*
                  * Post in statistics about this insert of a word in DB:
                  */
-                // Statistics.postStats("45", 1);
+                Statistics.postStats("45", 1);
 
                 // Re-charge this section:
                 createList(curCategoryName);
@@ -1140,7 +1135,7 @@ public class VocabularyActivity extends Activity implements
                                                                     "" + tempNumber))
                                                     .toString());
                                     // Post in statistics this export:
-                                    // Statistics.postStats("46", 1);
+                                    Statistics.postStats("46", 1);
                                 } else {
                                     // If an error occurred:
                                     GUITools.alert(
@@ -1233,7 +1228,7 @@ public class VocabularyActivity extends Activity implements
                                                 + nrRejected)).toString();
                 // Charge this section if words were found:
                 if (nrAdded > 0 || nrRejected > 0) {
-                    // Statistics.postStats("47", 1);
+                    Statistics.postStats("47", 1);
                     updateSpinner();
                     createList(categoryName);
                     // Determine the selected item in DropDown:

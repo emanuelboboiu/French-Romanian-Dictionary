@@ -2,123 +2,67 @@ package ro.pontes.dictfrro;
 
 /*
  * Class started on 24 September 2014 by Manu
+ * Rewritten on Tuesday, 21 December 2022.
  * Methods for statistics, like postStatistics.
  */
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import android.os.AsyncTask;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class Statistics {
+    private static final String baseUrl = "https://www.pontes.ro/ro/divertisment/games/soft_counts.php";
 
-    // A method to post a new game and the number of hands played during the
-    // sessions:
-/*
-    public static void postStats(final String gameIdInDB,
-                                 final int numberOfGamesPlayed) {
+    public static void postStats(final String pid, final int score) {
+        String url = baseUrl + "?pid=" + pid + "&score=" + score;
+        new GetWebData().execute(url);
+    } // end postStats() method.
 
-        // Run in another thread:
-        new Thread(new Runnable() {
-            public void run() {
 
-                // Create a new HttpClient and Post Header
-                HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(
-                        "http://www.pontes.ro/ro/divertisment/games/soft_counts.php");
+    // This is a subclass:
+    private static class GetWebData extends AsyncTask<String, String, String> {
 
-                try {
-                    // Add your data
-                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
-                            2);
-                    nameValuePairs
-                            .add(new BasicNameValuePair("pid", gameIdInDB));
-                    nameValuePairs.add(new BasicNameValuePair("score", ""
-                            + numberOfGamesPlayed));
-                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        // execute before task:
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
 
-                    // Execute HTTP Post Request
-                    HttpResponse response = httpClient.execute(httppost);
-                    response.toString();
+        // Execute task
+        String urlText = "";
 
-                } catch (ClientProtocolException e) {
-                    // TODO Auto-generated catch block
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
+        @Override
+        protected String doInBackground(String... strings) {
+            StringBuilder content = new StringBuilder();
+            urlText = strings[0];
+            try {
+                // Create a URL object:
+                URL url = new URL(urlText);
+                // Create a URLConnection object:
+                URLConnection urlConnection = url.openConnection();
+                // Wrap the URLConnection in a BufferedReader:
+                BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(urlConnection.getInputStream()));
+                String line;
+                // Read from the URLConnection via the BufferedReader:
+                while ((line = bufferedReader.readLine()) != null) {
+                    content.append(line);
                 }
+                bufferedReader.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }).start();
-    } // end post data.
+            return content.toString();
+        } // end doInBackground() method.
 
-    public static void postTestFinished(final String googleId,
-                                        final String testType, final double mark) {
+        // Execute after task with the task result as string:
+        @Override
+        protected void onPostExecute(String s) {
+            // Do nothing yet.
+        } // end postExecute() method.
+    } // end subclass.
 
-        // Run in another thread:
-        new Thread(new Runnable() {
-            public void run() {
-
-                // Create a new HttpClient and Post Header
-                HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(
-                        "http://android.pontes.ro/erd/insert_test_finished.php");
-
-                try {
-                    // Add your data
-                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
-                            3);
-                    nameValuePairs.add(new BasicNameValuePair("google_id",
-                            googleId));
-                    nameValuePairs.add(new BasicNameValuePair("tip", testType));
-                    nameValuePairs
-                            .add(new BasicNameValuePair("nota", "" + mark));
-                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                    // Execute HTTP Post Request
-                    HttpResponse response = httpClient.execute(httppost);
-                    response.toString();
-
-                } catch (ClientProtocolException e) {
-                    // TODO Auto-generated catch block
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                }
-            }
-        }).start();
-    } // end post data for a test finished.
-
-
-    // A method to change the name for mark statistics, tests finished:
-    public static void postNewName(final String googleId, final String newName) {
-
-        // Run in another thread:
-        new Thread(new Runnable() {
-            public void run() {
-
-                // Create a new HttpClient and Post Header
-                HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(
-                        "http://android.pontes.ro/erd/change_name.php");
-
-                try {
-                    // Add your data
-                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
-                            2);
-                    nameValuePairs.add(new BasicNameValuePair("google_id",
-                            googleId));
-                    nameValuePairs.add(new BasicNameValuePair("nume", newName));
-                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                    // Execute HTTP Post Request
-                    HttpResponse response = httpClient.execute(httppost);
-                    response.toString();
-
-                } catch (ClientProtocolException e) {
-                    // TODO Auto-generated catch block
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                }
-            }
-        }).start();
-    } // end post data.
-*/
 } // end statistics class.
