@@ -103,14 +103,12 @@ public class DataBaseHelper2 extends SQLiteOpenHelper {
     // Open the database, so we can query it
     public void openDataBase() throws SQLException {
         String mPath = DB_PATH;
-        mDataBase = SQLiteDatabase.openDatabase(mPath, null,
-                SQLiteDatabase.CREATE_IF_NECESSARY);
+        mDataBase = SQLiteDatabase.openDatabase(mPath, null, SQLiteDatabase.CREATE_IF_NECESSARY);
     }
 
     @Override
     public synchronized void close() {
-        if (mDataBase != null)
-            mDataBase.close();
+        if (mDataBase != null) mDataBase.close();
         super.close();
     }
 

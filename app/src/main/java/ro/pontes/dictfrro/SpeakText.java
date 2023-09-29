@@ -32,14 +32,13 @@ public class SpeakText {
         } // end if no engine was saved.
 
         // For TextToSpeech:
-        mTTS = new TextToSpeech(this.context,
-                status -> {
-                    if (status != TextToSpeech.ERROR) {
-                        // It means no error was found, we can set the
-                        // language:
-                        setSavedLanguage();
-                    }
-                }, curEngine);
+        mTTS = new TextToSpeech(this.context, status -> {
+            if (status != TextToSpeech.ERROR) {
+                // It means no error was found, we can set the
+                // language:
+                setSavedLanguage();
+            }
+        }, curEngine);
         // end for TextToSpeech.
     } // end constructor.
 
@@ -83,10 +82,7 @@ public class SpeakText {
 
                 } // end if this language exists as country and variant.
                 else {
-                    GUITools.alert(
-                            context,
-                            context.getString(R.string.warning),
-                            context.getString(R.string.warning_no_tts_available_fr));
+                    GUITools.alert(context, context.getString(R.string.warning), context.getString(R.string.warning_no_tts_available_fr));
                 } // end if the language doesn't exist.
             }, 250);
 
@@ -102,14 +98,12 @@ public class SpeakText {
             if (mTTS.isLanguageAvailable(curTTSLocale) != TextToSpeech.LANG_NOT_SUPPORTED) {
 
                 for (int i = 0; i < toSpell.length(); i++) {
-                    mTTS.speak("" + toSpell.charAt(i),
-                            TextToSpeech.QUEUE_ADD, null, null);
+                    mTTS.speak("" + toSpell.charAt(i), TextToSpeech.QUEUE_ADD, null, null);
                 } // end for each character.
 
             } // end if this language exists as country and variant.
             else {
-                GUITools.alert(context, context.getString(R.string.warning),
-                        context.getString(R.string.warning_no_tts_available_fr));
+                GUITools.alert(context, context.getString(R.string.warning), context.getString(R.string.warning_no_tts_available_fr));
             } // end if the language doesn't exist.
         } // end if isSpeech.
     } // end spellUsingLanguage() method.
@@ -127,8 +121,7 @@ public class SpeakText {
         }
         String country = set.getStringSettings("ttsCountry");
         if (country == null || country.equals("")) {
-            country = context.getResources().getConfiguration().locale
-                    .getCountry();
+            country = context.getResources().getConfiguration().locale.getCountry();
         }
         String variant = set.getStringSettings("ttsVariant");
         if (variant == null) {

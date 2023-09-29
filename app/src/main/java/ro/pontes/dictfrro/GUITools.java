@@ -90,8 +90,7 @@ public class GUITools {
     @SuppressLint("InflateParams")
     public static void aboutDialog(Context context) {
         // Inflate the about message contents
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View messageView = inflater.inflate(R.layout.about_dialog, null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -138,8 +137,7 @@ public class GUITools {
         } else if (today == 2) {
             dayOfWeek = context.getString(R.string.yesterday);
         } else {
-            dayOfWeek = cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG,
-                    Locale.getDefault());
+            dayOfWeek = cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
         }
 
         // Make the hour and minute with 0 in front if they are less
@@ -159,14 +157,7 @@ public class GUITools {
             curMinute = "" + iMinute;
         }
 
-        return String.format(
-                context.getString(R.string.date_format),
-                dayOfWeek,
-                "" + cal.get(Calendar.DAY_OF_MONTH),
-                ""
-                        + cal.getDisplayName(Calendar.MONTH, Calendar.LONG,
-                        Locale.getDefault()),
-                "" + cal.get(Calendar.YEAR), curHour, curMinute);
+        return String.format(context.getString(R.string.date_format), dayOfWeek, "" + cal.get(Calendar.DAY_OF_MONTH), "" + cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()), "" + cal.get(Calendar.YEAR), curHour, curMinute);
     } // end timeStampToString() method.
 
     /*
@@ -202,8 +193,7 @@ public class GUITools {
 
         // Determine if is RO at the start of the current language:
         // Get the system current locale: // Get the locale:
-        String curLocale = context.getResources().getConfiguration().locale
-                .getDisplayName();
+        String curLocale = context.getResources().getConfiguration().locale.getDisplayName();
         curLocale = curLocale.substring(0, 2);
         curLocale = curLocale.toLowerCase(Locale.getDefault());
         if (curLocale.equals("ro")) {
@@ -217,17 +207,14 @@ public class GUITools {
     } // end goToAppWebPage() method.
 
     public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager
-                .getActiveNetworkInfo();
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     } // end isNetworkAvailable() method.
 
     public static void copyIntoClipboard(final Context context, String text) {
         SoundPlayer.playSimple(context, "copy_into_clipboard");
-        ClipboardManager clipboard = (ClipboardManager) context
-                .getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("Result", text);
         clipboard.setPrimaryClip(clip);
     } // end copyIntoClipboard() method.
@@ -246,8 +233,7 @@ public class GUITools {
         for (String s : aInformation) {
             TextView tv = new TextView(context);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, MainActivity.textSize);
-            tv.setPadding(MainActivity.mPaddingDP, MainActivity.mPaddingDP,
-                    MainActivity.mPaddingDP, MainActivity.mPaddingDP);
+            tv.setPadding(MainActivity.mPaddingDP, MainActivity.mPaddingDP, MainActivity.mPaddingDP, MainActivity.mPaddingDP);
             tv.setText(s);
             ll.addView(tv);
         } // end for.
@@ -257,8 +243,7 @@ public class GUITools {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         alertDialog.setTitle(context.getString(R.string.help_alert_title));
         alertDialog.setView(sv);
-        alertDialog.setPositiveButton(context.getString(R.string.bt_close),
-                null);
+        alertDialog.setPositiveButton(context.getString(R.string.bt_close), null);
         AlertDialog alert = alertDialog.create();
         alert.show();
     } // end showHelp() method.
@@ -277,32 +262,22 @@ public class GUITools {
 
     // A method to rate this application:
     public static void showRateDialog(final Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                .setTitle(context.getString(R.string.title_rate_app))
-                .setMessage(context.getString(R.string.body_rate_app))
-                .setPositiveButton(context.getString(R.string.bt_rate),
-                        (dialog, which) -> {
-                            Settings set = new Settings(context);
-                            set.saveBooleanSettings("wasRated", true);
-                            String link = "market://details?id=";
-                            try {
-                                // play market available
-                                context.getPackageManager()
-                                        .getPackageInfo(
-                                                "com.android.vending",
-                                                0);
-                                // not available
-                            } catch (PackageManager.NameNotFoundException e) {
-                                e.printStackTrace();
-                                // Should use browser
-                                link = "https://play.google.com/store/apps/details?id=";
-                            }
-                            // Starts external action
-                            context.startActivity(new Intent(
-                                    Intent.ACTION_VIEW, Uri.parse(link
-                                    + context.getPackageName())));
-                        })
-                .setNegativeButton(context.getString(R.string.bt_not_now), null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context).setTitle(context.getString(R.string.title_rate_app)).setMessage(context.getString(R.string.body_rate_app)).setPositiveButton(context.getString(R.string.bt_rate), (dialog, which) -> {
+            Settings set = new Settings(context);
+            set.saveBooleanSettings("wasRated", true);
+            String link = "market://details?id=";
+            try {
+                // play market available
+                context.getPackageManager().getPackageInfo("com.android.vending", 0);
+                // not available
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+                // Should use browser
+                link = "https://play.google.com/store/apps/details?id=";
+            }
+            // Starts external action
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link + context.getPackageName())));
+        }).setNegativeButton(context.getString(R.string.bt_not_now), null);
         builder.show();
     } // end showRateDialog() method.
 
@@ -312,8 +287,7 @@ public class GUITools {
         boolean wasRated = set.getBooleanSettings("wasRated");
         if (!wasRated) {
 
-            if (MainActivity.numberOfLaunches % 6 == 0
-                    && MainActivity.numberOfLaunches > 0) {
+            if (MainActivity.numberOfLaunches % 6 == 0 && MainActivity.numberOfLaunches > 0) {
                 GUITools.showRateDialog(context);
             } // end if was x launches.
         } // end if it was not rated.
@@ -324,17 +298,10 @@ public class GUITools {
         // only if is not already the premium version:
         if (!MainActivity.isPremium) {
             Settings set = new Settings(context);
-            boolean wasNoticedPremium = set
-                    .getBooleanSettings("wasNoticedPremium");
+            boolean wasNoticedPremium = set.getBooleanSettings("wasNoticedPremium");
             if (!wasNoticedPremium) {
-                if (MainActivity.numberOfLaunches % 15 == 0
-                        && MainActivity.numberOfLaunches > 0) {
-                    GUITools.alert(
-                            context,
-                            context.getString(R.string.information),
-                            String.format(
-                                    context.getString(R.string.info_about_premium_version),
-                                    MainActivity.mUpgradePrice));
+                if (MainActivity.numberOfLaunches % 15 == 0 && MainActivity.numberOfLaunches > 0) {
+                    GUITools.alert(context, context.getString(R.string.information), String.format(context.getString(R.string.info_about_premium_version), MainActivity.mUpgradePrice));
                     set.saveBooleanSettings("wasNoticedPremium", true);
                 } // end if was the x launch.
             } // end if it was not noticed.
@@ -345,20 +312,16 @@ public class GUITools {
     public static void openAppInPlayStore(Context context) {
         final String appPackageName = context.getPackageName();
         try {
-            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri
-                    .parse("market://details?id=" + appPackageName)));
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
         } catch (android.content.ActivityNotFoundException anfe) {
-            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri
-                    .parse("https://play.google.com/store/apps/details?id="
-                            + appPackageName)));
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
         }
     } // end openAppInPlayStore() method.
 
     // A method to set background and other global things about a layout:
     public static void setLayoutInitial(Context context, int layoutType) {
         String mBackground;
-        if (MainActivity.background == null
-                || MainActivity.background.equals("")) {
+        if (MainActivity.background == null || MainActivity.background.equals("")) {
             /*
              * It means no background was chosen and saved, we choose a random
              * one:
@@ -382,21 +345,18 @@ public class GUITools {
         // Determine the background ID:
         int resId = 0;
         if (!MainActivity.background.equals("paper0")) {
-            resId = context.getResources().getIdentifier(mBackground,
-                    "drawable", context.getPackageName());
+            resId = context.getResources().getIdentifier(mBackground, "drawable", context.getPackageName());
         }
 
         /* layoutType 1 means relative, 2 means linear. */
         // if is a relative layout:
         if (layoutType == 1) {
-            RelativeLayout rl = ((Activity) context)
-                    .findViewById(R.id.layoutMain);
+            RelativeLayout rl = ((Activity) context).findViewById(R.id.layoutMain);
             rl.setBackgroundResource(resId);
         } // end if layoutType is RelativeLayout.
         // Now for LinearLayout:
         else if (layoutType == 2) {
-            LinearLayout ll = ((Activity) context)
-                    .findViewById(R.id.layoutMain);
+            LinearLayout ll = ((Activity) context).findViewById(R.id.layoutMain);
             ll.setBackgroundResource(resId);
         } // end if is a LinearLayout.
     } // end setLayoutInitial() method.

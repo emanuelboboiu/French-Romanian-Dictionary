@@ -62,8 +62,7 @@ public class SettingsActivity extends Activity {
 
             case R.id.cbtSearchFullTextSetting:
                 MainActivity.isSearchFullText = checked;
-                set.saveBooleanSettings("isSearchFullText",
-                        MainActivity.isSearchFullText);
+                set.saveBooleanSettings("isSearchFullText", MainActivity.isSearchFullText);
                 break;
 
             case R.id.cbtOnshakeSetting:
@@ -98,19 +97,12 @@ public class SettingsActivity extends Activity {
     public void deleteLog() {
         String tempTitle = getString(R.string.sh_title_delete_history);
         String tempBody = getString(R.string.sh_disable_now);
-        new AlertDialog.Builder(this)
-                .setTitle(tempTitle)
-                .setMessage(tempBody)
-                .setIcon(android.R.drawable.ic_delete)
-                .setPositiveButton(R.string.yes,
-                        (dialog, whichButton) -> {
-                            SearchHistory searchHistory = new SearchHistory(
-                                    mFinalContext);
-                            searchHistory.deleteSearchHistory();
-                            // Play a delete sound:
-                            SoundPlayer.playSimple(mFinalContext,
-                                    "delete_history");
-                        }).setNegativeButton(R.string.no, null).show();
+        new AlertDialog.Builder(this).setTitle(tempTitle).setMessage(tempBody).setIcon(android.R.drawable.ic_delete).setPositiveButton(R.string.yes, (dialog, whichButton) -> {
+            SearchHistory searchHistory = new SearchHistory(mFinalContext);
+            searchHistory.deleteSearchHistory();
+            // Play a delete sound:
+            SoundPlayer.playSimple(mFinalContext, "delete_history");
+        }).setNegativeButton(R.string.no, null).show();
 
     } // end deleteLog() method.
 

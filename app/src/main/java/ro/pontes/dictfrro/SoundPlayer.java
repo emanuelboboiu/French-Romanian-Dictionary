@@ -16,8 +16,7 @@ public class SoundPlayer {
             MediaPlayer mp = new MediaPlayer();
 
             int resID;
-            resID = context.getResources().getIdentifier(fileName, "raw",
-                    context.getPackageName());
+            resID = context.getResources().getIdentifier(fileName, "raw", context.getPackageName());
             mp = MediaPlayer.create(context, resID);
 
             mp.start();

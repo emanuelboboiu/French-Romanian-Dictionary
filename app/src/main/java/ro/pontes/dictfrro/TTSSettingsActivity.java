@@ -79,8 +79,7 @@ public class TTSSettingsActivity extends Activity {
          * A LayoutParams for weight for text view and buttons in the llEngines,
          * to be 1F::
          */
-        LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         llParams.weight = 1.0f;
 
         /*
@@ -91,8 +90,7 @@ public class TTSSettingsActivity extends Activity {
 
         int count = mEngines.size();
         Resources res = getResources();
-        String foundEngines = res.getQuantityString(
-                R.plurals.tv_number_of_engines, count, count);
+        String foundEngines = res.getQuantityString(R.plurals.tv_number_of_engines, count, count);
         tv.setText(foundEngines);
         llEngines.addView(tv, llParams);
 
@@ -106,19 +104,15 @@ public class TTSSettingsActivity extends Activity {
             bt.setOnClickListener(view -> {
                 // Let's initialise the chosen TTS engine:
                 // TextToSpeech initialisation:
-                tts = new TextToSpeech(mFinalContext,
-                        status -> {
-                            if (status != TextToSpeech.ERROR) {
-                                // We do something good:
-                                detectVoices(engineName, engineLabel);
-                            } else {
-                                // Show an error:
-                                GUITools.alert(
-                                        mFinalContext,
-                                        getString(R.string.error),
-                                        getString(R.string.error_after_choosing_engine));
-                            }
-                        }, engineName);
+                tts = new TextToSpeech(mFinalContext, status -> {
+                    if (status != TextToSpeech.ERROR) {
+                        // We do something good:
+                        detectVoices(engineName, engineLabel);
+                    } else {
+                        // Show an error:
+                        GUITools.alert(mFinalContext, getString(R.string.error), getString(R.string.error_after_choosing_engine));
+                    }
+                }, engineName);
                 // End initialisation.
             });
             // End add listener for tap on button.
@@ -139,14 +133,12 @@ public class TTSSettingsActivity extends Activity {
          * A LayoutParams for weight for text view and buttons in the llVoices,
          * to be 1F::
          */
-        LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         llParams.weight = 1.0f;
 
         // A text view as a title of this window zone:
         TextView tv = new TextView(this);
-        tv.setText(MyHtml.fromHtml(String.format(
-                getString(R.string.tv_chose_a_voice), engineLabel)));
+        tv.setText(MyHtml.fromHtml(String.format(getString(R.string.tv_chose_a_voice), engineLabel)));
         llVoices.addView(tv, llParams);
 
         // Detect all voice locale:
@@ -166,8 +158,7 @@ public class TTSSettingsActivity extends Activity {
         if (localeList.size() > 0) {
             for (int i = localeList.size() - 1; i >= 0; i--) {
                 String curTempLang = localeList.get(i).getLanguage();
-                if (!(curTempLang.equalsIgnoreCase("fr") || curTempLang
-                        .equalsIgnoreCase("fra"))) {
+                if (!(curTempLang.equalsIgnoreCase("fr") || curTempLang.equalsIgnoreCase("fra"))) {
                     localeList.remove(i);
                 } // end if current Locale isn't French.
             } // end for cut the non-English locale.
@@ -189,9 +180,7 @@ public class TTSSettingsActivity extends Activity {
                 String language = tempLocale.getDisplayLanguage();
                 String country = tempLocale.getDisplayCountry();
                 String variant = tempLocale.getDisplayVariant();
-                CharSequence curLanguage = MyHtml.fromHtml(String.format(
-                        getString(R.string.one_english_voice_in_list),
-                        language, country, variant));
+                CharSequence curLanguage = MyHtml.fromHtml(String.format(getString(R.string.one_english_voice_in_list), language, country, variant));
                 bt.setText(curLanguage.toString().trim());
                 bt.setOnClickListener(view -> showVoice(tempLocale, engineLabel));
                 // End add listener for tap on button.
@@ -208,9 +197,7 @@ public class TTSSettingsActivity extends Activity {
         llVoices.removeAllViews();
 
         // A LayoutParams to add some controls into llVoices:
-        LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         // Write a title for this zone:
         TextView tv = new TextView(this);
@@ -218,13 +205,9 @@ public class TTSSettingsActivity extends Activity {
         String language = tempLocale.getDisplayLanguage();
         String country = tempLocale.getDisplayCountry();
         String variant = tempLocale.getDisplayVariant();
-        CharSequence curLanguage = MyHtml.fromHtml(String.format(
-                getString(R.string.one_english_voice_in_list), language,
-                country, variant));
+        CharSequence curLanguage = MyHtml.fromHtml(String.format(getString(R.string.one_english_voice_in_list), language, country, variant));
 
-        CharSequence voiceTitle = MyHtml.fromHtml(String.format(
-                getString(R.string.a_voice_chosen_to_check), engineLabel,
-                curLanguage.toString().trim()));
+        CharSequence voiceTitle = MyHtml.fromHtml(String.format(getString(R.string.a_voice_chosen_to_check), engineLabel, curLanguage.toString().trim()));
         tv.setText(voiceTitle);
         llVoices.addView(tv, llParams);
 
@@ -266,8 +249,7 @@ public class TTSSettingsActivity extends Activity {
             }
 
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress,
-                                          boolean fromUser) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 ttsRate = getFloatFromProcent(progress);
                 tts.setSpeechRate(ttsRate);
                 speakTheSample("" + progress + "%");
@@ -298,8 +280,7 @@ public class TTSSettingsActivity extends Activity {
             }
 
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress,
-                                          boolean fromUser) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 ttsPitch = getFloatFromProcent(progress);
                 tts.setPitch(ttsPitch);
                 speakTheSample("" + progress + "%");
@@ -316,8 +297,7 @@ public class TTSSettingsActivity extends Activity {
         ll.setGravity(Gravity.CENTER_HORIZONTAL);
 
         // A LayoutParams for weight of buttons here as 1F:
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         params.weight = 1.0f;
 
         // A button to hear a sample:
@@ -327,11 +307,8 @@ public class TTSSettingsActivity extends Activity {
         btSample.setOnClickListener(view -> speakTheSample(sampleText));
         // End add listener for tap on btSample.
         btSample.setOnLongClickListener(view -> {
-            CharSequence theMessage = MyHtml.fromHtml(String.format(
-                    getString(R.string.the_sample_message),
-                    getString(R.string.bt_tts_sample), sampleText));
-            GUITools.alert(mFinalContext, getString(R.string.the_sample),
-                    theMessage.toString());
+            CharSequence theMessage = MyHtml.fromHtml(String.format(getString(R.string.the_sample_message), getString(R.string.bt_tts_sample), sampleText));
+            GUITools.alert(mFinalContext, getString(R.string.the_sample), theMessage.toString());
             return true;
         });
         // End add listener for tap on btSample.

@@ -23,8 +23,7 @@ public class Settings {
     // A method to detect if a preference exist or not:
     public boolean preferenceExists(String key) {
         // Restore preferences
-        SharedPreferences settings = context
-                .getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         return settings.contains(key);
     } // end detect if a preference exists or not.
 
@@ -33,8 +32,7 @@ public class Settings {
     public void saveBooleanSettings(String key, boolean value) {
         // We need an Editor object to make preference changes.
         // All objects are from android.context.Context
-        SharedPreferences settings = context
-                .getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(key, value);
         // Commit the edits!
@@ -45,8 +43,7 @@ public class Settings {
     public boolean getBooleanSettings(String key) {
         boolean value;
         // Restore preferences
-        SharedPreferences settings = context
-                .getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         value = settings.getBoolean(key, false);
 
         return value;
@@ -56,8 +53,7 @@ public class Settings {
     public void saveIntSettings(String key, int value) {
         // We need an Editor object to make preference changes.
         // All objects are from android.context.Context
-        SharedPreferences settings = context
-                .getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(key, value);
         // Commit the edits!
@@ -68,8 +64,7 @@ public class Settings {
     public int getIntSettings(String key) {
         int value;
         // Restore preferences
-        SharedPreferences settings = context
-                .getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         value = settings.getInt(key, 0);
 
         return value;
@@ -79,8 +74,7 @@ public class Settings {
     public void saveFloatSettings(String key, float value) {
         // We need an Editor object to make preference changes.
         // All objects are from android.context.Context
-        SharedPreferences settings = context
-                .getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putFloat(key, value);
         // Commit the edits!
@@ -91,8 +85,7 @@ public class Settings {
     public float getFloatSettings(String key) {
         float value;
         // Restore preferences
-        SharedPreferences settings = context
-                .getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         value = settings.getFloat(key, 3.0F); // a default value like the value
         // for moderate magnitude.
 
@@ -103,8 +96,7 @@ public class Settings {
     public double getDoubleSettings(String key) {
         float tempValue;
         // Restore preferences
-        SharedPreferences settings = context
-                .getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         tempValue = settings.getFloat(key, 3.0F);
 
         return tempValue;
@@ -114,8 +106,7 @@ public class Settings {
     public void saveStringSettings(String key, String value) {
         // We need an Editor object to make preference changes.
         // All objects are from android.context.Context
-        SharedPreferences settings = context
-                .getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(key, value);
         // Commit the edits!
@@ -126,8 +117,7 @@ public class Settings {
     public String getStringSettings(String key) {
         String value;
         // Restore preferences
-        SharedPreferences settings = context
-                .getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         value = settings.getString(key, null);
 
         return value;

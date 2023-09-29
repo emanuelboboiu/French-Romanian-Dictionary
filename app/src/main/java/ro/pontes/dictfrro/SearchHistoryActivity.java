@@ -23,8 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class SearchHistoryActivity extends Activity implements
-        OnItemSelectedListener {
+public class SearchHistoryActivity extends Activity implements OnItemSelectedListener {
 
     private SearchHistory searchHistory;
     private final Context mFinalContext = this;
@@ -66,9 +65,7 @@ public class SearchHistoryActivity extends Activity implements
         int nrOfSearches = searchHistory.getNumberOfRecords();
         if (MainActivity.isHistory) {
             Resources res = getResources();
-            String bottomStatusMessage = res
-                    .getQuantityString(R.plurals.tv_number_of_searches,
-                            nrOfSearches, nrOfSearches);
+            String bottomStatusMessage = res.getQuantityString(R.plurals.tv_number_of_searches, nrOfSearches, nrOfSearches);
             tv.setText(bottomStatusMessage);
         } // end if is search history activated.
         else {
@@ -96,14 +93,11 @@ public class SearchHistoryActivity extends Activity implements
         LinearLayout llResults = findViewById(R.id.llResults);
         llResults.removeAllViews();
 
-        Cursor cursor = searchHistory.getSearchesCursor(type, direction,
-                orderBy);
+        Cursor cursor = searchHistory.getSearchesCursor(type, direction, orderBy);
         if (cursor != null) {
 
             // Make a LayoutParams to match parent horizontally:
-            LinearLayout.LayoutParams tvParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams tvParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
             // Create TextViews for each word.
             // We need the string with place holders:
@@ -119,8 +113,7 @@ public class SearchHistoryActivity extends Activity implements
                 tv.setGravity(Gravity.LEFT);
                 // w means word, d means date, id = the ID in database:
                 final String w = cursor.getString(4);
-                final String d = GUITools.timeStampToString(this,
-                        cursor.getInt(5));
+                final String d = GUITools.timeStampToString(this, cursor.getInt(5));
                 String tvText = String.format(tvSearchedWord, w, d);
                 CharSequence tvSeq = MyHtml.fromHtml(tvText);
                 tv.setText(tvSeq);
@@ -141,10 +134,7 @@ public class SearchHistoryActivity extends Activity implements
                         // Only for English words:
                         speak.sayUsingLanguage(w, false);
                     } else {
-                        GUITools.alert(
-                                mFinalContext,
-                                getString(R.string.warning),
-                                getString(R.string.no_romanian_language_to_speak));
+                        GUITools.alert(mFinalContext, getString(R.string.warning), getString(R.string.no_romanian_language_to_speak));
                     } // end if Romanian results, no speak.
                 });
                 // End add listener for short click on a result.
@@ -210,49 +200,36 @@ public class SearchHistoryActivity extends Activity implements
     public void deleteSearchHistory(View view) {
         String tempTitle = getString(R.string.sh_title_delete_history);
         String tempBody = getString(R.string.sh_body_delete_history);
-        new AlertDialog.Builder(this)
-                .setTitle(tempTitle)
-                .setMessage(tempBody)
-                .setIcon(android.R.drawable.ic_delete)
-                .setPositiveButton(R.string.yes,
-                        (dialog, whichButton) -> {
-                            searchHistory.deleteSearchHistory();
-                            // Play a delete sound:
-                            SoundPlayer.playSimple(mFinalContext,
-                                    "delete_history");
+        new AlertDialog.Builder(this).setTitle(tempTitle).setMessage(tempBody).setIcon(android.R.drawable.ic_delete).setPositiveButton(R.string.yes, (dialog, whichButton) -> {
+            searchHistory.deleteSearchHistory();
+            // Play a delete sound:
+            SoundPlayer.playSimple(mFinalContext, "delete_history");
 
-                            // After delete, set again the status:
-                            setBottomStatus();
-                            // show results again, no results found:
-                            showResults(curCategory);
-                        }).setNegativeButton(R.string.no, null).show();
+            // After delete, set again the status:
+            setBottomStatus();
+            // show results again, no results found:
+            showResults(curCategory);
+        }).setNegativeButton(R.string.no, null).show();
     } // end deleteSearchHistory() method.
 
     public void deleteWordHistory(final int id) {
         String tempTitle = getString(R.string.sh_title_delete_word_history);
         String tempBody = getString(R.string.sh_body_delete_word_history);
-        new AlertDialog.Builder(this)
-                .setTitle(tempTitle)
-                .setMessage(tempBody)
-                .setIcon(android.R.drawable.ic_delete)
-                .setPositiveButton(R.string.yes,
-                        (dialog, whichButton) -> {
-                            searchHistory.deleteWordFromHistory(id);
-                            // Play a delete sound:
-                            SoundPlayer.playSimple(mFinalContext,
-                                    "delete_history");
+        new AlertDialog.Builder(this).setTitle(tempTitle).setMessage(tempBody).setIcon(android.R.drawable.ic_delete).setPositiveButton(R.string.yes, (dialog, whichButton) -> {
+            searchHistory.deleteWordFromHistory(id);
+            // Play a delete sound:
+            SoundPlayer.playSimple(mFinalContext, "delete_history");
 
-                            // After delete, set again the status:
-                            setBottomStatus();
-                            // show results again:
-                            showResults(curCategory);
-                        }).setNegativeButton(R.string.no, null).show();
+            // After delete, set again the status:
+            setBottomStatus();
+            // show results again:
+            showResults(curCategory);
+        }).setNegativeButton(R.string.no, null).show();
     } // end deleteSearchHistory() method.
 
     // For context menu:
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.setHeaderTitle(getString(R.string.cm_result_title));
         MenuInflater inflater = getMenuInflater();
@@ -266,15 +243,12 @@ public class SearchHistoryActivity extends Activity implements
     public boolean onContextItemSelected(MenuItem item) {
         // First we take the text from the longly clicked result:
         String result = tvResultForContext.getText().toString();
-        String[] aResult = result
-                .split(MyHtml.fromHtml(getString(R.string.sh_word_and_date_separator)).toString());
+        String[] aResult = result.split(MyHtml.fromHtml(getString(R.string.sh_word_and_date_separator)).toString());
         String w = st.cleanString(aResult[0]);
 
         // We take also the id of the word in database:
         int wordId = (Integer) tvResultForContext.getTag();
-        @SuppressWarnings("unused")
-        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
-                .getMenuInfo();
+        @SuppressWarnings("unused") AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.cmSearchResult:
                 goToDictionaryAndSearch(w, direction);
@@ -303,8 +277,7 @@ public class SearchHistoryActivity extends Activity implements
 
     // end for context menu things.
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position,
-                               long id) {
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         curCategory = position; // a global variable.
 

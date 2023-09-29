@@ -27,15 +27,7 @@ public class SearchHistory {
         // We need the time in seconds:
         long timeInSeconds = GUITools.getTimeInSeconds();
         int status = 0; // 1 means processed item.
-        String sql = "INSERT INTO istoric (tip, status, directie, termen, data) VALUES ('"
-                + type
-                + "', '"
-                + status
-                + "', '"
-                + direction
-                + "', '"
-                + word
-                + "', '" + timeInSeconds + "');";
+        String sql = "INSERT INTO istoric (tip, status, directie, termen, data) VALUES ('" + type + "', '" + status + "', '" + direction + "', '" + word + "', '" + timeInSeconds + "');";
         mDbHelper.executeSQLCode(sql);
     } // end addRecord() method.
 
@@ -65,8 +57,7 @@ public class SearchHistory {
          * English, 0 means Romanian. orderBy contains a string containing the
          * name of the column to order, word or date:
          */
-        String sql = "SELECT * FROM istoric WHERE tip=" + type
-                + " AND directie=" + direction + " ORDER BY " + orderBy + ";";
+        String sql = "SELECT * FROM istoric WHERE tip=" + type + " AND directie=" + direction + " ORDER BY " + orderBy + ";";
         Cursor cursor = mDbHelper.queryData(sql);
         // Only if there are results:
         int count = cursor.getCount();

@@ -43,8 +43,7 @@ public class BackgroundActivity extends Activity {
     private void setCurBackgroundTV(int nr) {
         TextView tv = findViewById(R.id.tvCurrentBackground);
         if (nr > 0) {
-            tv.setText(String.format(getString(R.string.tv_current_background),
-                    "" + nr));
+            tv.setText(String.format(getString(R.string.tv_current_background), "" + nr));
         } else {
             tv.setText(R.string.tv_without_background);
         }
@@ -103,8 +102,7 @@ public class BackgroundActivity extends Activity {
         if (tempBackground.equals("paper0")) {
             llLayoutMain.setBackgroundResource(0);
         } else {
-            int resId = getResources().getIdentifier(tempBackground,
-                    "drawable", getPackageName());
+            int resId = getResources().getIdentifier(tempBackground, "drawable", getPackageName());
             llLayoutMain.setBackgroundResource(resId);
         }
 

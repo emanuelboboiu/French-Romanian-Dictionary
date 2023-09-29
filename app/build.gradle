@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
     buildToolsVersion "33.0.0"
 
     defaultConfig {
         applicationId "ro.pontes.dictfrro"
         minSdkVersion 23
-        targetSdkVersion 33
+        targetSdkVersion 34
     }
 
     buildTypes {
@@ -19,9 +19,8 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.android.gms:play-services-ads:21.4.0'
-    def billing_version = "5.1.0"
-    implementation "com.android.billingclient:billing:$billing_version"
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.gms:play-services-ads:22.4.0'
+    implementation "com.android.billingclient:billing:6.0.1"
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
 }
