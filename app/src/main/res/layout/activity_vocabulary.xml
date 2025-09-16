@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layoutMain"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:id="@+id/llMain"
@@ -88,7 +89,8 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Bottom part, Google Ads: -->
+    <!-- Bottom part, banner and site: -->
+
     <LinearLayout
         android:id="@+id/llBottomInfo"
         android:layout_width="fill_parent"
@@ -97,16 +99,14 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <!-- Banner AdView -->
-        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/bannerAdView"
+        <TextView
+            android:id="@+id/tvPremiumVersionStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id">
-
-        </com.google.android.gms.ads.AdView>
-
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/tv_premium_version_status"
+            android:textSize="@dimen/text_size_main"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </RelativeLayout>

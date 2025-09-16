@@ -63,9 +63,9 @@
 
     <!-- About dialog: -->
     <string name="about">About Dictionary</string>
-    <string name="app_version">French Romanian Dictionary, version 3.1</string>
+    <string name="app_version">French Romanian Dictionary, version 4.1</string>
     <string name="app_release_date">The 1.0 version was released on Wednesday, 10 February 2016</string>
-    <string name="app_last_update">Last update was released on Thursday, September 28th, 2023</string>
+    <string name="app_last_update">Last update was released on Wednesday, September 17th, 2025</string>
     <string name="app_creator">Programmed by Emanuel Boboiu (Manu)</string>
     <string name="phone_number">Phone: +40740203043</string>
     <string name="email_address">E-mail: android@pontes.ro</string>

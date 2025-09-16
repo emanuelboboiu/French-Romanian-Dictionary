@@ -65,9 +65,9 @@
 
     <!-- About dialog: -->
     <string name="about">Despre Dicționar</string>
-    <string name="app_version">Dicționar Francez – Român, versiunea 3.1</string>
+    <string name="app_version">Dicționar Francez – Român, versiunea 4.1</string>
     <string name="app_release_date">Versiune 1.0 finalizată miercuri, 10 februarie 2016</string>
-    <string name="app_last_update">Ultima actualizare finalizată joi, 28 septembrie 2023</string>
+    <string name="app_last_update">Ultima actualizare finalizată miercuri, 17 septembrie 2025</string>
     <string name="app_creator">Programat de Emanuel Boboiu (Manu)</string>
     <string name="phone_number">Telefon: +40740203043</string>
     <string name="email_address">E-mail: android@pontes.ro</string>

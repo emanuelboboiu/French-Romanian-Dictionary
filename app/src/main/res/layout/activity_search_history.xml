@@ -2,10 +2,11 @@
     android:id="@+id/layoutMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:fitsSystemWindows="true"
     android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin" >
+    android:paddingBottom="@dimen/activity_vertical_margin">
 
     <LinearLayout
         android:id="@+id/llBottomInfo"
@@ -14,7 +15,7 @@
         android:layout_alignParentBottom="true"
         android:background="@color/search_icons"
         android:gravity="center_vertical"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tvStatus"
@@ -44,7 +45,7 @@
         android:layout_height="match_parent"
         android:layout_above="@id/llBottomInfo"
         android:gravity="center_horizontal"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <Spinner
             android:id="@+id/spinnerChooseSort"
@@ -56,8 +57,7 @@
             android:gravity="center_horizontal"
             android:nextFocusDown="@+id/llResults"
             android:spinnerMode="dropdown"
-            android:textSize="@dimen/text_size_history" >
-        </Spinner>
+            android:textSize="@dimen/text_size_history"></Spinner>
 
         <ScrollView
             android:id="@+id/svResults"
@@ -65,14 +65,13 @@
             android:layout_height="match_parent"
             android:isScrollContainer="false"
             android:orientation="vertical"
-            android:paddingTop="@dimen/results_top_margin" >
+            android:paddingTop="@dimen/results_top_margin">
 
             <LinearLayout
                 android:id="@+id/llResults"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
-            </LinearLayout>
+                android:orientation="vertical"></LinearLayout>
         </ScrollView>
     </LinearLayout>
 

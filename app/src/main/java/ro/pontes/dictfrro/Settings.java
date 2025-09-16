@@ -170,7 +170,7 @@ public class Settings {
         MainActivity.direction = getIntSettings("direction");
 
         // Charge the premium status:
-        MainActivity.isPremium = getBooleanSettings("isPremium");
+        MainActivity.isPremium = true; // getBooleanSettings("isPremium");
 
         /* About number of launches, useful for information, rate and others: */
         // Get current number of launches:
@@ -210,7 +210,7 @@ public class Settings {
         saveIntSettings("direction", 0);
 
         // We make it again as being not a premium one, to remove after:
-        saveBooleanSettings("isPremium", false);
+        saveBooleanSettings("isPremium", true);
 
         // To be considered not noticed about premium version:
         saveBooleanSettings("wasNoticedPremium", false);

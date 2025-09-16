@@ -31,10 +31,6 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -73,9 +69,6 @@ public class VocabularyActivity extends Activity implements OnItemSelectedListen
      * needed and other things:
      */
     private AlertDialog alertToShow;
-
-    // Creating a null object of AdView:
-    private AdView bannerAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,8 +125,8 @@ public class VocabularyActivity extends Activity implements OnItemSelectedListen
 
         // Call the method to show banner if is not premium:
         if (!MainActivity.isPremium) {
-            bannerAdView = findViewById(R.id.bannerAdView);
-            adMobSequence();
+            // bannerAdView = findViewById(R.id.bannerAdView);
+            // adMobSequence();
         }
     } // end onCreate() method.
 
@@ -228,7 +221,7 @@ public class VocabularyActivity extends Activity implements OnItemSelectedListen
         categoryName = st.realEscapeString(categoryName);
         // Hide the bottom layout if is premium version:
         if (MainActivity.isPremium) {
-            hideAdMob(true);
+            // hideAdMob(true);
         }
 
         // Clear the previous content of the llList layout:
@@ -286,6 +279,7 @@ public class VocabularyActivity extends Activity implements OnItemSelectedListen
         // Do nothing.
     } // end onNothingSelected() implemented method.
 
+    /*
     // The method to generate the AdMob sequence:
     private void adMobSequence() {
         //initializing the Google Admob SDK
@@ -314,6 +308,7 @@ public class VocabularyActivity extends Activity implements OnItemSelectedListen
             llBottomInfo.setVisibility(View.VISIBLE);
         }
     } // end hideAdMob() method.
+    */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -395,34 +390,38 @@ public class VocabularyActivity extends Activity implements OnItemSelectedListen
         int idSection = cur.getInt(1);
         int idRecord = cur.getInt(0);
         cur.close();
-        @SuppressWarnings("unused") AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-        switch (item.getItemId()) {
-            case R.id.cmSpeakResult:
-                speak.sayUsingLanguage(frenchPart, false);
-                return true;
-            case R.id.cmSpellResult:
-                speak.spellUsingLanguage(frenchPart);
-                return true;
-            case R.id.cmCopyResult:
-                GUITools.copyIntoClipboard(this, result);
-                return true;
-            case R.id.cmCopyWord:
-                GUITools.copyIntoClipboard(this, w);
-                return true;
-            case R.id.cmCopyExplanation:
-                GUITools.copyIntoClipboard(this, e);
-                return true;
-            case R.id.cmVocabularyEdit:
-                editRecord(idRecord);
-                return true;
-            case R.id.cmVocabularyDelete:
-                deleteRecord(w, e);
-                return true;
-            case R.id.cmVocabularyProperties:
-                showVocabularyProperties(w, e, idSection, direction, curTime);
-                return true;
-            default:
-                return super.onContextItemSelected(item);
+
+        @SuppressWarnings("unused")
+        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+
+        int id = item.getItemId();
+
+        if (id == R.id.cmSpeakResult) {
+            speak.sayUsingLanguage(frenchPart, false);
+            return true;
+        } else if (id == R.id.cmSpellResult) {
+            speak.spellUsingLanguage(frenchPart);
+            return true;
+        } else if (id == R.id.cmCopyResult) {
+            GUITools.copyIntoClipboard(this, result);
+            return true;
+        } else if (id == R.id.cmCopyWord) {
+            GUITools.copyIntoClipboard(this, w);
+            return true;
+        } else if (id == R.id.cmCopyExplanation) {
+            GUITools.copyIntoClipboard(this, e);
+            return true;
+        } else if (id == R.id.cmVocabularyEdit) {
+            editRecord(idRecord);
+            return true;
+        } else if (id == R.id.cmVocabularyDelete) {
+            deleteRecord(w, e);
+            return true;
+        } else if (id == R.id.cmVocabularyProperties) {
+            showVocabularyProperties(w, e, idSection, direction, curTime);
+            return true;
+        } else {
+            return super.onContextItemSelected(item);
         }
     } // end selected item in context menu.
     // End context menu implementation.

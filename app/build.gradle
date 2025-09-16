@@ -1,13 +1,17 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    compileSdkVersion 34
-    buildToolsVersion "33.0.0"
+    namespace "ro.pontes.dictfrro"
+    compileSdk 36
 
     defaultConfig {
         applicationId "ro.pontes.dictfrro"
-        minSdkVersion 23
-        targetSdkVersion 34
+        minSdk 23
+        targetSdk 36
+        versionCode 19
+        versionName "4.1"
     }
 
     buildTypes {
@@ -18,9 +22,15 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"
+        force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22"
+        force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22"
+    }
+}
+
 dependencies {
-    implementation 'com.google.android.gms:play-services-ads:22.4.0'
-    implementation "com.android.billingclient:billing:6.0.1"
     implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
 }
