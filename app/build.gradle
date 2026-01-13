@@ -10,8 +10,8 @@ android {
         applicationId "ro.pontes.dictfrro"
         minSdk 23
         targetSdk 36
-        versionCode 19
-        versionName "4.1"
+        versionCode 21
+        versionName "4.1.1"
     }
 
     buildTypes {
@@ -22,7 +22,7 @@ android {
     }
 }
 
-configurations.all {
+configurations.configureEach {
     resolutionStrategy {
         force "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"
         force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22"

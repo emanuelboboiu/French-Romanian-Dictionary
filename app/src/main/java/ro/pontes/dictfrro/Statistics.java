@@ -14,7 +14,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class Statistics {
-    private static final String baseUrl = "https://www.pontes.ro/ro/divertisment/games/soft_counts.php";
+    private static final String baseUrl = "https://pontes.ro/ro/divertisment/games/soft_counts.php";
 
     public static void postStats(final String pid, final int score) {
         String url = baseUrl + "?pid=" + pid + "&score=" + score;

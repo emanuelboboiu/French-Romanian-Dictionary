@@ -22,7 +22,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     // destination path (location) of our database on device
     private static String DB_PATH = "";
     private static final String DB_NAME = "dictfrro.db"; // Database name
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String SP_KEY_DB_VER = "dbVer";
 
     private SQLiteDatabase mDataBase;

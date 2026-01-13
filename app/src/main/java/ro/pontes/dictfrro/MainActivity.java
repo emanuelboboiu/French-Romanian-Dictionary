@@ -36,7 +36,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /*
  * Class started on Friday, 04 September 2015, created by Emanuel Boboiu.
